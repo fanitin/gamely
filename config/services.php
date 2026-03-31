@@ -13,6 +13,11 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'rawg' => [
+        'key' => env('RAWG_API_KEY'),
+        'base_url' => env('RAWG_BASE_URL', 'https://api.rawg.io/api'),
+        'sleep_ms' => env('RAWG_RATE_LIMIT_SLEEP_MS', 400),
+    ],
 
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
