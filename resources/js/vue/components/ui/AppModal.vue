@@ -21,10 +21,10 @@ defineEmits(['close'])
         <Dialog as="div" @close="$emit('close')" class="relative z-50">
             <TransitionChild
                 as="template"
-                enter="duration-300 ease-out"
+                enter="duration-150 ease-out"
                 enter-from="opacity-0"
                 enter-to="opacity-100"
-                leave="duration-200 ease-in"
+                leave="duration-100 ease-in"
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
@@ -35,14 +35,14 @@ defineEmits(['close'])
                 <div class="flex min-h-full items-center justify-center p-4 text-center">
                     <TransitionChild
                         as="template"
-                        enter="duration-300 ease-out"
+                        enter="duration-150 ease-out"
                         enter-from="opacity-0 scale-95"
                         enter-to="opacity-100 scale-100"
-                        leave="duration-200 ease-in"
+                        leave="duration-100 ease-in"
                         leave-from="opacity-100 scale-100"
                         leave-to="opacity-0 scale-95"
                     >
-                        <DialogPanel class="w-full max-w-md transform overflow-visible rounded-2xl bg-slate-900/95 border border-white/10 p-8 text-left align-middle shadow-2xl transition-all backdrop-blur-md">
+                        <DialogPanel class="w-full max-w-md transform overflow-visible rounded-2xl bg-slate-900/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md">
                             <div class="flex items-center justify-between mb-6">
                                 <DialogTitle as="h3" class="text-xl font-medium leading-6 text-white">
                                     {{ title }}

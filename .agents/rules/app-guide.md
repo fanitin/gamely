@@ -29,7 +29,7 @@ Gamely is a Wordle-style daily game about video games. Players guess a game by i
 
 **Monetization:** Google AdSense — banners after each guess, in result modal, on wiki pages.
 
-**Data source:** RAWG API (rawg.io) — imported into own DB on a schedule. Never query RAWG on user requests.
+**Data source:** IGDB API — imported into own DB on a schedule. Never query RAWG on user requests.
 
 **Auth:** None in v1. User stats stored in localStorage.
 
@@ -52,9 +52,7 @@ Gamely is a Wordle-style daily game about video games. Players guess a game by i
 - 6 attempts, blur decreases with each wrong guess
 - Daily challenge + infinite mode
 
-### v2 (post-launch)
-
-- Character mode — deferred, no reliable API for character data with attributes
+- Character mode — guess a character based on some attributes like gender, game series etc.
 
 ---
 
@@ -99,9 +97,9 @@ Gamely is a Wordle-style daily game about video games. Players guess a game by i
 ### Design Rules
 
 - Normalized structure. No JSON columns for relationships.
-- `updateOrCreate` by `rawg_id` everywhere — imports are idempotent.
+- `updateOrCreate` by `igdb_id` or something like that everywhere — imports are idempotent.
 - `is_active` flag on games — controls game pool without deleting records.
-- Never hit RAWG on user requests — only from own DB.
+- Never hit igdb on user requests — only from own DB.
 
 ### Reference Tables (imported first — games depend on these)
 
@@ -116,7 +114,7 @@ publishers  — id, rawg_id, name, slug, timestamps
 
 ```
 games
-  id, rawg_id, title, slug
+  id, igdb_id, title, slug
   release_year (int)
   rating (decimal 3,2), ratings_count (int)
   cover_url (string, R2 path)
@@ -175,9 +173,9 @@ Global stats? how many users guessed in each attempts as a график
 
 ### Import Command Requirements
 
-- `updateOrCreate` by `rawg_id` — safe to re-run anytime
+- `updateOrCreate` by `igdb` — safe to re-run anytime
 - Resume on failure: store `last_page` in Redis cache, continue from there
-- Sleep 400ms between RAWG requests — avoid rate limit 429
+- Sleep 400ms between igdbrequests — avoid rate limit 429
 - Process in chunks — never load all records into memory
 - Log progress: created / updated / skipped
 
@@ -190,7 +188,6 @@ Global stats? how many users guessed in each attempts as a график
 
 - Run after import:games
 - Only for games where `is_active = true`
-- RAWG endpoint: `GET /games/{id}/screenshots`
 - Download → upload to R2 → save URL in game_screenshots
 - Max 5 screenshots per game, skip if already exist
 
