@@ -1,0 +1,63 @@
+{
+    "nav": {
+        "home": "Home",
+        "stats": "Stats",
+        "how_to_play": "How to Play",
+        "games": "Games",
+        "change_locale": "Language"
+    },
+    "modes": {
+        "attributes": "Attributes",
+        "screenshot": "Screenshot",
+        "daily": "Daily Challenge",
+        "infinite": "Infinite Mode"
+    },
+    "game": {
+        "guess_placeholder": "Search for a game...",
+        "submit": "Guess",
+        "share": "Share Result",
+        "give_up": "Give Up",
+        "attempts": "{current} / {max} attempts",
+        "loading": "Loading..."
+    },
+    "result": {
+        "win_title": "Correct!",
+        "lose_title": "Game Over",
+        "answer_was": "The answer was:",
+        "next_in": "Next game in:",
+        "play_again": "Play Again",
+        "streak": "Streak",
+        "played": "Played",
+        "win_rate": "Win Rate",
+        "average_guesses": "Avg. Guesses"
+    },
+    "comparison": {
+        "exact": "Exact match",
+        "close": "Close",
+        "wrong": "Wrong",
+        "higher": "Higher ▲",
+        "lower": "Lower ▼"
+    },
+    "attributes": {
+        "genre": "Genre",
+        "release_year": "Year",
+        "developer": "Developer",
+        "publisher": "Publisher",
+        "platform": "Platform",
+        "rating": "Rating"
+    },
+    "share": {
+        "title": "GameWordle #{number} · {mode} · {score}/6",
+        "copied": "Copied to clipboard!"
+    },
+    "errors": {
+        "game_not_found": "Game not found",
+        "already_played": "You already played today's challenge",
+        "network": "Network error. Please try again."
+    },
+    "locale": {
+        "en": "English",
+        "ru": "Русский",
+        "ua": "Українська"
+    }
+}

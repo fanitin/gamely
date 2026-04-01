@@ -5,11 +5,12 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { createI18n } from "vue-i18n";
 import en from "./locales/en.json";
 import ru from "./locales/ru.json";
+import ua from "./locales/ua.json";
 
 const i18n = createI18n({
     locale: localStorage.getItem("gw_locale") || "en",
     fallbackLocale: "en",
-    messages: { en, ru },
+    messages: { en, ru, ua },
 });
 
 createInertiaApp({

@@ -1,0 +1,63 @@
+{
+    "nav": {
+        "home": "Главная",
+        "stats": "Статистика",
+        "how_to_play": "Как играть",
+        "games": "Игры",
+        "change_locale": "Язык"
+    },
+    "modes": {
+        "attributes": "Атрибуты",
+        "screenshot": "Скриншот",
+        "daily": "Ежедневный вызов",
+        "infinite": "Бесконечный режим"
+    },
+    "game": {
+        "guess_placeholder": "Найдите игру...",
+        "submit": "Угадать",
+        "share": "Поделиться",
+        "give_up": "Сдаться",
+        "attempts": "{current} / {max} попыток",
+        "loading": "Загрузка..."
+    },
+    "result": {
+        "win_title": "Правильно!",
+        "lose_title": "Игра окончена",
+        "answer_was": "Правильный ответ:",
+        "next_in": "Следующая игра через:",
+        "play_again": "Играть снова",
+        "streak": "Серия",
+        "played": "Сыграно",
+        "win_rate": "Процент побед",
+        "average_guesses": "Среднее попыток"
+    },
+    "comparison": {
+        "exact": "Точное совпадение",
+        "close": "Близко",
+        "wrong": "Не совпадает",
+        "higher": "Выше ▲",
+        "lower": "Ниже ▼"
+    },
+    "attributes": {
+        "genre": "Жанр",
+        "release_year": "Год",
+        "developer": "Разработчик",
+        "publisher": "Издатель",
+        "platform": "Платформа",
+        "rating": "Рейтинг"
+    },
+    "share": {
+        "title": "GameWordle #{number} · {mode} · {score}/6",
+        "copied": "Скопировано!"
+    },
+    "errors": {
+        "game_not_found": "Игра не найдена",
+        "already_played": "Вы уже играли в сегодняшний вызов",
+        "network": "Ошибка сети. Попробуйте снова."
+    },
+    "locale": {
+        "en": "English",
+        "ru": "Русский",
+        "ua": "Українська"
+    }
+}

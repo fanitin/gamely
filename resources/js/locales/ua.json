@@ -1,0 +1,63 @@
+{
+    "nav": {
+        "home": "Головна",
+        "stats": "Статистика",
+        "how_to_play": "Як грати",
+        "games": "Ігри",
+        "change_locale": "Мова"
+    },
+    "modes": {
+        "attributes": "Атрибути",
+        "screenshot": "Скріншот",
+        "daily": "Щоденний виклик",
+        "infinite": "Нескінченний режим"
+    },
+    "game": {
+        "guess_placeholder": "Знайдіть гру...",
+        "submit": "Вгадати",
+        "share": "Поділитися",
+        "give_up": "Здатися",
+        "attempts": "{current} / {max} спроб",
+        "loading": "Завантаження..."
+    },
+    "result": {
+        "win_title": "Правильно!",
+        "lose_title": "Гра завершена",
+        "answer_was": "Правильна відповідь:",
+        "next_in": "Наступна гра через:",
+        "play_again": "Грати знову",
+        "streak": "Серія",
+        "played": "Зіграно",
+        "win_rate": "Відсоток перемог",
+        "average_guesses": "Середня кількість спроб"
+    },
+    "comparison": {
+        "exact": "Точний збіг",
+        "close": "Близько",
+        "wrong": "Не збігається",
+        "higher": "Вище ▲",
+        "lower": "Нижче ▼"
+    },
+    "attributes": {
+        "genre": "Жанр",
+        "release_year": "Рік",
+        "developer": "Розробник",
+        "publisher": "Видавець",
+        "platform": "Платформа",
+        "rating": "Рейтинг"
+    },
+    "share": {
+        "title": "GameWordle #{number} · {mode} · {score}/6",
+        "copied": "Скопійовано!"
+    },
+    "errors": {
+        "game_not_found": "Гру не знайдено",
+        "already_played": "Ви вже грали у сьогоднішній виклик",
+        "network": "Помилка мережі. Спробуйте знову."
+    },
+    "locale": {
+        "en": "English",
+        "ru": "Русский",
+        "ua": "Українська"
+    }
+}
