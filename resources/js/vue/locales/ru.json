@@ -4,7 +4,9 @@
         "stats": "Статистика",
         "how_to_play": "Как играть",
         "games": "Игры",
-        "change_locale": "Язык"
+        "change_locale": "Язык",
+        "choose_language": "Выберите язык",
+        "more_languages_soon": "Скоро будут новые языки!"
     },
     "modes": {
         "attributes": "Атрибуты",

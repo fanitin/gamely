@@ -4,7 +4,9 @@
         "stats": "Stats",
         "how_to_play": "How to Play",
         "games": "Games",
-        "change_locale": "Language"
+        "change_locale": "Language",
+        "choose_language": "Choose language",
+        "more_languages_soon": "More languages coming soon!"
     },
     "modes": {
         "attributes": "Attributes",

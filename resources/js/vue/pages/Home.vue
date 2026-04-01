@@ -1,7 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AppLayout from '@/vue/layouts/AppLayout.vue'
 
 const { t } = useI18n()
 </script>

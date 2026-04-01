@@ -21,6 +21,7 @@
         "@headlessui/vue": "^1.7.23",
         "@inertiajs/vue3": "^3.0.0",
         "@vueuse/core": "^14.2.1",
+        "lucide-vue-next": "^1.0.0",
         "vue": "^3.5.31",
         "vue-i18n": "^11.3.0"
     }

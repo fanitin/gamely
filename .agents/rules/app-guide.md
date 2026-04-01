@@ -25,7 +25,7 @@ You are an experienced senior fullstack developer and software architect special
 
 ## PROJECT OVERVIEW
 
-GameWordle is a Wordle-style daily game about video games. Players guess a game by its attributes or screenshot. English + Russian + Ukrainian AT LEAST launch (global audience, higher AdSense RPM).
+Gamely is a Wordle-style daily game about video games. Players guess a game by its attributes or screenshot. English + Russian + Ukrainian AT LEAST launch (global audience, higher AdSense RPM).
 
 **Monetization:** Google AdSense — banners after each guess, in result modal, on wiki pages.
 
