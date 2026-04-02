@@ -43,6 +43,7 @@
     "attributes": {
         "genre": "Genre",
         "release_year": "Year",
+        "year": "Year",
         "developer": "Developer",
         "publisher": "Publisher",
         "platform": "Platform",
@@ -61,5 +62,15 @@
         "en": "English",
         "ru": "Русский",
         "ua": "Українська"
+    },
+    "how_to_play": {
+        "intro": "Guess the game using attributes as hints. The indicators show how close your guess was to the solution.",
+        "infinite_hint": "You have unlimited attempts. Keep guessing until you find the game!",
+        "example_genre_match": "The genre matches exactly.",
+        "example_genre_partial": "At least one genre matches.",
+        "example_year_close": "Year is within ±3 years. ▲ means answer is higher.",
+        "example_wrong": "Does not match.",
+        "indicators": "Comparison Indicators",
+        "higher_hint": "Higher (▲) means the correct value is larger."
     }
 }
