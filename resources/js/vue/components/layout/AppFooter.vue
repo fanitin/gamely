@@ -7,7 +7,7 @@ const { t } = useI18n();
     <footer
         class="mt-auto border-t border-white/5 bg-slate-950/50 relative z-10 select-none"
     >
-        <div class="max-w-5xl mx-auto px-4 py-6">
+        <div class="max-w-5xl mx-auto px-4 py-4">
             <div
                 class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500"
             >
@@ -31,10 +31,12 @@ const { t } = useI18n();
             </div>
 
             <p
-                class="mt-4 text-[13px] text-slate-500 text-center sm:text-left italic opacity-80"
+                class="mt-2 text-[13px] text-slate-500 text-center sm:text-left italic opacity-80"
             >
                 Not affiliated with Sony, Microsoft or Nintendo. Data by
-                <a href="https://igdb.com">IGDB</a>.
+                <a href="https://igdb.com" class="hover:text-white underline">
+                    IGDB </a
+                >.
             </p>
         </div>
     </footer>
