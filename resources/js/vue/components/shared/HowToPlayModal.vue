@@ -46,6 +46,7 @@ const examples = [
     <AppModal
         :isOpen="isOpen"
         :title="t('nav.how_to_play')"
+        size="lg"
         @close="$emit('close')"
     >
         <div class="space-y-6 text-slate-300">

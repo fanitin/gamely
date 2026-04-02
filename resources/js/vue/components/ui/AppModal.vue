@@ -1,19 +1,37 @@
 <script setup>
-import { Dialog, DialogPanel, DialogTitle, TransitionRoot, TransitionChild } from '@headlessui/vue'
-import { X } from 'lucide-vue-next'
+import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionRoot,
+    TransitionChild,
+} from "@headlessui/vue";
+import { X } from "lucide-vue-next";
 
-defineProps({
+const props = defineProps({
     isOpen: {
         type: Boolean,
         required: true,
     },
     title: {
         type: String,
-        default: '',
+        default: "",
     },
-})
+    size: {
+        type: String,
+        default: "md", // sm, md, lg, xl, 2xl
+    },
+});
 
-defineEmits(['close'])
+defineEmits(["close"]);
+
+const sizeClasses = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
+};
 </script>
 
 <template>
@@ -28,11 +46,13 @@ defineEmits(['close'])
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+                <div class="fixed inset-0 bg-black/60 backdrop-blur-xs" />
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
-                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div
+                    class="flex min-h-full items-center justify-center p-4 text-center"
+                >
                     <TransitionChild
                         as="template"
                         enter="duration-150 ease-out"
@@ -42,9 +62,17 @@ defineEmits(['close'])
                         leave-from="opacity-100 scale-100"
                         leave-to="opacity-0 scale-95"
                     >
-                        <DialogPanel class="w-full max-w-md transform overflow-visible rounded-2xl bg-slate-900/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md">
+                        <DialogPanel
+                            :class="[
+                                'w-full transform overflow-visible rounded-2xl bg-slate-900/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md',
+                                sizeClasses[props.size] || sizeClasses.md,
+                            ]"
+                        >
                             <div class="flex items-center justify-between mb-6">
-                                <DialogTitle as="h3" class="text-xl font-medium leading-6 text-white">
+                                <DialogTitle
+                                    as="h3"
+                                    class="text-xl font-medium leading-6 text-white"
+                                >
                                     {{ title }}
                                 </DialogTitle>
                                 <button
