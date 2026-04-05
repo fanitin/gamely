@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Platform extends Model
 {
@@ -16,7 +17,7 @@ class Platform extends Model
         'url',
     ];
 
-    public function platformFamily()
+    public function platformFamily(): BelongsTo
     {
         return $this->belongsTo(PlatformFamily::class);
     }
