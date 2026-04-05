@@ -2,11 +2,12 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Models\PlatformFamily;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 
-#[Signature('import:platform-families')]
-#[Description('Import platform families from IGDB')]
+#[Signature('import:igdb-platform-families')]
+#[Description('Import platform families from IGDB API')]
 class ImportPlatformFamilies extends AbstractIgdbImport
 {
     protected function getEndpoint(): string
@@ -16,27 +17,27 @@ class ImportPlatformFamilies extends AbstractIgdbImport
 
     protected function getQueryBody(): string
     {
-        return 'fields id, name, slug, checksum;';
+        return 'fields id, name, slug;';
     }
 
     protected function processItem(array $item): string
     {
-        $family = \App\Models\PlatformFamily::where('igdb_id', $item['id'])->first();
-
-        if ($family) {
-            $family->update([
+        $family = PlatformFamily::updateOrCreate(
+            ['igdb_id' => $item['id']],
+            [
                 'name' => $item['name'] ?? null,
                 'slug' => $item['slug'] ?? null,
-            ]);
+            ]
+        );
+
+        if ($family->wasRecentlyCreated) {
+            return 'created';
+        }
+
+        if ($family->wasChanged()) {
             return 'updated';
         }
 
-        \App\Models\PlatformFamily::create([
-            'igdb_id' => $item['id'],
-            'name'    => $item['name'] ?? null,
-            'slug'    => $item['slug'] ?? null,
-        ]);
-
-        return 'created';
+        return 'skipped';
     }
 }
