@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GameType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -15,7 +16,7 @@ class Game extends Model
         'release_year',
         'rating',
         'rating_count',
-        'collection_id',
+        'game_type',
         'cover_igdb_id',
         'cover_url',
         'is_active',
@@ -28,12 +29,13 @@ class Game extends Model
             'release_year' => 'integer',
             'rating' => 'decimal:2',
             'rating_count' => 'integer',
+            'game_type' => GameType::class,
         ];
     }
 
-    public function collection(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function collections(): BelongsToMany
     {
-        return $this->belongsTo(Collection::class);
+        return $this->belongsToMany(Collection::class, 'game_collection');
     }
 
     public function similarGames(): BelongsToMany

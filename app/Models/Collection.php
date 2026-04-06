@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Collection extends Model
 {
@@ -13,8 +13,8 @@ class Collection extends Model
         'slug',
     ];
 
-    public function games(): HasMany
+    public function games(): BelongsToMany
     {
-        return $this->hasMany(Game::class);
+        return $this->belongsToMany(Game::class, 'game_collection');
     }
 }

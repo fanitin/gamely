@@ -25,7 +25,7 @@ class ImportGames extends AbstractIgdbImport
 
     protected function getQueryBody(): string
     {
-        return 'fields id, name, slug, summary, first_release_date, rating, rating_count, collection, franchises, cover, genres, platforms, themes, game_modes, player_perspectives; where game_type = (0,8,9) & rating_count >= 20 & rating > 50 & cover != null & screenshots != null & first_release_date != null;';
+        return 'fields id, name, slug, summary, first_release_date, rating, rating_count, game_type, collections, franchises, cover, genres, platforms, themes, game_modes, player_perspectives; where game_type = (0,8,9) & rating_count >= 20 & rating > 50 & cover != null & screenshots != null & first_release_date != null;';
     }
 
     protected function processItem(array $item): string
@@ -33,11 +33,6 @@ class ImportGames extends AbstractIgdbImport
         $year = null;
         if (! empty($item['first_release_date'])) {
             $year = Carbon::createFromTimestamp($item['first_release_date'])->year;
-        }
-
-        $collectionId = null;
-        if (! empty($item['collection'])) {
-            $collectionId = Collection::where('igdb_id', $item['collection'])->value('id');
         }
 
         $game = Game::updateOrCreate(
@@ -49,12 +44,17 @@ class ImportGames extends AbstractIgdbImport
                 'release_year' => $year,
                 'rating' => $item['rating'] ?? null,
                 'rating_count' => $item['rating_count'] ?? null,
-                'collection_id' => $collectionId,
+                'game_type' => $item['game_type'] ?? 0,
                 'cover_igdb_id' => $item['cover'] ?? null,
             ]
         );
 
         $wasCreated = $game->wasRecentlyCreated;
+
+        if (! empty($item['collections'])) {
+            $collectionIds = Collection::whereIn('igdb_id', $item['collections'])->pluck('id');
+            $game->collections()->sync($collectionIds);
+        }
 
         if (! empty($item['genres'])) {
             $genreIds = Genre::whereIn('igdb_id', $item['genres'])->pluck('id');

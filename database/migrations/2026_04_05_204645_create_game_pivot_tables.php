@@ -58,6 +58,12 @@ return new class extends Migration
             $table->foreignId('franchise_id')->constrained('franchises')->cascadeOnDelete();
             $table->primary(['game_id', 'franchise_id']);
         });
+
+        Schema::create('game_collection', function (Blueprint $table) {
+            $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
+            $table->foreignId('collection_id')->constrained('collections')->cascadeOnDelete();
+            $table->primary(['game_id', 'collection_id']);
+        });
     }
 
     /**
@@ -65,6 +71,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('game_collection');
         Schema::dropIfExists('game_franchise');
         Schema::dropIfExists('game_similar_game');
         Schema::dropIfExists('game_player_perspective');
