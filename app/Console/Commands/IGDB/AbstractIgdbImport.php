@@ -60,10 +60,12 @@ abstract class AbstractIgdbImport extends Command
                 usleep(400_000);
             }
 
+            $this->info("Successfully finished import for {$this->getEndpoint()}!\n");
+
             return static::SUCCESS;
 
         } catch (Throwable $e) {
-            $this->error('Import failed: '.$e->getMessage());
+            $this->error("Import failed: ".$e->getMessage()."\n");
 
             return static::FAILURE;
         }

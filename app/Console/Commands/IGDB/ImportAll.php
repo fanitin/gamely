@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\IGDB;
 
-use Illuminate\Console\Command;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
+use Illuminate\Console\Command;
 
 #[Signature('import:igdb-all')]
 #[Description('Execute all IGDB import commands in the correct order')]
@@ -29,13 +29,16 @@ class ImportAll extends Command
 
         foreach ($commands as $command) {
             $this->info("Running: {$command}");
-            
+
             $exitCode = $this->call($command);
 
             if ($exitCode !== 0) {
-                $this->error("Command {$command} failed with exit code {$exitCode}. Aborting.");
+                $this->error("\nCommand {$command} failed with exit code {$exitCode}. Aborting.");
+
                 return static::FAILURE;
             }
+
+            $this->line('');
         }
 
         $this->info('Full IGDB import completed successfully!');

@@ -62,43 +62,79 @@ class ImportGames extends AbstractIgdbImport
             ]
         );
 
-        $wasCreated = $game->wasRecentlyCreated;
+        if ($game->wasRecentlyCreated) {
+            $this->syncRelations($game, $item);
+            $this->syncCompanies($game, $item['involved_companies'] ?? []);
 
-        // Sync relationships with memory caching
-        $this->syncRelation($game, 'genres', Genre::class, $item['genres'] ?? []);
-        $this->syncRelation($game, 'platforms', Platform::class, $item['platforms'] ?? []);
-        $this->syncRelation($game, 'themes', Theme::class, $item['themes'] ?? []);
-        $this->syncRelation($game, 'gameModes', GameMode::class, $item['game_modes'] ?? []);
-        $this->syncRelation($game, 'playerPerspectives', PlayerPerspective::class, $item['player_perspectives'] ?? []);
-        $this->syncRelation($game, 'collections', Collection::class, $item['collections'] ?? []);
-        $this->syncRelation($game, 'franchises', Franchise::class, $item['franchises'] ?? []);
-
-        // Companies
-        if (! empty($item['involved_companies'])) {
-            $developerIds = [];
-            $publisherIds = [];
-
-            foreach ($item['involved_companies'] as $involved) {
-                if (empty($involved['company'])) {
-                    continue;
-                }
-
-                $companyData = $involved['company'];
-                $company = $this->getOrCreateCompany($companyData);
-
-                if ($involved['developer'] ?? false) {
-                    $developerIds[] = $company->id;
-                }
-                if ($involved['publisher'] ?? false) {
-                    $publisherIds[] = $company->id;
-                }
-            }
-
-            $game->developers()->sync($developerIds);
-            $game->publishers()->sync($publisherIds);
+            return 'created';
         }
 
-        return $wasCreated ? 'created' : 'updated';
+        $wasUpdated = $game->wasChanged();
+
+        if ($this->syncRelations($game, $item)) {
+            $wasUpdated = true;
+        }
+
+        if ($this->syncCompanies($game, $item['involved_companies'] ?? [])) {
+            $wasUpdated = true;
+        }
+
+        return $wasUpdated ? 'updated' : 'skipped';
+    }
+
+    private function syncRelations(Game $game, array $item): bool
+    {
+        $hasChanges = false;
+
+        $relations = [
+            'genres' => [Genre::class, $item['genres'] ?? []],
+            'platforms' => [Platform::class, $item['platforms'] ?? []],
+            'themes' => [Theme::class, $item['themes'] ?? []],
+            'gameModes' => [GameMode::class, $item['game_modes'] ?? []],
+            'playerPerspectives' => [PlayerPerspective::class, $item['player_perspectives'] ?? []],
+            'collections' => [Collection::class, $item['collections'] ?? []],
+            'franchises' => [Franchise::class, $item['franchises'] ?? []],
+        ];
+
+        foreach ($relations as $relation => $config) {
+            if ($this->syncRelation($game, $relation, $config[0], $config[1])) {
+                $hasChanges = true;
+            }
+        }
+
+        return $hasChanges;
+    }
+
+    private function syncCompanies(Game $game, array $involvedCompanies): bool
+    {
+        if (empty($involvedCompanies)) {
+            return false;
+        }
+
+        $developerIds = [];
+        $publisherIds = [];
+
+        foreach ($involvedCompanies as $involved) {
+            if (empty($involved['company'])) {
+                continue;
+            }
+
+            $companyData = $involved['company'];
+            $company = $this->getOrCreateCompany($companyData);
+
+            if ($involved['developer'] ?? false) {
+                $developerIds[] = $company->id;
+            }
+            if ($involved['publisher'] ?? false) {
+                $publisherIds[] = $company->id;
+            }
+        }
+
+        $devChanges = $game->developers()->sync($developerIds);
+        $pubChanges = $game->publishers()->sync($publisherIds);
+
+        return ! empty($devChanges['attached']) || ! empty($devChanges['detached']) || ! empty($devChanges['updated']) ||
+               ! empty($pubChanges['attached']) || ! empty($pubChanges['detached']) || ! empty($pubChanges['updated']);
     }
 
     private function getOrCreateCompany(array $data): Company
@@ -130,10 +166,10 @@ class ImportGames extends AbstractIgdbImport
         return self::$cache['companies'][$igdbId];
     }
 
-    private function syncRelation(Game $game, string $relation, string $modelClass, array $igdbIds): void
+    private function syncRelation(Game $game, string $relation, string $modelClass, array $igdbIds): bool
     {
         if (empty($igdbIds)) {
-            return;
+            return false;
         }
 
         if (! isset(self::$cache[$modelClass])) {
@@ -147,6 +183,8 @@ class ImportGames extends AbstractIgdbImport
             }
         }
 
-        $game->$relation()->sync($localIds);
+        $changes = $game->$relation()->sync($localIds);
+
+        return ! empty($changes['attached']) || ! empty($changes['detached']) || ! empty($changes['updated']);
     }
 }

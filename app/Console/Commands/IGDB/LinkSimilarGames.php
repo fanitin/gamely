@@ -41,8 +41,13 @@ class LinkSimilarGames extends Command
                         $similarGameIds = Game::whereIn('igdb_id', $item['similar_games'])->pluck('id');
 
                         if ($similarGameIds->isNotEmpty()) {
-                            $game->similarGames()->syncWithoutDetaching($similarGameIds);
-                            $stats['updated']++;
+                            $changes = $game->similarGames()->syncWithoutDetaching($similarGameIds);
+                            
+                            if (! empty($changes['attached'])) {
+                                $stats['updated']++;
+                            } else {
+                                $stats['skipped']++;
+                            }
                         } else {
                             $stats['skipped']++;
                         }
