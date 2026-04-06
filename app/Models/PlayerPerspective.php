@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PlayerPerspective extends Model
 {
@@ -11,4 +12,9 @@ class PlayerPerspective extends Model
         'name',
         'slug',
     ];
+
+    public function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class);
+    }
 }

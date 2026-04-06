@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Models\Collection;
+use App\Models\Franchise;
 use App\Models\Game;
 use App\Models\GameMode;
 use App\Models\Genre;
@@ -23,7 +25,7 @@ class ImportGames extends AbstractIgdbImport
 
     protected function getQueryBody(): string
     {
-        return 'fields id, name, slug, summary, first_release_date, rating, rating_count, total_rating, total_rating_count, cover, genres, platforms, themes, game_modes, player_perspectives; where game_type = (0,8,9) & total_rating_count >= 20 & cover != null & screenshots != null & first_release_date != null;';
+        return 'fields id, name, slug, summary, first_release_date, rating, rating_count, collection, franchises, cover, genres, platforms, themes, game_modes, player_perspectives; where game_type = (0,8,9) & rating_count >= 20 & rating > 50 & cover != null & screenshots != null & first_release_date != null;';
     }
 
     protected function processItem(array $item): string
@@ -31,6 +33,11 @@ class ImportGames extends AbstractIgdbImport
         $year = null;
         if (! empty($item['first_release_date'])) {
             $year = Carbon::createFromTimestamp($item['first_release_date'])->year;
+        }
+
+        $collectionId = null;
+        if (! empty($item['collection'])) {
+            $collectionId = Collection::where('igdb_id', $item['collection'])->value('id');
         }
 
         $game = Game::updateOrCreate(
@@ -42,8 +49,7 @@ class ImportGames extends AbstractIgdbImport
                 'release_year' => $year,
                 'rating' => $item['rating'] ?? null,
                 'rating_count' => $item['rating_count'] ?? null,
-                'total_rating' => $item['total_rating'] ?? null,
-                'total_rating_count' => $item['total_rating_count'] ?? null,
+                'collection_id' => $collectionId,
                 'cover_igdb_id' => $item['cover'] ?? null,
             ]
         );
@@ -73,6 +79,11 @@ class ImportGames extends AbstractIgdbImport
         if (! empty($item['player_perspectives'])) {
             $perspectiveIds = PlayerPerspective::whereIn('igdb_id', $item['player_perspectives'])->pluck('id');
             $game->playerPerspectives()->sync($perspectiveIds);
+        }
+
+        if (! empty($item['franchises'])) {
+            $franchiseIds = Franchise::whereIn('igdb_id', $item['franchises'])->pluck('id');
+            $game->franchises()->sync($franchiseIds);
         }
 
         return $wasCreated ? 'created' : 'updated';

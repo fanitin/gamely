@@ -15,8 +15,7 @@ class Game extends Model
         'release_year',
         'rating',
         'rating_count',
-        'total_rating',
-        'total_rating_count',
+        'collection_id',
         'cover_igdb_id',
         'cover_url',
         'is_active',
@@ -28,10 +27,23 @@ class Game extends Model
             'is_active' => 'boolean',
             'release_year' => 'integer',
             'rating' => 'decimal:2',
-            'total_rating' => 'decimal:2',
             'rating_count' => 'integer',
-            'total_rating_count' => 'integer',
         ];
+    }
+
+    public function collection(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Collection::class);
+    }
+
+    public function similarGames(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class, 'game_similar_game', 'game_id', 'similar_game_id');
+    }
+
+    public function franchises(): BelongsToMany
+    {
+        return $this->belongsToMany(Franchise::class, 'game_franchise');
     }
 
     public function genres(): BelongsToMany

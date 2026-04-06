@@ -46,6 +46,18 @@ return new class extends Migration
             $table->foreignIdFor(PlayerPerspective::class)->constrained()->cascadeOnDelete();
             $table->primary(['game_id', 'player_perspective_id']);
         });
+
+        Schema::create('game_similar_game', function (Blueprint $table) {
+            $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
+            $table->foreignId('similar_game_id')->constrained('games')->cascadeOnDelete();
+            $table->primary(['game_id', 'similar_game_id']);
+        });
+
+        Schema::create('game_franchise', function (Blueprint $table) {
+            $table->foreignId('game_id')->constrained('games')->cascadeOnDelete();
+            $table->foreignId('franchise_id')->constrained('franchises')->cascadeOnDelete();
+            $table->primary(['game_id', 'franchise_id']);
+        });
     }
 
     /**
@@ -53,6 +65,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('game_franchise');
+        Schema::dropIfExists('game_similar_game');
         Schema::dropIfExists('game_player_perspective');
         Schema::dropIfExists('game_game_mode');
         Schema::dropIfExists('game_theme');

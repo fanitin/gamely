@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class GameMode extends Model
+class Franchise extends Model
 {
     protected $fillable = [
         'igdb_id',
@@ -15,6 +15,6 @@ class GameMode extends Model
 
     public function games(): BelongsToMany
     {
-        return $this->belongsToMany(Game::class);
+        return $this->belongsToMany(Game::class, 'game_franchise');
     }
 }

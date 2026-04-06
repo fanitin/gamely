@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\IGDB;
 
+use App\Models\Collection;
+use App\Models\Franchise;
 use App\Models\Game;
 use App\Models\GameMode;
 use App\Models\Genre;
@@ -30,8 +32,6 @@ class GameTest extends TestCase
             'release_year' => 2007,
             'rating' => 86.65,
             'rating_count' => 3093,
-            'total_rating' => 89.64,
-            'total_rating_count' => 3101,
             'cover_igdb_id' => 122598,
             'summary' => 'BioShock is a horror-themed first-person shooter...',
             'is_active' => true,
@@ -57,6 +57,58 @@ class GameTest extends TestCase
 
         $this->assertCount(1, $game->playerPerspectives);
         $this->assertEquals('First person', $game->playerPerspectives->first()->name);
+    }
+
+    public function test_game_belongs_to_collection(): void
+    {
+        $collection = Collection::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 100]);
+        $game = Game::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 20, 'collection_id' => $collection->id]);
+
+        $this->assertNotNull($game->collection);
+        $this->assertEquals('BioShock', $game->collection->name);
+        $this->assertCount(1, $collection->games);
+    }
+
+    public function test_game_has_similar_games(): void
+    {
+        $game1 = Game::create(['name' => 'Game 1', 'slug' => 'game-1', 'igdb_id' => 1]);
+        $game2 = Game::create(['name' => 'Game 2', 'slug' => 'game-2', 'igdb_id' => 2]);
+
+        $game1->similarGames()->attach($game2->id);
+
+        $this->assertCount(1, $game1->similarGames);
+        $this->assertEquals('Game 2', $game1->similarGames->first()->name);
+    }
+
+    public function test_game_has_franchises(): void
+    {
+        $franchise = Franchise::create(['name' => 'Mario', 'slug' => 'mario', 'igdb_id' => 1]);
+        $game = Game::create(['name' => 'Super Mario World', 'slug' => 'super-mario-world', 'igdb_id' => 1]);
+
+        $game->franchises()->attach($franchise->id);
+
+        $this->assertCount(1, $game->franchises);
+        $this->assertEquals('Mario', $game->franchises->first()->name);
+        $this->assertCount(1, $franchise->games);
+    }
+
+    public function test_all_reference_models_have_games_relationship(): void
+    {
+        $game = Game::create(['name' => 'Test Game', 'slug' => 'test-game', 'igdb_id' => 1]);
+
+        $models = [
+            Genre::create(['name' => 'Genre', 'slug' => 'genre', 'igdb_id' => 1]),
+            Platform::create(['name' => 'Platform', 'slug' => 'platform', 'igdb_id' => 1]),
+            Theme::create(['name' => 'Theme', 'slug' => 'theme', 'igdb_id' => 1]),
+            GameMode::create(['name' => 'Mode', 'slug' => 'mode', 'igdb_id' => 1]),
+            PlayerPerspective::create(['name' => 'Perspective', 'slug' => 'perspective', 'igdb_id' => 1]),
+        ];
+
+        foreach ($models as $model) {
+            $model->games()->attach($game->id);
+            $this->assertCount(1, $model->fresh()->games);
+            $this->assertEquals('Test Game', $model->games->first()->name);
+        }
     }
 
     public function test_game_sync_method_clears_old_relationships(): void

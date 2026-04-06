@@ -20,8 +20,7 @@ return new class extends Migration
             $table->integer('release_year')->nullable();
             $table->decimal('rating', 6, 2)->nullable();
             $table->integer('rating_count')->nullable();
-            $table->decimal('total_rating', 6, 2)->nullable();
-            $table->integer('total_rating_count')->nullable();
+            $table->foreignId('collection_id')->nullable()->constrained()->nullOnDelete();
             $table->unsignedBigInteger('cover_igdb_id')->nullable();
             $table->string('cover_url')->nullable();
             $table->boolean('is_active')->default(false);

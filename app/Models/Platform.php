@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Platform extends Model
 {
@@ -16,6 +17,11 @@ class Platform extends Model
         'platform_family_id',
         'url',
     ];
+
+    public function games(): BelongsToMany
+    {
+        return $this->belongsToMany(Game::class);
+    }
 
     public function platformFamily(): BelongsTo
     {
