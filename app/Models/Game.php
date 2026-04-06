@@ -13,7 +13,8 @@ class Game extends Model
         'name',
         'slug',
         'summary',
-        'release_year',
+        'storyline',
+        'release_date',
         'rating',
         'rating_count',
         'game_type',
@@ -26,7 +27,7 @@ class Game extends Model
     {
         return [
             'is_active' => 'boolean',
-            'release_year' => 'integer',
+            'release_date' => 'date',
             'rating' => 'decimal:2',
             'rating_count' => 'integer',
             'game_type' => GameType::class,
@@ -46,6 +47,16 @@ class Game extends Model
     public function franchises(): BelongsToMany
     {
         return $this->belongsToMany(Franchise::class, 'game_franchise');
+    }
+
+    public function developers(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'game_developer');
+    }
+
+    public function publishers(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class, 'game_publisher');
     }
 
     public function genres(): BelongsToMany

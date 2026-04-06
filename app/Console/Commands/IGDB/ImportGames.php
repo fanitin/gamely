@@ -3,6 +3,7 @@
 namespace App\Console\Commands\IGDB;
 
 use App\Models\Collection;
+use App\Models\Company;
 use App\Models\Franchise;
 use App\Models\Game;
 use App\Models\GameMode;
@@ -18,6 +19,8 @@ use Illuminate\Support\Carbon;
 #[Description('Import games from IGDB API')]
 class ImportGames extends AbstractIgdbImport
 {
+    protected static ?array $cache = [];
+
     protected function getEndpoint(): string
     {
         return 'games';
@@ -25,14 +28,23 @@ class ImportGames extends AbstractIgdbImport
 
     protected function getQueryBody(): string
     {
-        return 'fields id, name, slug, summary, first_release_date, rating, rating_count, game_type, collections, franchises, cover, genres, platforms, themes, game_modes, player_perspectives; where game_type = (0,8,9) & rating_count >= 20 & rating > 50 & cover != null & screenshots != null & first_release_date != null;';
+        $fields = [
+            'id', 'name', 'slug', 'summary', 'storyline', 'first_release_date',
+            'rating', 'rating_count', 'game_type', 'cover',
+            'collections', 'franchises', 'genres', 'platforms', 'themes', 'game_modes', 'player_perspectives',
+            'involved_companies.developer', 'involved_companies.publisher',
+            'involved_companies.company.name', 'involved_companies.company.slug', 'involved_companies.company.id',
+            'involved_companies.company.logo.image_id',
+        ];
+
+        return 'fields '.implode(', ', $fields).'; where game_type = (0,8,9) & rating_count >= 20 & rating > 50 & cover != null & screenshots != null & first_release_date != null;';
     }
 
     protected function processItem(array $item): string
     {
-        $year = null;
+        $date = null;
         if (! empty($item['first_release_date'])) {
-            $year = Carbon::createFromTimestamp($item['first_release_date'])->year;
+            $date = Carbon::createFromTimestamp($item['first_release_date'])->toDateString();
         }
 
         $game = Game::updateOrCreate(
@@ -41,7 +53,8 @@ class ImportGames extends AbstractIgdbImport
                 'name' => $item['name'] ?? null,
                 'slug' => $item['slug'] ?? null,
                 'summary' => $item['summary'] ?? null,
-                'release_year' => $year,
+                'storyline' => $item['storyline'] ?? null,
+                'release_date' => $date,
                 'rating' => $item['rating'] ?? null,
                 'rating_count' => $item['rating_count'] ?? null,
                 'game_type' => $item['game_type'] ?? 0,
@@ -51,41 +64,89 @@ class ImportGames extends AbstractIgdbImport
 
         $wasCreated = $game->wasRecentlyCreated;
 
-        if (! empty($item['collections'])) {
-            $collectionIds = Collection::whereIn('igdb_id', $item['collections'])->pluck('id');
-            $game->collections()->sync($collectionIds);
-        }
+        // Sync relationships with memory caching
+        $this->syncRelation($game, 'genres', Genre::class, $item['genres'] ?? []);
+        $this->syncRelation($game, 'platforms', Platform::class, $item['platforms'] ?? []);
+        $this->syncRelation($game, 'themes', Theme::class, $item['themes'] ?? []);
+        $this->syncRelation($game, 'gameModes', GameMode::class, $item['game_modes'] ?? []);
+        $this->syncRelation($game, 'playerPerspectives', PlayerPerspective::class, $item['player_perspectives'] ?? []);
+        $this->syncRelation($game, 'collections', Collection::class, $item['collections'] ?? []);
+        $this->syncRelation($game, 'franchises', Franchise::class, $item['franchises'] ?? []);
 
-        if (! empty($item['genres'])) {
-            $genreIds = Genre::whereIn('igdb_id', $item['genres'])->pluck('id');
-            $game->genres()->sync($genreIds);
-        }
+        // Companies
+        if (! empty($item['involved_companies'])) {
+            $developerIds = [];
+            $publisherIds = [];
 
-        if (! empty($item['platforms'])) {
-            $platformIds = Platform::whereIn('igdb_id', $item['platforms'])->pluck('id');
-            $game->platforms()->sync($platformIds);
-        }
+            foreach ($item['involved_companies'] as $involved) {
+                if (empty($involved['company'])) {
+                    continue;
+                }
 
-        if (! empty($item['themes'])) {
-            $themeIds = Theme::whereIn('igdb_id', $item['themes'])->pluck('id');
-            $game->themes()->sync($themeIds);
-        }
+                $companyData = $involved['company'];
+                $company = $this->getOrCreateCompany($companyData);
 
-        if (! empty($item['game_modes'])) {
-            $modeIds = GameMode::whereIn('igdb_id', $item['game_modes'])->pluck('id');
-            $game->gameModes()->sync($modeIds);
-        }
+                if ($involved['developer'] ?? false) {
+                    $developerIds[] = $company->id;
+                }
+                if ($involved['publisher'] ?? false) {
+                    $publisherIds[] = $company->id;
+                }
+            }
 
-        if (! empty($item['player_perspectives'])) {
-            $perspectiveIds = PlayerPerspective::whereIn('igdb_id', $item['player_perspectives'])->pluck('id');
-            $game->playerPerspectives()->sync($perspectiveIds);
-        }
-
-        if (! empty($item['franchises'])) {
-            $franchiseIds = Franchise::whereIn('igdb_id', $item['franchises'])->pluck('id');
-            $game->franchises()->sync($franchiseIds);
+            $game->developers()->sync($developerIds);
+            $game->publishers()->sync($publisherIds);
         }
 
         return $wasCreated ? 'created' : 'updated';
+    }
+
+    private function getOrCreateCompany(array $data): Company
+    {
+        $igdbId = $data['id'];
+
+        if (! isset(self::$cache['companies'])) {
+            self::$cache['companies'] = [];
+        }
+
+        if (! isset(self::$cache['companies'][$igdbId])) {
+            $logoUrl = null;
+            if (! empty($data['logo']['image_id'])) {
+                $imageId = $data['logo']['image_id'];
+                $logoUrl = "https://images.igdb.com/igdb/image/upload/t_logo_med/{$imageId}.jpg";
+            }
+
+            $company = Company::updateOrCreate(
+                ['igdb_id' => $igdbId],
+                [
+                    'name' => $data['name'],
+                    'slug' => $data['slug'],
+                    'logo_url' => $logoUrl,
+                ]
+            );
+            self::$cache['companies'][$igdbId] = $company;
+        }
+
+        return self::$cache['companies'][$igdbId];
+    }
+
+    private function syncRelation(Game $game, string $relation, string $modelClass, array $igdbIds): void
+    {
+        if (empty($igdbIds)) {
+            return;
+        }
+
+        if (! isset(self::$cache[$modelClass])) {
+            self::$cache[$modelClass] = $modelClass::pluck('id', 'igdb_id')->toArray();
+        }
+
+        $localIds = [];
+        foreach ($igdbIds as $igdbId) {
+            if (isset(self::$cache[$modelClass][$igdbId])) {
+                $localIds[] = self::$cache[$modelClass][$igdbId];
+            }
+        }
+
+        $game->$relation()->sync($localIds);
     }
 }

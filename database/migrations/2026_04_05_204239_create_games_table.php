@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('summary')->nullable();
-            $table->integer('release_year')->nullable();
+            $table->text('storyline')->nullable();
+            $table->date('release_date')->nullable();
             $table->decimal('rating', 6, 2)->nullable();
             $table->integer('rating_count')->nullable();
             $table->unsignedTinyInteger('game_type')->default(0);

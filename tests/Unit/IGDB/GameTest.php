@@ -29,7 +29,7 @@ class GameTest extends TestCase
             'name' => 'BioShock',
             'slug' => 'bioshock',
             'igdb_id' => 20,
-            'release_year' => 2007,
+            'release_date' => '2007-08-21',
             'rating' => 86.65,
             'rating_count' => 3093,
             'cover_igdb_id' => 122598,
@@ -59,14 +59,16 @@ class GameTest extends TestCase
         $this->assertEquals('First person', $game->playerPerspectives->first()->name);
     }
 
-    public function test_game_belongs_to_collection(): void
+    public function test_game_belongs_to_collections(): void
     {
         $collection = Collection::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 100]);
-        $game = Game::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 20, 'collection_id' => $collection->id]);
+        $game = Game::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 20]);
 
-        $this->assertNotNull($game->collection);
-        $this->assertEquals('BioShock', $game->collection->name);
-        $this->assertCount(1, $collection->games);
+        $game->collections()->attach($collection->id);
+
+        $this->assertCount(1, $game->fresh()->collections);
+        $this->assertEquals('BioShock', $game->fresh()->collections->first()->name);
+        $this->assertCount(1, $collection->fresh()->games);
     }
 
     public function test_game_has_similar_games(): void
