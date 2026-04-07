@@ -82,6 +82,18 @@ class IgdbService
         return $response->json();
     }
 
+    public function getCovers(array $gameIds): array
+    {
+        if (empty($gameIds)) {
+            return [];
+        }
+
+        $idsString = implode(',', $gameIds);
+        $query = "fields game, image_id, url; where game = ({$idsString}); limit 500;";
+
+        return $this->query('covers', $query);
+    }
+
     private function makeRequest(string $endpoint, string $body): Response
     {
         return Http::withHeaders([

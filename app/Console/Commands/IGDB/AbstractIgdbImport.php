@@ -57,7 +57,7 @@ abstract class AbstractIgdbImport extends Command
                 $offset += $limit;
                 Cache::put($cacheKey, $offset, now()->addDays(7));
 
-                usleep(400_000);
+                usleep(config('services.igdb.sleep_ms', 250) * 1000);
             }
 
             $this->info("Successfully finished import for {$this->getEndpoint()}!\n");

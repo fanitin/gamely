@@ -23,6 +23,7 @@ class ImportAll extends Command
             'import:igdb-franchises',
             'import:igdb-games',
             'import:igdb-similar-games',
+            'import:covers',
         ];
 
         $this->info('Starting full IGDB import process...');
