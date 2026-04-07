@@ -8,7 +8,6 @@ use App\Services\MediaService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 #[Signature('import:covers {--limit= : Limit the number of games to process} {--force : Force re-download even if cover already exists in R2}')]
@@ -54,11 +53,10 @@ class ImportCovers extends Command
 
         $processed = 0;
         $success = 0;
-        $skippedR2 = 0;
         $failed = 0;
 
         $query->chunkById(50, function ($games) use (
-            $bar, &$processed, &$success, &$skippedR2, &$failed, $total, $forceRedownload
+            $bar, &$processed, &$success, &$failed, $total, $forceRedownload
         ) {
             if ($processed >= $total) {
                 return false;
@@ -74,18 +72,6 @@ class ImportCovers extends Command
                     $cover = $coversData->get($game->igdb_id);
 
                     if (! $cover || empty($cover['url'])) {
-                        $processed++;
-                        $bar->advance();
-                        continue;
-                    }
-
-                    $expectedPath = "covers/{$game->igdb_id}.webp";
-
-                    if (! $forceRedownload && Storage::disk('r2')->exists($expectedPath)) {
-                        if ($game->cover_url !== $expectedPath) {
-                            $game->update(['cover_url' => $expectedPath]);
-                        }
-                        $skippedR2++;
                         $processed++;
                         $bar->advance();
                         continue;
@@ -114,7 +100,7 @@ class ImportCovers extends Command
         $bar->finish();
         $this->newLine(2);
         $this->info("Cover import finished!");
-        $this->info("Uploaded: {$success} | Skipped (already on R2): {$skippedR2} | Failed: {$failed} | Total processed: {$processed}");
+        $this->info("Uploaded: {$success} | Failed: {$failed} | Total processed: {$processed}");
 
         return self::SUCCESS;
     }
