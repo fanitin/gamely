@@ -32,7 +32,7 @@ abstract class AbstractIgdbImport extends Command
 
         try {
             while (true) {
-                $query = $this->getQueryBody()." limit {$limit}; offset {$offset};";
+                $query = $this->getQueryBody()." sort id asc; limit {$limit}; offset {$offset};";
 
                 $items = $this->igdb->query($this->getEndpoint(), $query);
 
