@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('igdb_id')->unique();
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->string('abbreviation')->nullable();
             $table->unsignedBigInteger('platform_logo_id')->nullable();
             $table->foreignId('platform_family_id')->nullable()->constrained()->nullOnDelete();

@@ -25,6 +25,10 @@ return new class extends Migration
             $table->unsignedBigInteger('cover_igdb_id')->nullable();
             $table->string('cover_url')->nullable();
             $table->boolean('is_active')->default(false);
+
+            $table->index('name');
+            $table->index('is_active');
+
             $table->timestamps();
         });
     }
