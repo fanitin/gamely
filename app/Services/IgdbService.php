@@ -25,7 +25,7 @@ class IgdbService
         390, // PSVR2
 
         // Xbox
-        11,  // Xbox (original)
+        11,  // Xbox original
         12,  // Xbox 360
         49,  // Xbox One
         169, // Xbox Series X|S
@@ -46,7 +46,7 @@ class IgdbService
         37,  // 3DS
         137, // New 3DS
 
-        // Sega (ретро, но знаковые)
+        // Sega
         29,  // Mega Drive / Genesis
         32,  // Saturn
         23,  // Dreamcast
@@ -55,7 +55,7 @@ class IgdbService
         34,  // Android
         39,  // iOS
 
-        // VR (современные)
+        // VR
         162, // Oculus / Meta Quest
         163, // Steam VR
         386, // Meta Quest 2
@@ -92,6 +92,30 @@ class IgdbService
         $query = "fields game, image_id, url; where game = ({$idsString}); limit 500;";
 
         return $this->query('covers', $query);
+    }
+
+    public function getArtworks(array $gameIds): array
+    {
+        if (empty($gameIds)) {
+            return [];
+        }
+
+        $idsString = implode(',', $gameIds);
+        $query = "fields game, image_id, url; where game = ({$idsString}); limit 500;";
+
+        return $this->query('artworks', $query);
+    }
+
+    public function getScreenshots(array $gameIds): array
+    {
+        if (empty($gameIds)) {
+            return [];
+        }
+
+        $idsString = implode(',', $gameIds);
+        $query = "fields game, image_id, url; where game = ({$idsString}); limit 500;";
+
+        return $this->query('screenshots', $query);
     }
 
     private function makeRequest(string $endpoint, string $body): Response

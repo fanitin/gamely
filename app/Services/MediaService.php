@@ -20,7 +20,22 @@ class MediaService
 
     public function uploadCover(string $url, int $igdbId): string
     {
-        $sourceUrl = str_replace('t_thumb', 't_cover_big', $url);
+        return $this->processAndUploadImage($url, "covers/{$igdbId}.webp", 't_cover_big', 600);
+    }
+
+    public function uploadArtwork(string $url, int $igdbId, string $imageId): string
+    {
+        return $this->processAndUploadImage($url, "artworks/{$igdbId}_{$imageId}.webp", 't_1080p', 1280);
+    }
+
+    public function uploadScreenshot(string $url, int $igdbId, string $imageId): string
+    {
+        return $this->processAndUploadImage($url, "screenshots/{$igdbId}_{$imageId}.webp", 't_1080p', 1280);
+    }
+
+    private function processAndUploadImage(string $url, string $path, string $igdbSize, int $maxWidth): string
+    {
+        $sourceUrl = str_replace('t_thumb', $igdbSize, $url);
         if (! str_starts_with($sourceUrl, 'http')) {
             $sourceUrl = 'https:' . $sourceUrl;
         }
@@ -34,13 +49,11 @@ class MediaService
 
             $image = $this->manager->decode($response->body());
 
-            if ($image->width() > 600) {
-                $image->scale(width: 600);
+            if ($image->width() > $maxWidth) {
+                $image->scale(width: $maxWidth);
             }
 
             $encoded = $image->encode(new WebpEncoder(quality: 82));
-
-            $path = "covers/{$igdbId}.webp";
 
             Storage::disk('r2')->put($path, $encoded->toString(), [
                 'ContentType' => 'image/webp',
@@ -49,7 +62,7 @@ class MediaService
 
             return $path;
         } catch (Exception $e) {
-            throw new Exception('MediaService::uploadCover failed: ' . $e->getMessage(), 0, $e);
+            throw new Exception("MediaService::processAndUploadImage failed for {$path}: " . $e->getMessage(), 0, $e);
         }
     }
 

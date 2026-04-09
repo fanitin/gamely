@@ -6,6 +6,8 @@ use App\Models\Collection;
 use App\Models\Franchise;
 use App\Models\Game;
 use App\Models\GameMode;
+use App\Models\GameScreenshot;
+use App\Models\GameArtwork;
 use App\Models\Genre;
 use App\Models\Platform;
 use App\Models\PlayerPerspective;
@@ -128,5 +130,31 @@ class GameTest extends TestCase
 
         $this->assertCount(1, $game->fresh()->genres);
         $this->assertEquals('Second', $game->fresh()->genres->first()->name);
+    }
+
+    public function test_game_has_artworks(): void
+    {
+        $game = Game::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 20]);
+        
+        $game->artworks()->create([
+            'url' => 'artworks/20_art1.webp',
+            'order' => 1
+        ]);
+
+        $this->assertCount(1, $game->fresh()->artworks);
+        $this->assertEquals('artworks/20_art1.webp', $game->artworks->first()->url);
+    }
+
+    public function test_game_has_screenshots(): void
+    {
+        $game = Game::create(['name' => 'BioShock', 'slug' => 'bioshock', 'igdb_id' => 20]);
+        
+        $game->screenshots()->create([
+            'url' => 'screenshots/20_scr1.webp',
+            'order' => 1
+        ]);
+
+        $this->assertCount(1, $game->fresh()->screenshots);
+        $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->url);
     }
 }

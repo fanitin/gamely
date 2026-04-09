@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\GameType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Game extends Model
 {
@@ -82,5 +83,15 @@ class Game extends Model
     public function playerPerspectives(): BelongsToMany
     {
         return $this->belongsToMany(PlayerPerspective::class);
+    }
+
+    public function artworks(): HasMany
+    {
+        return $this->hasMany(GameArtwork::class);
+    }
+
+    public function screenshots(): HasMany
+    {
+        return $this->hasMany(GameScreenshot::class);
     }
 }

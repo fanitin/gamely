@@ -13,28 +13,33 @@ class ImportAll extends Command
     public function handle(): int
     {
         $commands = [
-            'import:igdb-platform-families',
-            'import:igdb-platforms',
-            'import:igdb-genres',
-            'import:igdb-game-modes',
-            'import:igdb-player-perspectives',
-            'import:igdb-themes',
-            'import:igdb-collections',
-            'import:igdb-franchises',
-            'import:igdb-games',
-            'import:igdb-similar-games',
-            'import:covers --limit=10',
+            ['signature' => 'import:igdb-platform-families'],
+            ['signature' => 'import:igdb-platforms'],
+            ['signature' => 'import:igdb-genres'],
+            ['signature' => 'import:igdb-game-modes'],
+            ['signature' => 'import:igdb-player-perspectives'],
+            ['signature' => 'import:igdb-themes'],
+            ['signature' => 'import:igdb-collections'],
+            ['signature' => 'import:igdb-franchises'],
+            ['signature' => 'import:igdb-games'],
+            ['signature' => 'import:igdb-similar-games'],
+            ['signature' => 'import:covers', 'arguments' => ['--limit' => 10]],
+            ['signature' => 'import:artworks', 'arguments' => ['--limit' => 10]],
+            ['signature' => 'import:screenshots', 'arguments' => ['--limit' => 10]],
         ];
 
         $this->info('Starting full IGDB import process...');
 
         foreach ($commands as $command) {
-            $this->info("Running: {$command}");
+            $signature = $command['signature'];
+            $arguments = $command['arguments'] ?? [];
 
-            $exitCode = $this->call($command);
+            $this->info("Running: {$signature}");
+
+            $exitCode = $this->call($signature, $arguments);
 
             if ($exitCode !== 0) {
-                $this->error("\nCommand {$command} failed with exit code {$exitCode}. Aborting.");
+                $this->error("\nCommand {$signature} failed with exit code {$exitCode}. Aborting.");
 
                 return static::FAILURE;
             }
