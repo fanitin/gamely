@@ -26,7 +26,7 @@ class ImportArtworks extends Command
         $forceRedownload = (bool) $this->option('force');
         $limit = $this->option('limit') ? (int) $this->option('limit') : null;
 
-        $query = Game::query()->where('is_active', true);
+        $query = Game::query()->whereNotNull('cover_igdb_id');
 
         if (! $forceRedownload) {
             $query->has('artworks', '<', 3);
@@ -39,7 +39,7 @@ class ImportArtworks extends Command
         }
 
         if ($total === 0) {
-            $this->info('No active games found needing artwork import.');
+            $this->info('No games found needing artwork import.');
 
             return self::SUCCESS;
         }
@@ -70,7 +70,7 @@ class ImportArtworks extends Command
                 foreach ($chunk as $game) {
                     $gameArtworks = $groupedArtworks->get($game->igdb_id, collect());
 
-                    if ($gameArtworks->isEmpty()) {
+                    if ($gameArtworks->count() < 3) {
                         $processed++;
                         $bar->advance();
 

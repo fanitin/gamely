@@ -40,6 +40,11 @@ class ImportArtworksTest extends TestCase
                             'game' => 20,
                             'image_id' => 'art2',
                             'url' => '//images.igdb.com/igdb/image/upload/t_thumb/art2.jpg'
+                        ],
+                        [
+                            'game' => 20,
+                            'image_id' => 'art3',
+                            'url' => '//images.igdb.com/igdb/image/upload/t_thumb/art3.jpg'
                         ]
                     ]);
             })
@@ -49,8 +54,8 @@ class ImportArtworksTest extends TestCase
             MediaService::class,
             Mockery::mock(MediaService::class, function (MockInterface $mock) {
                 $mock->shouldReceive('uploadArtwork')
-                    ->twice()
-                    ->andReturn('artworks/20_art1.webp', 'artworks/20_art2.webp');
+                    ->times(3)
+                    ->andReturn('artworks/20_art1.webp', 'artworks/20_art2.webp', 'artworks/20_art3.webp');
             })
         );
 
@@ -59,7 +64,7 @@ class ImportArtworksTest extends TestCase
             ->expectsOutputToContain('Artwork import finished!')
             ->assertExitCode(0);
 
-        $this->assertCount(2, $game->fresh()->artworks);
+        $this->assertCount(3, $game->fresh()->artworks);
         $this->assertEquals('artworks/20_art1.webp', $game->artworks->first()->url);
         $this->assertEquals(1, $game->artworks->first()->order);
     }

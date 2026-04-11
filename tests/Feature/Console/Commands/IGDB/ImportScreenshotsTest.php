@@ -40,6 +40,21 @@ class ImportScreenshotsTest extends TestCase
                             'game' => 20,
                             'image_id' => 'scr2',
                             'url' => '//images.igdb.com/igdb/image/upload/t_thumb/scr2.jpg'
+                        ],
+                        [
+                            'game' => 20,
+                            'image_id' => 'scr3',
+                            'url' => '//images.igdb.com/igdb/image/upload/t_thumb/scr3.jpg'
+                        ],
+                        [
+                            'game' => 20,
+                            'image_id' => 'scr4',
+                            'url' => '//images.igdb.com/igdb/image/upload/t_thumb/scr4.jpg'
+                        ],
+                        [
+                            'game' => 20,
+                            'image_id' => 'scr5',
+                            'url' => '//images.igdb.com/igdb/image/upload/t_thumb/scr5.jpg'
                         ]
                     ]);
             })
@@ -49,8 +64,14 @@ class ImportScreenshotsTest extends TestCase
             MediaService::class,
             Mockery::mock(MediaService::class, function (MockInterface $mock) {
                 $mock->shouldReceive('uploadScreenshot')
-                    ->twice()
-                    ->andReturn('screenshots/20_scr1.webp', 'screenshots/20_scr2.webp');
+                    ->times(5)
+                    ->andReturn(
+                        'screenshots/20_scr1.webp', 
+                        'screenshots/20_scr2.webp',
+                        'screenshots/20_scr3.webp',
+                        'screenshots/20_scr4.webp',
+                        'screenshots/20_scr5.webp'
+                    );
             })
         );
 
@@ -59,7 +80,7 @@ class ImportScreenshotsTest extends TestCase
             ->expectsOutputToContain('Screenshot import finished!')
             ->assertExitCode(0);
 
-        $this->assertCount(2, $game->fresh()->screenshots);
+        $this->assertCount(5, $game->fresh()->screenshots);
         $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->url);
         $this->assertEquals(1, $game->screenshots->first()->order);
     }

@@ -26,8 +26,7 @@ class ImportScreenshots extends Command
         $forceRedownload = (bool) $this->option('force');
         $limit = $this->option('limit') ? (int) $this->option('limit') : null;
 
-        // $query = Game::query()->where('is_active', true);
-        $query = Game::query();
+        $query = Game::query()->whereNotNull('cover_igdb_id');
 
         if (! $forceRedownload) {
             $query->has('screenshots', '<', 5);
@@ -71,7 +70,7 @@ class ImportScreenshots extends Command
                 foreach ($chunk as $game) {
                     $gameScreenshots = $groupedScreenshots->get($game->igdb_id, collect());
 
-                    if ($gameScreenshots->isEmpty()) {
+                    if ($gameScreenshots->count() < 5) {
                         $processed++;
                         $bar->advance();
 
