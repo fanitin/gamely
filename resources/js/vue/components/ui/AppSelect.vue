@@ -75,13 +75,13 @@ const sizeMap = computed(() => {
         <div class="relative mt-1">
             <ListboxLabel
                 v-if="label"
-                class="block text-sm font-medium text-slate-300 mb-1"
+                class="block text-sm font-medium text-muted mb-1"
             >
                 {{ label }}
             </ListboxLabel>
 
             <ListboxButton
-                class="relative w-full cursor-pointer rounded-xl bg-slate-800/80 border border-white/10 text-left text-white shadow-lg focus:outline-none focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/50 transition-colors hover:bg-slate-800 backdrop-blur-sm"
+                class="relative w-full cursor-pointer rounded-xl bg-onyx-light/80 border border-white/10 text-left text-white shadow-lg focus:outline-none focus-visible:border-teal-500 focus-visible:ring-2 focus-visible:ring-teal-500/50 transition-colors hover:bg-onyx-light backdrop-blur-sm"
                 :class="sizeMap.button"
             >
                 <span class="block truncate font-medium tracking-wide">
@@ -91,14 +91,14 @@ const sizeMap = computed(() => {
                     class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
                 >
                     <ChevronDown
-                        :class="['text-slate-400', sizeMap.icon]"
+                        :class="['text-muted', sizeMap.icon]"
                         aria-hidden="true"
                     />
                 </span>
             </ListboxButton>
 
             <ListboxOptions
-                class="absolute mt-2 max-h-60 w-full overflow-auto custom-scrollbar rounded-xl bg-slate-800 border border-white/10 py-2 shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overscroll-contain text-sm"
+                class="absolute mt-2 max-h-60 w-full overflow-auto custom-scrollbar rounded-xl bg-onyx border border-white/10 py-2 shadow-2xl ring-1 ring-black/5 focus:outline-none z-50 overscroll-contain text-sm"
             >
                 <ListboxOption
                     v-slot="{ selected }"
@@ -108,13 +108,13 @@ const sizeMap = computed(() => {
                     as="template"
                 >
                     <li
-                        class="relative cursor-pointer select-none py-3 hover:bg-emerald-500/15 text-slate-200 hover:text-emerald-400"
+                        class="relative cursor-pointer select-none py-3 hover:bg-teal-500/15 text-white/90 hover:text-teal-400"
                         :class="[sizeMap.option]"
                     >
                         <span
                             :class="[
                                 selected
-                                    ? 'font-semibold text-emerald-400'
+                                    ? 'font-semibold text-teal-400'
                                     : 'font-medium',
                                 'block truncate',
                             ]"
@@ -123,7 +123,7 @@ const sizeMap = computed(() => {
                         </span>
                         <span
                             v-if="selected"
-                            class="absolute inset-y-0 left-0 flex items-center text-emerald-500"
+                            class="absolute inset-y-0 left-0 flex items-center text-teal-500"
                             :class="[sizeMap.checkPl]"
                         >
                             <Check :class="sizeMap.icon" aria-hidden="true" />

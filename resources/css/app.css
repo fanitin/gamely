@@ -9,6 +9,56 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* Onyx (Background) */
+    --color-onyx: #353839;
+    --color-onyx-dark: #1A1C1D;
+    --color-onyx-light: #4A4E50;
+
+    /* Teal (Primary) */
+    --color-teal-500: #008080;
+    --color-teal-600: #006666;
+    --color-teal-400: #00A3A3;
+
+    /* Forest Green (Success) */
+    --color-forest-500: #228B22;
+    --color-forest-600: #1A6B1A;
+    --color-forest-400: #2EAF2E;
+
+    /* Crimson (Danger) */
+    --color-crimson-500: #DC143C;
+    --color-crimson-600: #B01030;
+    --color-crimson-400: #E64D69;
+
+    /* Indigo (Accent) */
+    --color-indigo-500: #4B0082;
+    --color-indigo-600: #390063;
+    --color-indigo-400: #6A00B8;
+
+    /* Gold (Warning) */
+    --color-gold-500: #D97706;
+    --color-gold-600: #B45309;
+    --color-gold-400: #F59E0B;
+
+    /* Slate/Muted */
+    --color-muted: #64748B;
+
+    /* Semantic Aliases */
+    --color-primary-500: var(--color-teal-500);
+    --color-primary-600: var(--color-teal-600);
+    --color-primary-400: var(--color-teal-400);
+
+    --color-success-500: var(--color-forest-500);
+    --color-success-600: var(--color-forest-600);
+    --color-success-400: var(--color-forest-400);
+
+    --color-danger-500: var(--color-crimson-500);
+    --color-danger-600: var(--color-crimson-600);
+    --color-danger-400: var(--color-crimson-400);
+
+    --color-warning-500: var(--color-gold-500);
+    --color-warning-600: var(--color-gold-600);
+    --color-warning-400: var(--color-gold-400);
 }
 
 @layer utilities {

@@ -64,7 +64,7 @@ const sizeClasses = {
                     >
                         <DialogPanel
                             :class="[
-                                'w-full transform overflow-visible rounded-2xl bg-slate-900/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md',
+                                'w-full transform overflow-visible rounded-2xl bg-onyx-dark/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md',
                                 sizeClasses[props.size] || sizeClasses.md,
                             ]"
                         >
@@ -77,7 +77,7 @@ const sizeClasses = {
                                 </DialogTitle>
                                 <button
                                     type="button"
-                                    class="rounded-lg p-1 text-slate-400 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+                                    class="rounded-lg p-1 text-muted hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/50"
                                     @click="$emit('close')"
                                 >
                                     <X class="w-6 h-6" />

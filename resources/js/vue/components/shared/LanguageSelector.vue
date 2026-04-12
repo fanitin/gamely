@@ -52,7 +52,7 @@ function handleLanguageChange(newLang) {
     <div>
         <button
             @click="openModal"
-            class="p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
+            class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/50"
             :title="t('nav.change_locale')"
         >
             <Globe class="w-6 h-6" />
@@ -67,7 +67,7 @@ function handleLanguageChange(newLang) {
                     @update:modelValue="handleLanguageChange"
                 />
                 
-                <p class="mt-6 text-sm text-slate-400 font-medium tracking-wide">
+                <p class="mt-6 text-sm text-muted font-medium tracking-wide">
                     {{ t('nav.more_languages_soon') }}
                 </p>
             </div>

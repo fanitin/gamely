@@ -5,17 +5,17 @@ const { t } = useI18n();
 
 <template>
     <footer
-        class="mt-auto border-t border-white/5 bg-slate-950/50 relative z-10 select-none"
+        class="mt-auto border-t border-white/5 bg-onyx-dark/50 relative z-10 select-none"
     >
         <div class="max-w-5xl mx-auto px-4 py-4">
             <div
-                class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-slate-500"
+                class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted/80"
             >
                 <div class="font-medium">
                     &copy; {{ new Date().getFullYear() }}
-                    <span class="text-slate-300">Gamely</span>
+                    <span class="text-white/80">Gamely</span>
                     <span class="mx-2 opacity-20">|</span>
-                    by <span class="text-slate-400">Faniko</span>
+                    by <span class="text-muted">Faniko</span>
                 </div>
 
                 <nav
@@ -31,7 +31,7 @@ const { t } = useI18n();
             </div>
 
             <p
-                class="mt-2 text-[13px] text-slate-500 text-center sm:text-left italic opacity-80"
+                class="mt-2 text-[13px] text-muted/80 text-center sm:text-left italic opacity-80"
             >
                 Not affiliated with Sony, Microsoft or Nintendo. Data by
                 <a href="https://igdb.com" class="hover:text-white underline">

@@ -49,12 +49,12 @@ const examples = [
         size="lg"
         @close="$emit('close')"
     >
-        <div class="space-y-6 text-slate-300">
+        <div class="space-y-6 text-muted">
             <div class="space-y-2">
                 <p class="text-sm leading-relaxed font-medium text-white/90">
                     {{ t("how_to_play.intro") }}
                 </p>
-                <p class="text-xs text-slate-500 italic">
+                <p class="text-xs text-muted/70 italic">
                     {{ t("how_to_play.infinite_hint") }}
                 </p>
             </div>
@@ -67,13 +67,13 @@ const examples = [
                 >
                     <div class="flex items-center gap-4">
                         <div
-                            class="min-w-[80px] h-10 px-2 flex items-center justify-center rounded-lg font-bold text-[13px] uppercase tracking-wider border border-white/5 shadow-inner"
+                            class="min-w-[80px] h-10 px-2 flex items-center justify-center rounded-lg font-bold text-[13px] uppercase tracking-wider border border-white/5 shadow-inner transition-colors"
                             :class="{
-                                'bg-emerald-600 text-white shadow-emerald-500/10':
+                                'bg-forest-500 text-white shadow-forest-500/10':
                                     example.status === 'exact',
-                                'bg-amber-500 text-white shadow-amber-500/10':
+                                'bg-gold-500 text-white shadow-gold-500/10':
                                     example.status === 'close',
-                                'bg-slate-800/80 text-slate-400':
+                                'bg-onyx-light/80 text-muted':
                                     example.status === 'wrong',
                             }"
                         >
@@ -81,11 +81,11 @@ const examples = [
                         </div>
                         <div class="flex-1 space-y-0.5">
                             <p
-                                class="text-[11px] font-bold text-slate-500 uppercase tracking-widest"
+                                class="text-[11px] font-bold text-muted/70 uppercase tracking-widest"
                             >
                                 {{ t(`attributes.${example.property}`) }}
                             </p>
-                            <p class="text-xs leading-snug text-slate-300">
+                            <p class="text-xs leading-snug text-muted">
                                 {{ example.description }}
                             </p>
                         </div>

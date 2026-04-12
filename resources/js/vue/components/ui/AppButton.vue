@@ -33,13 +33,13 @@ const baseClasses =
 
 const variantClasses = {
     primary:
-        "bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20",
+        "bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-white shadow-lg shadow-teal-500/20",
     secondary:
-        "bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/5",
-    ghost: "bg-transparent hover:bg-white/10 text-slate-300 hover:text-white",
-    danger: "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/20",
+        "bg-indigo-500 hover:bg-indigo-400 active:bg-indigo-600 text-white shadow-lg shadow-indigo-500/20",
+    ghost: "bg-transparent hover:bg-white/10 text-muted hover:text-white",
+    danger: "bg-crimson-500 hover:bg-crimson-400 active:bg-crimson-600 text-white shadow-lg shadow-crimson-500/20",
     outline:
-        "bg-transparent border-2 border-slate-700 hover:border-emerald-500 text-slate-300 hover:text-white",
+        "bg-transparent border-2 border-onyx-light hover:border-teal-500 text-muted hover:text-white",
 };
 
 const sizeClasses = {
