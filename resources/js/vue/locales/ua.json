@@ -42,8 +42,8 @@
     },
     "attributes": {
         "genre": "Жанр",
-        "release_year": "Рік",
         "year": "Рік",
+        "release_year": "Рік випуску",
         "developer": "Розробник",
         "publisher": "Видавець",
         "platform": "Платформа",

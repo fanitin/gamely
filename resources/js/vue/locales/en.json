@@ -42,8 +42,8 @@
     },
     "attributes": {
         "genre": "Genre",
-        "release_year": "Year",
         "year": "Year",
+        "release_year": "Year",
         "developer": "Developer",
         "publisher": "Publisher",
         "platform": "Platform",

@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import AppModal from "@/vue/components/ui/AppModal.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
@@ -14,7 +15,7 @@ defineEmits(["close"]);
 
 const { t } = useI18n();
 
-const examples = [
+const examples = computed(() => [
     {
         property: "genre",
         name: "Action, RPG",
@@ -39,7 +40,7 @@ const examples = [
         status: "wrong",
         description: t("how_to_play.example_wrong"),
     },
-];
+]);
 </script>
 
 <template>
