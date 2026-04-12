@@ -70,7 +70,7 @@ class ImportScreenshots extends Command
                 foreach ($chunk as $game) {
                     $gameScreenshots = $groupedScreenshots->get($game->igdb_id, collect());
 
-                    if ($gameScreenshots->count() < 5) {
+                    if ($gameScreenshots->isEmpty()) {
                         $processed++;
                         $bar->advance();
 

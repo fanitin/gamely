@@ -70,7 +70,7 @@ class ImportArtworks extends Command
                 foreach ($chunk as $game) {
                     $gameArtworks = $groupedArtworks->get($game->igdb_id, collect());
 
-                    if ($gameArtworks->count() < 3) {
+                    if ($gameArtworks->isEmpty()) {
                         $processed++;
                         $bar->advance();
 

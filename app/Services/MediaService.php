@@ -33,6 +33,11 @@ class MediaService
         return $this->processAndUploadImage($url, "screenshots/{$igdbId}_{$imageId}.webp", 't_1080p', 1280);
     }
 
+    public function uploadCharacterMugShot(string $url, int $igdbId): string
+    {
+        return $this->processAndUploadImage($url, "character_mug_shots/{$igdbId}.webp", 't_cover_big', 600);
+    }
+
     private function processAndUploadImage(string $url, string $path, string $igdbSize, int $maxWidth): string
     {
         $sourceUrl = str_replace('t_thumb', $igdbSize, $url);

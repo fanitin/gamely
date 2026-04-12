@@ -94,4 +94,9 @@ class Game extends Model
     {
         return $this->hasMany(GameScreenshot::class);
     }
+
+    public function characters(): BelongsToMany
+    {
+        return $this->belongsToMany(Character::class, 'character_game');
+    }
 }
