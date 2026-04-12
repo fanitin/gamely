@@ -32,7 +32,7 @@ class ImportCharacters extends AbstractIgdbImport
 
     protected function getQueryBody(): string
     {
-        return 'fields akas,character_gender,character_species,country_name,description,games,mug_shot,name,slug; where games != null;';
+        return 'fields akas,character_gender,character_species,country_name,description,games,mug_shot,name,slug; where games.game_type = (0,8,9) & games.rating_count >= 20 & games.rating > 60 & games.first_release_date != null;';
     }
 
     protected function processItem(array $item): string
