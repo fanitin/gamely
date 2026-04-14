@@ -9,18 +9,32 @@
         "more_languages_soon": "More languages coming soon!"
     },
     "modes": {
-        "attributes": "Attributes",
-        "screenshot": "Screenshot",
-        "daily": "Daily Challenge",
-        "infinite": "Infinite Mode"
+        "classic": {
+            "title": "Classic",
+            "description": "Guess the game by its attributes"
+        },
+        "characters": {
+            "title": "Characters",
+            "description": "Guess the character by their attributes"
+        },
+        "covers": {
+            "title": "Covers",
+            "description": "Guess the game by its blurred cover"
+        },
+        "photos": {
+            "title": "Photos",
+            "description": "Guess the hero by their blurred photo"
+        }
     },
     "game": {
-        "guess_placeholder": "Search for a game...",
         "submit": "Guess",
         "share": "Share Result",
         "give_up": "Give Up",
         "attempts": "{current} / {max} attempts",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "no_results": "No results found",
+        "search_game": "Search for a game...",
+        "search_character": "Search for a character..."
     },
     "result": {
         "win_title": "Correct!",
@@ -41,12 +55,15 @@
         "lower": "Lower ▼"
     },
     "attributes": {
+        "game": "Game",
         "genre": "Genre",
+        "genres": "Genres",
         "year": "Year",
         "release_year": "Year",
         "developer": "Developer",
         "publisher": "Publisher",
         "platform": "Platform",
+        "platforms": "Platforms",
         "rating": "Rating"
     },
     "share": {

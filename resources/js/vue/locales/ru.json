@@ -9,18 +9,32 @@
         "more_languages_soon": "Скоро будут новые языки!"
     },
     "modes": {
-        "attributes": "Атрибуты",
-        "screenshot": "Скриншот",
-        "daily": "Ежедневный вызов",
-        "infinite": "Бесконечный режим"
+        "classic": {
+            "title": "Классика",
+            "description": "Угадай игру по её атрибутам"
+        },
+        "characters": {
+            "title": "Персонажи",
+            "description": "Угадай персонажа по атрибутам"
+        },
+        "covers": {
+            "title": "Обложки",
+            "description": "Угадай игру по размытой обложке"
+        },
+        "photos": {
+            "title": "Фото",
+            "description": "Угадай персонажа по размытой фотографии"
+        }
     },
     "game": {
-        "guess_placeholder": "Найдите игру...",
         "submit": "Угадать",
         "share": "Поделиться",
         "give_up": "Сдаться",
         "attempts": "{current} / {max} попыток",
-        "loading": "Загрузка..."
+        "loading": "Загрузка...",
+        "no_results": "Ничего не найдено",
+        "search_game": "Найдите игру...",
+        "search_character": "Найдите персонажа..."
     },
     "result": {
         "win_title": "Правильно!",
@@ -41,12 +55,15 @@
         "lower": "Ниже ▼"
     },
     "attributes": {
+        "game": "Игра",
         "genre": "Жанр",
-        "release_year": "Год",
+        "genres": "Жанры",
         "year": "Год",
+        "release_year": "Год",
         "developer": "Разработчик",
         "publisher": "Издатель",
         "platform": "Платформа",
+        "platforms": "Платформы",
         "rating": "Рейтинг"
     },
     "share": {

@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\PagesController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', fn () => Inertia::render('Home'));
-
+Route::get('/', [PagesController::class, 'home'])->name('home');
+Route::get('/attributes', [PagesController::class, 'classic'])->name('classic');

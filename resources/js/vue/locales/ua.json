@@ -9,18 +9,32 @@
         "more_languages_soon": "Скоро будуть нові мови!"
     },
     "modes": {
-        "attributes": "Атрибути",
-        "screenshot": "Скріншот",
-        "daily": "Щоденний виклик",
-        "infinite": "Нескінченний режим"
+        "classic": {
+            "title": "Класика",
+            "description": "Вгадай гру за її атрибутами"
+        },
+        "characters": {
+            "title": "Персонажі",
+            "description": "Вгадай персонажа за атрибутами"
+        },
+        "covers": {
+            "title": "Обкладинки",
+            "description": "Вгадай гру за розмитою обкладинкою"
+        },
+        "photos": {
+            "title": "Фото",
+            "description": "Вгадай персонажа за розмитою фотографією"
+        }
     },
     "game": {
-        "guess_placeholder": "Знайдіть гру...",
         "submit": "Вгадати",
         "share": "Поділитися",
         "give_up": "Здатися",
         "attempts": "{current} / {max} спроб",
-        "loading": "Завантаження..."
+        "loading": "Завантаження...",
+        "no_results": "Нічого не знайдено",
+        "search_game": "Знайдіть гру...",
+        "search_character": "Знайдіть персонажа..."
     },
     "result": {
         "win_title": "Правильно!",
@@ -41,12 +55,15 @@
         "lower": "Нижче ▼"
     },
     "attributes": {
+        "game": "Гра",
         "genre": "Жанр",
+        "genres": "Жанри",
         "year": "Рік",
-        "release_year": "Рік випуску",
+        "release_year": "Рік",
         "developer": "Розробник",
         "publisher": "Видавець",
         "platform": "Платформа",
+        "platforms": "Платформи",
         "rating": "Рейтинг"
     },
     "share": {

@@ -35,7 +35,7 @@ const { t } = useI18n();
             >
                 Not affiliated with Sony, Microsoft or Nintendo. Data by
                 <a href="https://igdb.com" class="hover:text-white underline">
-                    IGDB </a
+                    IGDB</a
                 >.
             </p>
         </div>

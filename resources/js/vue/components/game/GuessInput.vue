@@ -1,0 +1,124 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import { watchDebounced } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
+import axios from "axios";
+import { Search } from "lucide-vue-next";
+
+const { t } = useI18n();
+
+interface SearchResult {
+    id: number | string;
+    name: string;
+    image?: string;
+    meta?: string;
+}
+
+const props = withDefaults(defineProps<{
+    type?: string;
+    placeholder?: string;
+}>(), {
+    type: "game",
+});
+
+const getPlaceholder = (): string => {
+    if (props.placeholder) return props.placeholder;
+    const placeholderKey = `game.search_${props.type}`;
+    return t(placeholderKey);
+};
+
+const emit = defineEmits<{
+    (e: "select", item: SearchResult): void;
+}>();
+
+const query = ref("");
+const results = ref<SearchResult[]>([]);
+const isOpen = ref(false);
+const isLoading = ref(false);
+
+const search = async () => {
+    if (query.value.length < 2) {
+        results.value = [];
+        isOpen.value = false;
+        return;
+    }
+
+    isLoading.value = true;
+    try {
+        const response = await axios.get("/api/search", {
+            params: {
+                q: query.value,
+                type: props.type,
+            },
+        });
+        results.value = response.data;
+        isOpen.value = true;
+    } catch (err) {
+        console.error("Search failed", err);
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+watchDebounced(query, search, { debounce: 300 });
+
+const select = (item: SearchResult) => {
+    emit("select", item);
+    query.value = "";
+    isOpen.value = false;
+    results.value = [];
+};
+</script>
+
+<template>
+    <div class="relative w-full max-w-xl mx-auto">
+        <div class="relative group">
+            <div
+                class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+            >
+                <Search
+                    class="h-5 w-5 text-muted group-focus-within:text-primary-400 transition-colors"
+                />
+            </div>
+            <input
+                v-model="query"
+                type="text"
+                class="block w-full pl-12 pr-4 py-4 bg-onyx border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all text-lg"
+                :placeholder="getPlaceholder()"
+                @focus="isOpen = query.length >= 2"
+            />
+        </div>
+
+        <div
+            v-if="isOpen && results.length > 0"
+            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto"
+        >
+            <button
+                v-for="item in results"
+                :key="item.id"
+                class="w-full px-6 py-4 flex items-center gap-4 text-left hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
+                @click="select(item)"
+            >
+                <div
+                    v-if="item.image"
+                    class="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-onyx"
+                >
+                    <img :src="item.image" class="w-full h-full object-cover" />
+                </div>
+                <div>
+                    <div class="text-white font-bold">{{ item.name }}</div>
+                    <div v-if="item.meta" class="text-muted text-sm">
+                        {{ item.meta }}
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <div
+            v-else-if="isOpen && query.length >= 2 && !isLoading"
+            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl p-6 text-center text-muted"
+        >
+            {{ t("game.no_results") }}
+        </div>
+    </div>
+</template>
