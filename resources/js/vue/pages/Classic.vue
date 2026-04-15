@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head } from "@inertiajs/vue3";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import GameGrid from "@/vue/components/game/GameGrid.vue";
@@ -21,14 +21,14 @@ watch(isFinished, (val) => {
     }
 });
 
-const columns = [
+const columns = computed(() => [
     t("attributes.game"),
     t("attributes.release_year"),
     t("attributes.genres"),
     t("attributes.platforms"),
     t("attributes.developer"),
     t("attributes.rating"),
-];
+]);
 </script>
 
 <template>

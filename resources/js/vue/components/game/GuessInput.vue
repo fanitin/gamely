@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { watchDebounced } from "@vueuse/core";
+import { watchDebounced, onClickOutside } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import { Search } from "lucide-vue-next";
-
+import { route } from "ziggy-js";
 const { t } = useI18n();
 
 interface SearchResult {
@@ -35,6 +35,11 @@ const query = ref("");
 const results = ref<SearchResult[]>([]);
 const isOpen = ref(false);
 const isLoading = ref(false);
+const containerRef = ref(null);
+
+onClickOutside(containerRef, () => {
+    isOpen.value = false;
+});
 
 const search = async () => {
     if (query.value.length < 2) {
@@ -44,10 +49,11 @@ const search = async () => {
     }
 
     isLoading.value = true;
+
     try {
-        const response = await axios.get("/api/search", {
+        const response = await axios.get(route("api.game-search"), {
             params: {
-                q: query.value,
+                query: query.value,
                 type: props.type,
             },
         });
@@ -60,7 +66,7 @@ const search = async () => {
     }
 };
 
-watchDebounced(query, search, { debounce: 300 });
+watchDebounced(query, search, { debounce: 400 });
 
 const select = (item: SearchResult) => {
     emit("select", item);
@@ -71,7 +77,7 @@ const select = (item: SearchResult) => {
 </script>
 
 <template>
-    <div class="relative w-full max-w-xl mx-auto">
+    <div ref="containerRef" class="relative w-full max-w-xl mx-auto">
         <div class="relative group">
             <div
                 class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
@@ -85,7 +91,7 @@ const select = (item: SearchResult) => {
                 type="text"
                 class="block w-full pl-12 pr-4 py-4 bg-onyx border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all text-lg"
                 :placeholder="getPlaceholder()"
-                @focus="isOpen = query.length >= 2"
+                @click="isOpen = query.length >= 2 && (results.length > 0 || !isLoading)"
             />
         </div>
 
