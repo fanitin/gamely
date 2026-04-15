@@ -11,7 +11,7 @@ import ResultModal from "@/vue/components/game/ResultModal.vue";
 import { useGame } from "@/vue/composables/useGame";
 
 const { t } = useI18n();
-const { attempts, isLoading, submitGuess, isFinished, gameState } = useGame("classic");
+const { attempts, isLoading, submitGuess, isFinished, gameState } = useGame("characters");
 
 const showResultModal = ref(false);
 
@@ -24,18 +24,17 @@ watch(isFinished, (val) => {
 });
 
 const columns = computed(() => [
-    t("attributes.game"),
-    t("attributes.release_year"),
-    t("attributes.genres"),
-    t("attributes.platforms"),
-    t("attributes.developer"),
-    t("attributes.rating"),
+    t("attributes.character"),
+    t("attributes.series"),
+    t("attributes.gender"),
+    t("attributes.species"),
+    t("attributes.first_appearance"),
 ]);
 </script>
 
 <template>
     <AppLayout>
-        <Head :title="t('modes.classic.title')" />
+        <Head :title="t('modes.characters.title')" />
 
         <div class="max-w-6xl mx-auto px-4 py-8">
             <div class="flex items-center justify-between mb-12">
@@ -52,10 +51,10 @@ const columns = computed(() => [
 
                 <div class="text-center flex-1">
                     <h1 class="text-3xl font-black text-white mb-2 uppercase tracking-tighter">
-                        {{ t("modes.classic.title") }}
+                        {{ t("modes.characters.title") }}
                     </h1>
                     <p class="text-muted">
-                        {{ t("modes.classic.description") }}
+                        {{ t("modes.characters.description") }}
                     </p>
                 </div>
 
@@ -64,7 +63,7 @@ const columns = computed(() => [
 
             <div v-if="!isFinished" class="mb-12 sticky top-4 z-40">
                 <GuessInput
-                    type="game"
+                    type="character"
                     @select="item => submitGuess(item.id)"
                 />
             </div>

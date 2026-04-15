@@ -10,11 +10,16 @@ class PagesController extends Controller
 {
     public function home(): Response
     {
-        return Inertia::render('Home');
+        return Inertia::render('Home', []);
     }
 
     public function classic(): Response
     {
-        return Inertia::render('Classic');
+        return Inertia::render('Classic', []);
+    }
+
+    public function characters(): Response
+    {
+        return Inertia::render('Characters', []);
     }
 }

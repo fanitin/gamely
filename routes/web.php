@@ -4,4 +4,5 @@ use App\Http\Controllers\Game\PagesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'home'])->name('home');
-Route::get('/attributes', [PagesController::class, 'classic'])->name('classic');
+Route::get('/classic', [PagesController::class, 'classic'])->name('classic');
+Route::get('/characters', [PagesController::class, 'characters'])->name('characters');

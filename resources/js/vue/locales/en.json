@@ -6,7 +6,8 @@
         "games": "Games",
         "change_locale": "Language",
         "choose_language": "Choose language",
-        "more_languages_soon": "More languages coming soon!"
+        "more_languages_soon": "More languages coming soon!",
+        "back_to_menu": "Back to Menu"
     },
     "modes": {
         "classic": {
@@ -64,7 +65,13 @@
         "publisher": "Publisher",
         "platform": "Platform",
         "platforms": "Platforms",
-        "rating": "Rating"
+        "rating": "Rating",
+
+        "character": "Character",
+        "series": "Series",
+        "gender": "Gender",
+        "species": "Species",
+        "first_appearance": "First Appearance"
     },
     "share": {
         "title": "GameWordle #{number} · {mode} · {score}/6",

@@ -15,13 +15,13 @@ interface ModeCard {
 const modes: ModeCard[] = [
     {
         id: "classic",
-        href: "/attributes",
+        href: "/classic",
         title: "modes.classic.title",
         desc: "modes.classic.description",
     },
     {
         id: "characters",
-        href: "#",
+        href: "/characters",
         title: "modes.characters.title",
         desc: "modes.characters.description",
     },

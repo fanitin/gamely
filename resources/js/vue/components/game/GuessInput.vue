@@ -77,7 +77,9 @@ const select = (item: SearchResult) => {
 </script>
 
 <template>
-    <div ref="containerRef" class="relative w-full max-w-xl mx-auto">
+    <div ref="containerRef" class="relative w-full max-w-xl mx-auto"
+        @keydown.esc="isOpen = false"
+    >
         <div class="relative group">
             <div
                 class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
@@ -97,7 +99,7 @@ const select = (item: SearchResult) => {
 
         <div
             v-if="isOpen && results.length > 0"
-            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto"
+            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto custom-scrollbar"
         >
             <button
                 v-for="item in results"
@@ -109,7 +111,7 @@ const select = (item: SearchResult) => {
                     v-if="item.image"
                     class="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-onyx"
                 >
-                    <img :src="item.image" class="w-full h-full object-cover" />
+                    <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
                 </div>
                 <div>
                     <div class="text-white font-bold">{{ item.name }}</div>
@@ -128,3 +130,30 @@ const select = (item: SearchResult) => {
         </div>
     </div>
 </template>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+</style>
+

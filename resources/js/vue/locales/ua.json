@@ -6,7 +6,8 @@
         "games": "Ігри",
         "change_locale": "Мова",
         "choose_language": "Оберіть мову",
-        "more_languages_soon": "Скоро будуть нові мови!"
+        "more_languages_soon": "Скоро будуть нові мови!",
+        "back_to_menu": "Назад в меню"
     },
     "modes": {
         "classic": {
@@ -64,7 +65,13 @@
         "publisher": "Видавець",
         "platform": "Платформа",
         "platforms": "Платформи",
-        "rating": "Рейтинг"
+        "rating": "Рейтинг",
+
+        "character": "Персонаж",
+        "series": "Серія",
+        "gender": "Стать",
+        "species": "Вид",
+        "first_appearance": "Перша поява"
     },
     "share": {
         "title": "GameWordle #{number} · {mode} · {score}/6",
