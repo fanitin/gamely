@@ -66,7 +66,7 @@ const search = async () => {
     }
 };
 
-watchDebounced(query, search, { debounce: 400 });
+watchDebounced(query, search, { debounce: 300 });
 
 const select = (item: SearchResult) => {
     emit("select", item);

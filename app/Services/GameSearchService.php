@@ -9,75 +9,83 @@ class GameSearchService
 {
     public function search(string $query, string $type)
     {
-        $query = trim($query);
-
-        if(empty($query) || empty($type)) {
+        if (empty($query) || empty($type)) {
             return collect([]);
         }
 
-        if ($type === "game") {
-            $exact = Game::whereRaw('LOWER(name) = ?', [$query])
-                ->selectRaw('*, 1 as relevance')
-                ->limit(50);
+        $query = strtolower(trim($query));
 
-            $startsWith = Game::whereRaw('LOWER(name) LIKE ?', [$query . '%'])
-                ->whereRaw('LOWER(name) != ?', [$query])
-                ->selectRaw('*, 2 as relevance')
-                ->limit(50);
+        return match ($type) {
+            'game' => $this->searchGames($query),
+            'character' => $this->searchCharacters($query),
+            default => collect([]),
+        };
+    }
 
-            $wholeWord = Game::whereRaw('LOWER(name) LIKE ?', ['% ' . $query . '%'])
-                ->selectRaw('*, 3 as relevance')
-                ->limit(50);
+    private function searchGames(string $query)
+    {
+        $exact = Game::whereRaw('LOWER(name) = ?', [$query])
+            ->selectRaw('*, 1 as relevance')
+            ->limit(50);
 
-            $partial = Game::whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%'])
-                ->whereRaw('LOWER(name) NOT LIKE ?', [$query . '%'])
-                ->whereRaw('LOWER(name) NOT LIKE ?', ['% ' . $query . '%'])
-                ->selectRaw('*, 4 as relevance')
-                ->limit(50);
+        $startsWith = Game::whereRaw('LOWER(name) LIKE ?', [$query . '%'])
+            ->whereRaw('LOWER(name) != ?', [$query])
+            ->selectRaw('*, 2 as relevance')
+            ->limit(50);
 
-            $games = $exact
-                ->union($startsWith)
-                ->union($wholeWord)
-                ->union($partial)
-                ->orderBy('relevance')
-                ->orderBy('rating', 'desc')
-                ->limit(100)
-                ->get()
-                ->makeHidden(['relevance']);
+        $wholeWord = Game::whereRaw('LOWER(name) LIKE ?', ['% ' . $query . '%'])
+            ->selectRaw('*, 3 as relevance')
+            ->limit(50);
 
-            return $games;
-        }
+        $partial = Game::whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%'])
+            ->whereRaw('LOWER(name) NOT LIKE ?', [$query . '%'])
+            ->whereRaw('LOWER(name) NOT LIKE ?', ['% ' . $query . '%'])
+            ->selectRaw('*, 4 as relevance')
+            ->limit(50);
 
-        if($type === "character") {
-            $exact = Character::whereRaw('LOWER(name) = ?', [$query])
-                ->selectRaw('*, 1 as relevance')
-                ->limit(50);
+        $games = $exact
+            ->union($startsWith)
+            ->union($wholeWord)
+            ->union($partial)
+            ->orderBy('relevance')
+            ->orderBy('rating', 'desc')
+            ->limit(100)
+            ->get()
+            ->makeHidden(['relevance']);
 
-            $startsWith = Character::whereRaw('LOWER(name) LIKE ?', [$query . '%'])
-                ->whereRaw('LOWER(name) != ?', [$query])
-                ->selectRaw('*, 2 as relevance')
-                ->limit(50);
+        return $games;
+    }
 
-            $wholeWord = Character::whereRaw('LOWER(name) LIKE ?', ['% ' . $query . '%'])
-                ->selectRaw('*, 3 as relevance')
-                ->limit(50);
+    private function searchCharacters(string $query)
+    {
+        $exact = Character::whereRaw('LOWER(name) = ?', [$query])
+            ->selectRaw('*, 1 as relevance')
+            ->limit(50);
 
-            $partial = Character::whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%'])
-                ->whereRaw('LOWER(name) NOT LIKE ?', [$query . '%'])
-                ->whereRaw('LOWER(name) NOT LIKE ?', ['% ' . $query . '%'])
-                ->selectRaw('*, 4 as relevance')
-                ->limit(50);
+        $startsWith = Character::whereRaw('LOWER(name) LIKE ?', [$query . '%'])
+            ->whereRaw('LOWER(name) != ?', [$query])
+            ->selectRaw('*, 2 as relevance')
+            ->limit(50);
 
-            $characters = $exact
-                ->union($startsWith)
-                ->union($wholeWord)
-                ->union($partial)
-                ->orderBy('relevance')
-                ->limit(100)
-                ->get()
-                ->makeHidden(['relevance']);
+        $wholeWord = Character::whereRaw('LOWER(name) LIKE ?', ['% ' . $query . '%'])
+            ->selectRaw('*, 3 as relevance')
+            ->limit(50);
 
-            return $characters;
-        }
+        $partial = Character::whereRaw('LOWER(name) LIKE ?', ['%' . $query . '%'])
+            ->whereRaw('LOWER(name) NOT LIKE ?', [$query . '%'])
+            ->whereRaw('LOWER(name) NOT LIKE ?', ['% ' . $query . '%'])
+            ->selectRaw('*, 4 as relevance')
+            ->limit(50);
+
+        $characters = $exact
+            ->union($startsWith)
+            ->union($wholeWord)
+            ->union($partial)
+            ->orderBy('relevance')
+            ->limit(100)
+            ->get()
+            ->makeHidden(['relevance']);
+
+        return $characters;
     }
 }

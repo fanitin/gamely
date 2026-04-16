@@ -1,6 +1,7 @@
 import { ref, computed } from "vue";
 import axios from "axios";
 import type { GameAttempt, GameStatus } from "../types/game";
+import {route} from "ziggy-js";
 
 export function useGame(modeId: string) {
     const attempts = ref<GameAttempt[]>([]);
@@ -18,9 +19,9 @@ export function useGame(modeId: string) {
         error.value = null;
 
         try {
-            const response = await axios.post("/api/guess", {
+            const response = await axios.post(route('api.guess'), {
                 mode: modeId,
-                id: entityId,
+                entity_id: entityId,
             });
 
             const result = response.data as GameAttempt;
