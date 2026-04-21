@@ -35,7 +35,14 @@
         "loading": "Loading...",
         "no_results": "No results found",
         "search_game": "Search for a game...",
-        "search_character": "Search for a character..."
+        "search_character": "Search for a character...",
+        "you_won": "You Won",
+        "attempts_count": "{count} attempts | {count} attempt | {count} attempts",
+        "your_attempts": "Your Attempts",
+        "how_to_play": "How to Play",
+        "exact_match": "Exact match - the attribute is correct",
+        "close_match": "Close match - partially correct or within range",
+        "no_match": "No match - the attribute is incorrect"
     },
     "result": {
         "win_title": "Correct!",

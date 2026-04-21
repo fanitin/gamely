@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\GameType;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Game extends Model
 {
@@ -24,6 +26,8 @@ class Game extends Model
         'is_active',
     ];
 
+    protected $appends = ['display_name'];
+
     protected function casts(): array
     {
         return [
@@ -34,6 +38,37 @@ class Game extends Model
             'game_type' => GameType::class,
         ];
     }
+
+    protected function coverUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => $value ? Storage::disk('r2')->url($value) : null,
+        );
+    }
+
+    protected function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $name = $this->name;
+
+                if (!$this->game_type || $this->game_type->value === 0) {
+                    return $name;
+                }
+
+                $suffix = $this->game_type->label();
+                $nameLower = mb_strtolower($name);
+                $suffixLower = mb_strtolower($suffix);
+
+                if (str_contains($nameLower, $suffixLower)) {
+                    return $name;
+                }
+
+                return "{$name} ({$suffix})";
+            }
+        );
+    }
+
 
     public function collections(): BelongsToMany
     {

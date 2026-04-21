@@ -1,64 +1,87 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { MoveUp, MoveDown } from "lucide-vue-next";
-import type { GameCell, TagItem } from "../../types/game";
+import { ArrowUp, ArrowDown } from "lucide-vue-next";
 
-const props = defineProps<{
-    cell: GameCell,
-}>();
+interface Props {
+    result: "exact" | "close" | "wrong";
+    label: string;
+    value?: string | number | Array<{ id: number; name: string; url?: string }>;
+    arrow?: "up" | "down";
+    type?: "platforms" | "default";
+}
 
-const statusClasses = computed(() => {
-    return {
-        "bg-success-600 border-success-500": props.cell.status === "correct",
-        "bg-warning-600 border-warning-500": props.cell.status === "partial",
-        "bg-onyx-light border-white/10": props.cell.status === "wrong",
-    };
+const props = withDefaults(defineProps<Props>(), {
+    type: "default"
 });
 
-const isTags = computed(() => Array.isArray(props.cell.value));
-const tags = computed(() => props.cell.value as TagItem[]);
+const bgColor = computed(() => {
+    switch (props.result) {
+        case "exact":
+            return "bg-success-500";
+        case "close":
+            return "bg-warning-500";
+        case "wrong":
+            return "bg-danger-500";
+        default:
+            return "bg-danger-500";
+    }
+});
+
+const isPlatforms = computed(() => props.type === "platforms" && Array.isArray(props.value));
+
+const displayValue = computed(() => {
+    if (!props.value) return "-";
+
+    if (Array.isArray(props.value)) {
+        return props.value.map(item => item.name).join(", ");
+    }
+
+    return props.value.toString();
+});
 </script>
 
 <template>
     <div
-        class="relative w-full aspect-square flex flex-col items-center justify-center p-2 border-2 rounded-xl transition-all duration-500"
-        :class="statusClasses"
+        :class="[
+            bgColor,
+            'rounded-xl p-3 text-white transition-all duration-300 min-h-[100px] flex flex-col',
+        ]"
     >
-        <template v-if="props.cell.type === 'year'">
-            <span class="text-xl font-bold text-white">{{ props.cell.value }}</span>
-            <div v-if="props.cell.meta?.direction === 'up'" class="mt-1">
-                <MoveUp class="w-5 h-5 text-white/80 animate-bounce" />
-            </div>
-            <div v-else-if="props.cell.meta?.direction === 'down'" class="mt-1">
-                <MoveDown class="w-5 h-5 text-white/80 animate-bounce" />
-            </div>
-        </template>
+        <div class="text-xs font-medium text-white/70 uppercase tracking-wide mb-2">
+            {{ label }}
+        </div>
 
-        <template v-else-if="isTags">
-            <div class="flex flex-wrap justify-center gap-1.5">
+        <div v-if="isPlatforms" class="flex-1 flex items-center justify-center">
+            <div class="grid grid-cols-3 gap-2 w-full">
                 <div
-                    v-for="(item, index) in tags"
-                    :key="index"
-                    class="group relative"
+                    v-for="platform in (value as Array<{id: number; name: string; url?: string}>)"
+                    :key="platform.id"
+                    class="flex items-center justify-center"
+                    :title="platform.name"
                 >
-                    <div
-                        class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider transition-all duration-200 cursor-default hover:scale-125 hover:z-20 hover:shadow-xl hover:brightness-110"
-                        :class="[
-                            item.matched
-                                ? 'bg-white text-success-700'
-                                : 'bg-black/20 text-white/70',
-                        ]"
-                    >
-                        {{ item.label }}
-                    </div>
+                    <img
+                        v-if="platform.url"
+                        :src="platform.url"
+                        :alt="platform.name"
+                        class="w-8 h-8 object-contain opacity-90"
+                    />
+                    <span v-else class="text-[10px] font-bold text-center leading-tight">
+                        {{ platform.name }}
+                    </span>
                 </div>
             </div>
-        </template>
+        </div>
 
-        <template v-else>
-            <span class="text-xs font-bold text-white text-center uppercase tracking-tight">
-                {{ props.cell.value }}
-            </span>
-        </template>
+        <div v-else class="flex-1 flex items-center justify-between gap-2">
+            <div class="text-sm font-bold flex-1 overflow-hidden">
+                <div class="line-clamp-3 break-words" :title="displayValue">
+                    {{ displayValue }}
+                </div>
+            </div>
+            <div v-if="arrow" class="shrink-0">
+                <ArrowUp v-if="arrow === 'up'" class="w-5 h-5" />
+                <ArrowDown v-if="arrow === 'down'" class="w-5 h-5" />
+            </div>
+        </div>
     </div>
 </template>

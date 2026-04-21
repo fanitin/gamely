@@ -1,36 +1,23 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
-import { ref, watch, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { ArrowLeft } from "lucide-vue-next";
+import { computed } from "vue";
+import { ArrowLeft, Trophy, AlertCircle } from "lucide-vue-next";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
-import GameGrid from "@/vue/components/game/GameGrid.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
-import ResultModal from "@/vue/components/game/ResultModal.vue";
-import { useGame } from "@/vue/composables/useGame";
+import AttemptRow from "@/vue/components/game/AttemptRow.vue";
+import { useClassicGame } from "@/vue/composables/useClassicGame";
 
 const { t } = useI18n();
-const { attempts, isLoading, submitGuess, isFinished, gameState } = useGame("classic");
+const { attempts, isWon, isLoading, error, canGuess, guessedGameIds, makeGuess } = useClassicGame();
 
-const showResultModal = ref(false);
+const reversedAttempts = computed(() => [...attempts.value].reverse());
 
-watch(isFinished, (val) => {
-    if (val) {
-        setTimeout(() => {
-            showResultModal.value = true;
-        }, 1000);
-    }
-});
-
-const columns = computed(() => [
-    t("attributes.game"),
-    t("attributes.release_year"),
-    t("attributes.genres"),
-    t("attributes.platforms"),
-    t("attributes.developer"),
-    t("attributes.rating"),
-]);
+const handleSelect = async (item: { id: number | string; name: string }) => {
+    if (!canGuess.value) return;
+    await makeGuess(Number(item.id));
+};
 </script>
 
 <template>
@@ -62,25 +49,73 @@ const columns = computed(() => [
                 <div class="w-[120px]"></div>
             </div>
 
-            <div v-if="!isFinished" class="mb-12 sticky top-4 z-40">
+            <div
+                v-if="error"
+                class="mb-6 bg-danger-500/10 border border-danger-500/30 rounded-xl p-4 flex items-center gap-3 animate-fade-in"
+            >
+                <AlertCircle class="w-5 h-5 text-danger-500 shrink-0" />
+                <span class="text-white">{{ error }}</span>
+            </div>
+
+            <div
+                v-if="isWon"
+                class="mb-6 bg-success-500/10 border border-success-500/30 rounded-xl p-6 text-center space-y-3 animate-fade-in"
+            >
+                <Trophy class="w-12 h-12 text-success-500 mx-auto" />
+                <h2 class="text-2xl font-bold text-white">
+                    {{ t("game.you_won") }}!
+                </h2>
+                <p class="text-muted">
+                    {{ t("game.attempts_count", { count: attempts.length + 1 }) }}
+                </p>
+            </div>
+
+            <div v-if="canGuess" class="mb-12 sticky top-4 z-40">
                 <GuessInput
                     type="game"
-                    @select="item => submitGuess(item.id)"
+                    :placeholder="t('game.search_game')"
+                    :exclude-ids="guessedGameIds"
+                    @select="handleSelect"
                 />
             </div>
 
-            <GameGrid
-                :columns="columns"
-                :attempts="attempts"
-                :is-loading="isLoading"
-            />
+            <div v-if="isLoading" class="text-center mb-8">
+                <div
+                    class="inline-block w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"
+                ></div>
+            </div>
 
-            <ResultModal
-                :show="showResultModal"
-                :game-state="gameState"
-                :attempts="attempts"
-                @close="showResultModal = false"
-            />
+            <div v-if="attempts.length > 0" class="space-y-6 mb-8">
+                <h2 class="text-2xl font-bold text-white">
+                    {{ t("game.your_attempts") }}
+                </h2>
+
+                <div class="space-y-4">
+                    <AttemptRow
+                        v-for="(attempt, index) in reversedAttempts"
+                        :key="index"
+                        :attempt="attempt"
+                    />
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+</style>
+

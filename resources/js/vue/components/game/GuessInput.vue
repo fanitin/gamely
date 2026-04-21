@@ -10,6 +10,7 @@ const { t } = useI18n();
 interface SearchResult {
     id: number | string;
     name: string;
+    display_name?: string;
     image?: string;
     meta?: string;
 }
@@ -17,8 +18,10 @@ interface SearchResult {
 const props = withDefaults(defineProps<{
     type?: string;
     placeholder?: string;
+    excludeIds?: number[];
 }>(), {
     type: "game",
+    excludeIds: () => [],
 });
 
 const getPlaceholder = (): string => {
@@ -57,7 +60,17 @@ const search = async () => {
                 type: props.type,
             },
         });
-        results.value = response.data;
+
+        const allResults = response.data;
+
+        if (props.excludeIds && props.excludeIds.length > 0) {
+            results.value = allResults.filter((item: SearchResult) =>
+                !props.excludeIds.includes(Number(item.id))
+            );
+        } else {
+            results.value = allResults;
+        }
+
         isOpen.value = true;
     } catch (err) {
         console.error("Search failed", err);
@@ -73,6 +86,12 @@ const select = (item: SearchResult) => {
     query.value = "";
     isOpen.value = false;
     results.value = [];
+};
+
+const handleEnter = () => {
+    if (results.value.length > 0 && isOpen.value) {
+        select(results.value[0]);
+    }
 };
 </script>
 
@@ -94,6 +113,7 @@ const select = (item: SearchResult) => {
                 class="block w-full pl-12 pr-4 py-4 bg-onyx border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all text-lg"
                 :placeholder="getPlaceholder()"
                 @click="isOpen = query.length >= 2 && (results.length > 0 || !isLoading)"
+                @keydown.enter="handleEnter"
             />
         </div>
 
@@ -114,7 +134,7 @@ const select = (item: SearchResult) => {
                     <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
                 </div>
                 <div>
-                    <div class="text-white font-bold">{{ item.name }}</div>
+                    <div class="text-white font-bold">{{ item.display_name || item.name }}</div>
                     <div v-if="item.meta" class="text-muted text-sm">
                         {{ item.meta }}
                     </div>
