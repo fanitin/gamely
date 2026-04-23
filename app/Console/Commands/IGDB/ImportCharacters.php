@@ -37,6 +37,16 @@ class ImportCharacters extends AbstractIgdbImport
 
     protected function processItem(array $item): string
     {
+        if (empty($item['games']) || ! is_array($item['games'])) {
+            return 'skipped';
+        }
+
+        $existingGameIds = Game::whereIn('igdb_id', $item['games'])->pluck('id')->toArray();
+
+        if (empty($existingGameIds)) {
+            return 'skipped';
+        }
+
         $character = Character::updateOrCreate(
             ['igdb_id' => $item['id']],
             [
@@ -51,12 +61,7 @@ class ImportCharacters extends AbstractIgdbImport
             ]
         );
 
-        if (isset($item['games']) && is_array($item['games'])) {
-            $existingGameIds = Game::whereIn('igdb_id', $item['games'])->pluck('id')->toArray();
-            if (! empty($existingGameIds)) {
-                $character->games()->syncWithoutDetaching($existingGameIds);
-            }
-        }
+        $character->games()->syncWithoutDetaching($existingGameIds);
 
         if ($character->wasRecentlyCreated) {
             return 'created';
