@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Exceptions\GarbageImageException;
 use App\Models\Game;
 use App\Services\IgdbService;
 use App\Services\MediaService;
@@ -81,6 +82,8 @@ class ImportCovers extends Command
                         $path = $this->media->uploadCover($cover['url'], $game->igdb_id);
                         $game->update(['cover_url' => $path]);
                         $success++;
+                    } catch (GarbageImageException $e) {
+                        $this->warn("\n[Skipped] Game IGDB ID {$game->igdb_id}: Black/garbage cover skipped.");
                     } catch (Throwable $e) {
                         $this->error("\n[Error] Game IGDB ID {$game->igdb_id}: " . $e->getMessage());
                         $failed++;

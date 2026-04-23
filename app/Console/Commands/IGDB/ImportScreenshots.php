@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Exceptions\GarbageImageException;
 use App\Models\Game;
 use App\Services\IgdbService;
 use App\Services\MediaService;
@@ -93,10 +94,14 @@ class ImportScreenshots extends Command
                         continue;
                     }
 
-                    $screenshotsToProcess = $screenshotsToProcess->take($needed);
                     $order = $currentCount + 1;
+                    $addedForThisGame = 0;
 
-                    foreach ($screenshotsToProcess as $screenshot) {
+                    foreach ($gameScreenshots as $screenshot) {
+                        if ($addedForThisGame >= $needed) {
+                            break;
+                        }
+
                         if (empty($screenshot['url']) || empty($screenshot['image_id'])) {
                             continue;
                         }
@@ -115,6 +120,9 @@ class ImportScreenshots extends Command
                             ]);
 
                             $success++;
+                            $addedForThisGame++;
+                        } catch (GarbageImageException $e) {
+                            $this->warn("\n[Skipped] Game IGDB ID {$game->igdb_id}: Black/garbage screenshot {$screenshot['image_id']} skipped.");
                         } catch (Throwable $e) {
                             $this->error("\n[Error] Game IGDB ID {$game->igdb_id} Screenshot {$screenshot['image_id']}: ".$e->getMessage());
                             $failed++;

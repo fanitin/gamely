@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Exceptions\GarbageImageException;
 use App\Models\Character;
 use App\Services\IgdbService;
 use App\Services\MediaService;
@@ -82,6 +83,8 @@ class ImportCharacterMugShots extends Command
                             $character->update(['mug_shot_url' => $path]);
                         }
                         $success++;
+                    } catch (GarbageImageException $e) {
+                        $this->warn("\n[Skipped] Character ID {$character->id}: Black/garbage mug shot skipped.");
                     } catch (Throwable $e) {
                         $this->error("\n[Error] Character ID {$character->id}: ".$e->getMessage());
                         $failed++;

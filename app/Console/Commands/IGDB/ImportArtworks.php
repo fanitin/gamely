@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Exceptions\GarbageImageException;
 use App\Models\Game;
 use App\Services\IgdbService;
 use App\Services\MediaService;
@@ -93,10 +94,14 @@ class ImportArtworks extends Command
                         continue;
                     }
 
-                    $artworksToProcess = $artworksToProcess->take($needed);
                     $order = $currentCount + 1;
+                    $addedForThisGame = 0;
 
-                    foreach ($artworksToProcess as $artwork) {
+                    foreach ($gameArtworks as $artwork) {
+                        if ($addedForThisGame >= $needed) {
+                            break;
+                        }
+
                         if (empty($artwork['url']) || empty($artwork['image_id'])) {
                             continue;
                         }
@@ -115,6 +120,9 @@ class ImportArtworks extends Command
                             ]);
 
                             $success++;
+                            $addedForThisGame++;
+                        } catch (GarbageImageException $e) {
+                            $this->warn("\n[Skipped] Game IGDB ID {$game->igdb_id}: Black/garbage artwork {$artwork['image_id']} skipped.");
                         } catch (Throwable $e) {
                             $this->error("\n[Error] Game IGDB ID {$game->igdb_id} Artwork {$artwork['image_id']}: ".$e->getMessage());
                             $failed++;

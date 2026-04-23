@@ -21,6 +21,7 @@ class ImportScreenshotsTest extends TestCase
             'name' => 'BioShock',
             'slug' => 'bioshock',
             'igdb_id' => 20,
+            'cover_igdb_id' => 100,
             'is_active' => true,
         ]);
 
@@ -91,6 +92,7 @@ class ImportScreenshotsTest extends TestCase
             'name' => 'BioShock',
             'slug' => 'bioshock',
             'igdb_id' => 20,
+            'cover_igdb_id' => 100,
             'is_active' => true,
         ]);
 
