@@ -14,17 +14,17 @@
             "title": "Классика",
             "description": "Угадай игру по её атрибутам"
         },
-        "characters": {
-            "title": "Персонажи",
+        "game_screenshots": {
+            "title": "Скриншоты",
+            "description": "Угадай игру по скриншотам"
+        },
+        "character_attributes": {
+            "title": "Атрибуты героя",
             "description": "Угадай персонажа по атрибутам"
         },
-        "covers": {
-            "title": "Обложки",
-            "description": "Угадай игру по размытой обложке"
-        },
-        "photos": {
-            "title": "Фото",
-            "description": "Угадай персонажа по размытой фотографии"
+        "character_image": {
+            "title": "Фото героя",
+            "description": "Угадай героя по размытой фотографии"
         }
     },
     "game": {

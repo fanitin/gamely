@@ -14,17 +14,17 @@
             "title": "Класика",
             "description": "Вгадай гру за її атрибутами"
         },
-        "characters": {
-            "title": "Персонажі",
+        "game_screenshots": {
+            "title": "Скриншоти",
+            "description": "Вгадай гру за скриншотами"
+        },
+        "character_attributes": {
+            "title": "Атрибути героя",
             "description": "Вгадай персонажа за атрибутами"
         },
-        "covers": {
-            "title": "Обкладинки",
-            "description": "Вгадай гру за розмитою обкладинкою"
-        },
-        "photos": {
-            "title": "Фото",
-            "description": "Вгадай персонажа за розмитою фотографією"
+        "character_image": {
+            "title": "Фото героя",
+            "description": "Вгадай героя за розмитою фотографією"
         }
     },
     "game": {

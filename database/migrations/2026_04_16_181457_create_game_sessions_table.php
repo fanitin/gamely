@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('game_sessions', function (Blueprint $table) {
             $table->id();
-            $table->string('mode', 20);
+            $table->string('mode', 30);
             $table->uuid('session_token');
 
             $table->foreignId('challenge_id')->nullable()->constrained('daily_challenges')->cascadeOnDelete();

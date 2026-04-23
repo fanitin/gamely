@@ -32,12 +32,12 @@ class GenerateDailyChallenges extends Command
                 $entityInfo = '';
                 if ($mode === GameMode::CLASSIC) {
                     $entityInfo = " (game #{$challenge->game_id})";
-                } elseif ($mode === GameMode::CHARACTER) {
-                    $entityInfo = " (character #{$challenge->character_id})";
-                } elseif ($mode === GameMode::COVER) {
-                    $entityInfo = " (game #{$challenge->game_id} with cover)";
-                } elseif ($mode === GameMode::SILHOUETTE) {
-                    $entityInfo = " (character #{$challenge->character_id} with mug_shot)";
+                } elseif ($mode === GameMode::GAME_SCREENSHOTS) {
+                    $entityInfo = " (game #{$challenge->game_id} with screenshots)";
+                } elseif ($mode === GameMode::CHARACTER_ATTRIBUTES) {
+                    $entityInfo = " (character #{$challenge->character_id} by attributes)";
+                } elseif ($mode === GameMode::CHARACTER_IMAGE) {
+                    $entityInfo = " (character #{$challenge->character_id} by mugshot)";
                 }
 
                 $this->info("✓ {$mode->label()}{$entityInfo}");
@@ -53,9 +53,9 @@ class GenerateDailyChallenges extends Command
     {
         return match ($mode) {
             GameMode::CLASSIC => $this->generateClassicChallenge($date),
-            GameMode::CHARACTER => $this->generateCharacterChallenge($date),
-            GameMode::COVER => $this->generateCoverChallenge($date),
-            GameMode::SILHOUETTE => $this->generateSilhouetteChallenge($date),
+            GameMode::GAME_SCREENSHOTS => $this->generateScreenshotsChallenge($date),
+            GameMode::CHARACTER_ATTRIBUTES => $this->generateCharacterAttributesChallenge($date),
+            GameMode::CHARACTER_IMAGE => $this->generateCharacterImageChallenge($date),
         };
     }
 
@@ -71,11 +71,26 @@ class GenerateDailyChallenges extends Command
         ]);
     }
 
-    private function generateCharacterChallenge(string $date): ?DailyChallenge
+    private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32($date);
-        $character = Character::has('games')
-            ->whereNotNull('gender_id')
+        $game = Game::has('screenshots')->inRandomOrder($seed)->first();
+
+        if (!$game) {
+            return null;
+        }
+
+        return DailyChallenge::create([
+            'mode' => GameMode::GAME_SCREENSHOTS->value,
+            'date' => $date,
+            'game_id' => $game->id,
+        ]);
+    }
+
+    private function generateCharacterAttributesChallenge(string $date): ?DailyChallenge
+    {
+        $seed = crc32($date);
+        $character = Character::whereNotNull('gender_id')
             ->whereNotNull('species_id')
             ->inRandomOrder($seed)
             ->first();
@@ -85,29 +100,13 @@ class GenerateDailyChallenges extends Command
         }
 
         return DailyChallenge::create([
-            'mode' => GameMode::CHARACTER->value,
+            'mode' => GameMode::CHARACTER_ATTRIBUTES->value,
             'date' => $date,
             'character_id' => $character->id,
         ]);
     }
 
-    private function generateCoverChallenge(string $date): ?DailyChallenge
-    {
-        $seed = crc32($date);
-        $game = Game::whereNotNull('cover_url')->inRandomOrder($seed)->first();
-
-        if (!$game) {
-            return null;
-        }
-
-        return DailyChallenge::create([
-            'mode' => GameMode::COVER->value,
-            'date' => $date,
-            'game_id' => $game->id,
-        ]);
-    }
-
-    private function generateSilhouetteChallenge(string $date): ?DailyChallenge
+    private function generateCharacterImageChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32($date);
         $character = Character::whereNotNull('mug_shot_url')
@@ -121,7 +120,7 @@ class GenerateDailyChallenges extends Command
         }
 
         return DailyChallenge::create([
-            'mode' => GameMode::SILHOUETTE->value,
+            'mode' => GameMode::CHARACTER_IMAGE->value,
             'date' => $date,
             'character_id' => $character->id,
         ]);

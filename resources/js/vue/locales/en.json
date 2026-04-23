@@ -14,16 +14,16 @@
             "title": "Classic",
             "description": "Guess the game by its attributes"
         },
-        "characters": {
-            "title": "Characters",
+        "game_screenshots": {
+            "title": "Screenshots",
+            "description": "Guess the game by its screenshots"
+        },
+        "character_attributes": {
+            "title": "Character Attributes",
             "description": "Guess the character by their attributes"
         },
-        "covers": {
-            "title": "Covers",
-            "description": "Guess the game by its blurred cover"
-        },
-        "photos": {
-            "title": "Photos",
+        "character_image": {
+            "title": "Character Image",
             "description": "Guess the hero by their blurred photo"
         }
     },
