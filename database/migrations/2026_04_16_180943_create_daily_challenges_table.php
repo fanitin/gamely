@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('daily_challenges', function (Blueprint $table) {
             $table->id();
-            $table->string('mode', 30);
+            $table->string('mode');
             $table->date('date');
 
             $table->foreignId('game_id')->nullable()->constrained('games')->cascadeOnDelete();
