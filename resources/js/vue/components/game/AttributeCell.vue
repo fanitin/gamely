@@ -2,41 +2,53 @@
 import { computed } from "vue";
 import { ArrowUp, ArrowDown } from "lucide-vue-next";
 
-interface Props {
-    result: "exact" | "close" | "wrong";
+interface MultiValue {
     label: string;
-    value?: string | number | Array<{ id: number; name: string; url?: string }>;
-    arrow?: "up" | "down";
-    type?: "platforms" | "default";
+    value: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    type: "default"
-});
+const props = defineProps<{
+    result: "exact" | "close" | "wrong";
+    value?: string | number | Array<MultiValue>;
+    arrow?: "up" | "down";
+}>();
 
 const bgColor = computed(() => {
     switch (props.result) {
         case "exact":
-            return "bg-success-500";
+            return "bg-success-500/90";
         case "close":
-            return "bg-warning-500";
+            return "bg-warning-500/90";
         case "wrong":
-            return "bg-danger-500";
+            return "bg-danger-500/90";
         default:
-            return "bg-danger-500";
+            return "bg-danger-500/90";
     }
 });
 
-const isPlatforms = computed(() => props.type === "platforms" && Array.isArray(props.value));
+const bgArrowOverlay = computed(() => {
+    if (!props.arrow) return "";
+
+    switch (props.result) {
+        case "exact":
+            return "bg-success-700/30";
+        case "close":
+            return "bg-warning-700/30";
+        case "wrong":
+            return "bg-danger-700/30";
+        default:
+            return "bg-danger-700/30";
+    }
+});
+
+const isMultiValue = computed(() => Array.isArray(props.value));
 
 const displayValue = computed(() => {
     if (!props.value) return "-";
-
-    if (Array.isArray(props.value)) {
-        return props.value.map(item => item.name).join(", ");
+    if (typeof props.value === 'string' || typeof props.value === 'number') {
+        return props.value.toString();
     }
-
-    return props.value.toString();
+    return "-";
 });
 </script>
 
@@ -44,44 +56,33 @@ const displayValue = computed(() => {
     <div
         :class="[
             bgColor,
-            'rounded-xl p-3 text-white transition-all duration-300 min-h-[100px] flex flex-col',
+            'relative rounded-lg p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
         ]"
     >
-        <div class="text-xs font-medium text-white/70 uppercase tracking-wide mb-2">
-            {{ label }}
+        <div
+            v-if="arrow"
+            :class="[
+                bgArrowOverlay,
+                'absolute inset-0 flex items-center justify-center pointer-events-none'
+            ]"
+        >
+            <ArrowUp v-if="arrow === 'up'" class="w-20 h-20 opacity-15" />
+            <ArrowDown v-if="arrow === 'down'" class="w-20 h-20 opacity-15" />
         </div>
 
-        <div v-if="isPlatforms" class="flex-1 flex items-center justify-center">
-            <div class="grid grid-cols-3 gap-2 w-full">
-                <div
-                    v-for="platform in (value as Array<{id: number; name: string; url?: string}>)"
-                    :key="platform.id"
-                    class="flex items-center justify-center"
-                    :title="platform.name"
-                >
-                    <img
-                        v-if="platform.url"
-                        :src="platform.url"
-                        :alt="platform.name"
-                        class="w-8 h-8 object-contain opacity-90"
-                    />
-                    <span v-else class="text-[10px] font-bold text-center leading-tight">
-                        {{ platform.name }}
-                    </span>
-                </div>
+        <div v-if="isMultiValue" class="relative z-10 w-full max-w-[85%] mx-auto space-y-2">
+            <div
+                v-for="(item, index) in (value as Array<MultiValue>)"
+                :key="index"
+                class="text-sm leading-snug"
+            >
+                <span class="text-white/70 font-medium">{{ item.label }}:</span>
+                <span class="ml-1.5 font-bold">{{ item.value }}</span>
             </div>
         </div>
 
-        <div v-else class="flex-1 flex items-center justify-between gap-2">
-            <div class="text-sm font-bold flex-1 overflow-hidden">
-                <div class="line-clamp-3 break-words" :title="displayValue">
-                    {{ displayValue }}
-                </div>
-            </div>
-            <div v-if="arrow" class="shrink-0">
-                <ArrowUp v-if="arrow === 'up'" class="w-5 h-5" />
-                <ArrowDown v-if="arrow === 'down'" class="w-5 h-5" />
-            </div>
+        <div v-else class="relative z-10 text-sm font-bold text-center w-full max-w-[85%] mx-auto break-words leading-snug">
+            {{ displayValue }}
         </div>
     </div>
 </template>

@@ -14,8 +14,10 @@ class GameComparisonService
             'rating' => $this->compareRating($guessed->rating, $target->rating),
             'genres' => $this->compareGenres($guessed, $target),
             'platforms' => $this->comparePlatforms($guessed, $target),
-            'developers' => $this->compareDevelopers($guessed, $target),
-            'publishers' => $this->comparePublishers($guessed, $target),
+            'developers_publishers' => $this->compareDevelopersAndPublishers($guessed, $target),
+            'franchises_collections' => $this->compareFranchisesAndCollections($guessed, $target),
+            'game_modes' => $this->compareGameModes($guessed, $target),
+            'player_perspectives' => $this->comparePlayerPerspectives($guessed, $target),
         ];
     }
 
@@ -148,35 +150,95 @@ class GameComparisonService
         return ['result' => 'wrong'];
     }
 
-    private function compareDevelopers(Game $guessed, Game $target): array
+    private function compareDevelopersAndPublishers(Game $guessed, Game $target): array
     {
-        $guessedIds = $guessed->developers->pluck('id')->toArray();
-        $targetIds = $target->developers->pluck('id')->toArray();
+        $guessedDevs = $guessed->developers->pluck('id')->toArray();
+        $targetDevs = $target->developers->pluck('id')->toArray();
 
-        if (empty($guessedIds) || empty($targetIds)) {
-            return ['result' => 'wrong'];
+        $guessedPubs = $guessed->publishers->pluck('id')->toArray();
+        $targetPubs = $target->publishers->pluck('id')->toArray();
+
+        sort($guessedDevs);
+        sort($targetDevs);
+        sort($guessedPubs);
+        sort($targetPubs);
+
+        if ($guessedDevs === $targetDevs && $guessedPubs === $targetPubs) {
+            return ['result' => 'exact'];
         }
 
-        $intersection = array_intersect($guessedIds, $targetIds);
-        if (!empty($intersection)) {
+        $devIntersection = array_intersect($guessedDevs, $targetDevs);
+        $pubIntersection = array_intersect($guessedPubs, $targetPubs);
+
+        if (!empty($devIntersection) || !empty($pubIntersection)) {
+            return ['result' => 'close'];
+        }
+
+        return ['result' => 'wrong'];
+    }
+
+    private function compareFranchisesAndCollections(Game $guessed, Game $target): array
+    {
+        $guessedFranchises = $guessed->franchises->pluck('id')->toArray();
+        $targetFranchises = $target->franchises->pluck('id')->toArray();
+
+        $guessedCollections = $guessed->collections->pluck('id')->toArray();
+        $targetCollections = $target->collections->pluck('id')->toArray();
+
+        $franchiseIntersection = array_intersect($guessedFranchises, $targetFranchises);
+
+        $collectionIntersection = array_intersect($guessedCollections, $targetCollections);
+
+        if (!empty($franchiseIntersection) || !empty($collectionIntersection)) {
             return ['result' => 'exact'];
         }
 
         return ['result' => 'wrong'];
     }
 
-    private function comparePublishers(Game $guessed, Game $target): array
+    private function compareGameModes(Game $guessed, Game $target): array
     {
-        $guessedIds = $guessed->publishers->pluck('id')->toArray();
-        $targetIds = $target->publishers->pluck('id')->toArray();
+        $guessedModes = $guessed->gameModes->pluck('id')->toArray();
+        $targetModes = $target->gameModes->pluck('id')->toArray();
 
-        if (empty($guessedIds) || empty($targetIds)) {
+        if (empty($guessedModes) || empty($targetModes)) {
             return ['result' => 'wrong'];
         }
 
-        $intersection = array_intersect($guessedIds, $targetIds);
-        if (!empty($intersection)) {
+        sort($guessedModes);
+        sort($targetModes);
+
+        if ($guessedModes === $targetModes) {
             return ['result' => 'exact'];
+        }
+
+        $intersection = array_intersect($guessedModes, $targetModes);
+        if (!empty($intersection)) {
+            return ['result' => 'close'];
+        }
+
+        return ['result' => 'wrong'];
+    }
+
+    private function comparePlayerPerspectives(Game $guessed, Game $target): array
+    {
+        $guessedPerspectives = $guessed->playerPerspectives->pluck('id')->toArray();
+        $targetPerspectives = $target->playerPerspectives->pluck('id')->toArray();
+
+        if (empty($guessedPerspectives) || empty($targetPerspectives)) {
+            return ['result' => 'wrong'];
+        }
+
+        sort($guessedPerspectives);
+        sort($targetPerspectives);
+
+        if ($guessedPerspectives === $targetPerspectives) {
+            return ['result' => 'exact'];
+        }
+
+        $intersection = array_intersect($guessedPerspectives, $targetPerspectives);
+        if (!empty($intersection)) {
+            return ['result' => 'close'];
         }
 
         return ['result' => 'wrong'];

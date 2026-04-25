@@ -25,7 +25,19 @@ class GuessService
 
         $challenge = DailyChallenge::forMode($mode)
             ->forDate($date)
-            ->with(['game.genres', 'game.platforms', 'game.developers', 'game.publishers', 'character.games', 'character.gender', 'character.species'])
+            ->with([
+                'game.genres',
+                'game.platforms',
+                'game.developers',
+                'game.publishers',
+                'game.franchises',
+                'game.collections',
+                'game.gameModes',
+                'game.playerPerspectives',
+                'character.games',
+                'character.gender',
+                'character.species'
+            ])
             ->firstOrFail();
 
         $targetEntity = $challenge->getEntity();
@@ -84,8 +96,16 @@ class GuessService
 
     private function compareGameGuess(int $guessedId, int $targetId, Game $targetGame): array
     {
-        $guessedGame = Game::with(['genres', 'platforms', 'developers', 'publishers'])
-            ->findOrFail($guessedId);
+        $guessedGame = Game::with([
+            'genres',
+            'platforms',
+            'developers',
+            'publishers',
+            'franchises',
+            'collections',
+            'gameModes',
+            'playerPerspectives'
+        ])->findOrFail($guessedId);
 
         $comparison = $this->comparisonService->compareGames($guessedGame, $targetGame);
 
@@ -107,6 +127,10 @@ class GuessService
                     ]),
                     'developers' => $guessedGame->developers->map(fn($d) => ['id' => $d->id, 'name' => $d->name]),
                     'publishers' => $guessedGame->publishers->map(fn($p) => ['id' => $p->id, 'name' => $p->name]),
+                    'franchises' => $guessedGame->franchises->map(fn($f) => ['id' => $f->id, 'name' => $f->name]),
+                    'collections' => $guessedGame->collections->map(fn($c) => ['id' => $c->id, 'name' => $c->name]),
+                    'game_modes' => $guessedGame->gameModes->map(fn($m) => ['id' => $m->id, 'name' => $m->name]),
+                    'player_perspectives' => $guessedGame->playerPerspectives->map(fn($p) => ['id' => $p->id, 'name' => $p->name]),
                 ],
                 'comparison' => $comparison,
             ],

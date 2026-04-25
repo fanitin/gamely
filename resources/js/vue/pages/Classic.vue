@@ -24,7 +24,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
     <AppLayout>
         <Head :title="t('modes.classic.title')" />
 
-        <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="max-w-5/6 mx-auto px-4 py-8">
             <div class="flex items-center justify-between mb-12">
                 <AppButton
                     :as="Link"
@@ -90,12 +90,45 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                     {{ t("game.your_attempts") }}
                 </h2>
 
-                <div class="space-y-4">
-                    <AttemptRow
-                        v-for="(attempt, index) in reversedAttempts"
-                        :key="index"
-                        :attempt="attempt"
-                    />
+                <div class="overflow-x-auto pb-4">
+                    <div class="min-w-[900px] space-y-3">
+                        <div class="grid grid-cols-[50px_80px_repeat(6,_1fr)_80px_80px] gap-2 mb-2">
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                #
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.game") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.genres") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.developers_publishers") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.franchises") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.player_perspective") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.game_mode") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.rating") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.release_year") }}
+                            </div>
+                        </div>
+
+                        <AttemptRow
+                            v-for="(attempt, index) in reversedAttempts"
+                            :key="index"
+                            :attempt="attempt"
+                            :attempt-number="attempts.length - index"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
