@@ -185,12 +185,21 @@ class GameComparisonService
         $guessedCollections = $guessed->collections->pluck('id')->toArray();
         $targetCollections = $target->collections->pluck('id')->toArray();
 
-        $franchiseIntersection = array_intersect($guessedFranchises, $targetFranchises);
+        sort($guessedFranchises);
+        sort($targetFranchises);
+        sort($guessedCollections);
+        sort($targetCollections);
 
+        if ($guessedFranchises === $targetFranchises && $guessedCollections === $targetCollections) {
+            return ['result' => 'exact'];
+        }
+
+        $franchiseIntersection = array_intersect($guessedFranchises, $targetFranchises);
         $collectionIntersection = array_intersect($guessedCollections, $targetCollections);
 
+
         if (!empty($franchiseIntersection) || !empty($collectionIntersection)) {
-            return ['result' => 'exact'];
+            return ['result' => 'close'];
         }
 
         return ['result' => 'wrong'];

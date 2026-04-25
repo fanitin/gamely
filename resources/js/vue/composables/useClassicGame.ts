@@ -41,7 +41,6 @@ export function useClassicGame() {
     const error = ref<string | null>(null);
     const guessedGameIds = ref<number[]>([]);
 
-    const sessionToken = useLocalStorage("session_token", "");
     const todayKey = new Date().toISOString().split("T")[0];
     const completedToday = useLocalStorage(`classic_completed_${todayKey}`, false);
 

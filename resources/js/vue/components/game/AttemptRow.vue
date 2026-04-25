@@ -77,13 +77,18 @@ function buildFranchisesCollectionsValue() {
     const franchises = props.attempt.guessed.franchises || [];
     const collections = props.attempt.guessed.collections || [];
 
-    const franchiseIds = franchises.map(f => f.id).sort().join(',');
-    const collectionIds = collections.map(c => c.id).sort().join(',');
-
     const franchiseNames = franchises.map(f => f.name).join(", ");
     const collectionNames = collections.map(c => c.name).join(", ");
 
-    if (franchiseIds === collectionIds && franchiseIds) {
+    if (franchises.length === 0 && collections.length > 0) {
+        return collectionNames;
+    }
+
+    if (collections.length === 0 && franchises.length > 0) {
+        return franchiseNames;
+    }
+
+    if (franchises.length === 1 && collections.length === 1 && franchiseNames === collectionNames) {
         return franchiseNames;
     }
 
@@ -100,29 +105,6 @@ function buildFranchisesCollectionsValue() {
         result.push({
             label: t('attributes.collection'),
             value: collectionNames
-        });
-    }
-
-    return result.length > 0 ? result : "-";
-}
-
-function buildGameModesPerspectivesValue() {
-    const modes = props.attempt.guessed.game_modes || [];
-    const perspectives = props.attempt.guessed.player_perspectives || [];
-
-    const result = [];
-
-    if (perspectives.length > 0) {
-        result.push({
-            label: t('attributes.player_perspective'),
-            value: perspectives.map(p => p.name).join(", ")
-        });
-    }
-
-    if (modes.length > 0) {
-        result.push({
-            label: t('attributes.game_mode'),
-            value: modes.map(m => m.name).join(", ")
         });
     }
 
