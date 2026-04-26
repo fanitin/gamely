@@ -50,9 +50,9 @@ class GuessService
         }
 
         $comparison = match ($mode) {
-            GameMode::CLASSIC => $this->compareGameGuess($entityId, $targetEntity->id, $targetEntity),
+            GameMode::CLASSIC, GameMode::GAME_SCREENSHOTS => $this->compareGameGuess($entityId, $targetEntity->id, $targetEntity),
             GameMode::CHARACTER_ATTRIBUTES => $this->compareCharacterGuess($entityId, $targetEntity->id, $targetEntity),
-            GameMode::GAME_SCREENSHOTS, GameMode::CHARACTER_IMAGE => $this->compareSimpleGuess($entityId, $targetEntity->id, $mode),
+            GameMode::CHARACTER_IMAGE => $this->compareSimpleGuess($entityId, $targetEntity->id, $mode),
         };
 
         $isCorrect = $comparison['is_correct'];
@@ -84,6 +84,7 @@ class GuessService
                 'is_correct' => true,
                 'attempts' => $attempts,
                 'session_id' => $session->id,
+                'comparison' => $comparison['data'] ?? null,
             ];
         }
 

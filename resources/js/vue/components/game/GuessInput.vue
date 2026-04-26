@@ -104,13 +104,13 @@ const handleEnter = () => {
                 class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
             >
                 <Search
-                    class="h-5 w-5 text-muted group-focus-within:text-primary-400 transition-colors"
+                    class="h-5 w-5 text-muted group-focus-within:text-teal-400 transition-colors"
                 />
             </div>
             <input
                 v-model="query"
                 type="text"
-                class="block w-full pl-12 pr-4 py-4 bg-onyx border border-white/10 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all text-lg"
+                class="block w-full pl-12 pr-4 py-4 bg-onyx border border-onyx-light/30 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all text-lg"
                 :placeholder="getPlaceholder()"
                 @click="isOpen = query.length >= 2 && (results.length > 0 || !isLoading)"
                 @keydown.enter="handleEnter"
@@ -119,12 +119,12 @@ const handleEnter = () => {
 
         <div
             v-if="isOpen && results.length > 0"
-            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto custom-scrollbar"
+            class="absolute z-50 w-full mt-2 bg-onyx-light border border-onyx-light/50 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto custom-scrollbar"
         >
             <button
                 v-for="item in results"
                 :key="item.id"
-                class="w-full px-6 py-4 flex items-center gap-4 text-left hover:bg-white/5 transition-colors border-b border-white/5 last:border-0"
+                class="w-full px-6 py-4 flex items-center gap-4 text-left hover:bg-onyx transition-colors border-b border-onyx-light/30 last:border-0"
                 @click="select(item)"
             >
                 <div
@@ -144,7 +144,7 @@ const handleEnter = () => {
 
         <div
             v-else-if="isOpen && query.length >= 2 && !isLoading"
-            class="absolute z-50 w-full mt-2 bg-onyx-light border border-white/10 rounded-2xl p-6 text-center text-muted"
+            class="absolute z-50 w-full mt-2 bg-onyx-light border border-onyx-light/50 rounded-2xl p-6 text-center text-muted"
         >
             {{ t("game.no_results") }}
         </div>

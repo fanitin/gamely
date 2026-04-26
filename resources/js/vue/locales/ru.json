@@ -6,8 +6,8 @@
         "games": "Игры",
         "change_locale": "Язык",
         "choose_language": "Выберите язык",
-        "more_languages_soon": "Скоро будут новые языки!",
-        "back_to_menu": "Назад в меню"
+        "more_languages_soon": "Скоро появятся новые языки",
+        "back_to_menu": "В меню"
     },
     "modes": {
         "classic": {
@@ -19,37 +19,34 @@
             "description": "Угадай игру по скриншотам"
         },
         "character_attributes": {
-            "title": "Атрибуты героя",
+            "title": "Персонаж",
             "description": "Угадай персонажа по атрибутам"
         },
         "character_image": {
-            "title": "Фото героя",
-            "description": "Угадай героя по размытой фотографии"
+            "title": "Силуэт",
+            "description": "Угадай персонажа по размытому фото"
         }
     },
     "game": {
         "submit": "Угадать",
         "share": "Поделиться",
-        "give_up": "Сдаться",
-        "attempts": "{current} / {max} попыток",
         "loading": "Загрузка...",
         "no_results": "Ничего не найдено",
-        "search_game": "Найдите игру...",
-        "search_character": "Найдите персонажа...",
-        "you_won": "Вы победили",
+        "search_game": "Найти игру...",
+        "search_character": "Найти персонажа...",
+        "you_won": "Победа",
         "attempts_count": "{count} попыток | {count} попытка | {count} попытки",
         "your_attempts": "Ваши попытки",
         "how_to_play": "Как играть",
         "exact_match": "Точное совпадение — атрибут правильный",
-        "close_match": "Близко — частично правильно или в пределах диапазона",
+        "close_match": "Близко — частичное совпадение или в пределах диапазона",
         "no_match": "Не совпадает — атрибут неправильный"
     },
     "result": {
-        "win_title": "Правильно!",
+        "win_title": "Верно!",
         "lose_title": "Игра окончена",
         "answer_was": "Правильный ответ:",
         "next_in": "Следующая игра через:",
-        "play_again": "Играть снова",
         "streak": "Серия",
         "played": "Сыграно",
         "win_rate": "Процент побед",
@@ -64,37 +61,29 @@
     },
     "attributes": {
         "game": "Игра",
-        "genre": "Жанр",
         "genres": "Жанры",
-        "year": "Год",
         "release_year": "Год",
         "developer": "Разработчик",
         "publisher": "Издатель",
-        "developers_publishers": "Разработчик/Издатель",
-        "companies": "Компании",
-        "platform": "Платформа",
+        "developers_publishers": "Разработчик / Издатель",
         "platforms": "Платформы",
         "rating": "Рейтинг",
         "franchise": "Франшиза",
         "collection": "Коллекция",
-        "franchises": "Франшиза/Коллекция",
+        "franchises": "Франшиза / Коллекция",
         "game_mode": "Режим игры",
         "player_perspective": "Перспектива",
-        "modes": "Режимы/Перспектива",
-
         "character": "Персонаж",
-        "series": "Серия",
         "gender": "Пол",
-        "species": "Вид",
-        "first_appearance": "Первое появление"
+        "species": "Вид"
     },
     "share": {
-        "title": "GameWordle #{number} · {mode} · {score}/6",
+        "title": "Gamely #{number} · {mode} · {score}",
         "copied": "Скопировано!"
     },
     "errors": {
         "game_not_found": "Игра не найдена",
-        "already_played": "Вы уже играли в сегодняшний вызов",
+        "already_played": "Вы уже играли сегодня",
         "network": "Ошибка сети. Попробуйте снова."
     },
     "locale": {
@@ -103,13 +92,32 @@
         "ua": "Українська"
     },
     "how_to_play": {
-        "intro": "Угадайте игру по её атрибутам. Индикаторы подскажут, насколько ваш выбор близок к ответу.",
-        "infinite_hint": "У вас бесконечное количество попыток! Отгадывайте, пока не найдете игру.",
-        "example_genre_match": "Полное совпадение.",
-        "example_genre_partial": "Есть частичное совпадение (например, один из жанров).",
-        "example_year_close": "Год выпуска в пределах ±3 лет. ▲ означает, что ответ выше.",
-        "example_wrong": "Не совпадает.",
-        "indicators": "Индикаторы сравнения",
-        "higher_hint": "Стрелка вверх (▲) означает, что правильное значение выше."
+        "intro": "Угадайте игру по её атрибутам. Индикаторы покажут, насколько ваш ответ близок к правильному.",
+        "infinite_hint": "У вас неограниченное количество попыток. Угадывайте, пока не найдёте ответ!",
+        "exact_match": "Полное совпадение.",
+        "partial_match": "Частичное совпадение (например, один из жанров).",
+        "close_match": "Близко. ▲ означает, что ответ выше.",
+        "no_match": "Не совпадает.",
+        "indicators": "Индикаторы сравнения"
+    },
+    "screenshots": {
+        "revealed": "Скриншотов открыто",
+        "screenshot_alt": "Скриншот {number}",
+        "thumbnail_alt": "Миниатюра {number}",
+        "no_screenshot": "Скриншот недоступен"
+    },
+    "hints": {
+        "unlock_in": "Ещё {count} попытка | Ещё {count} попытки | Ещё {count} попыток",
+        "tap_to_reveal": "Нажмите, чтобы открыть",
+        "no_data": "Нет данных",
+        "types": {
+            "year": "Год выхода",
+            "first_letter": "Первая буква",
+            "franchises": "Серия / Франшиза",
+            "companies": "Разработчик / Издатель",
+            "gender": "Пол",
+            "species": "Вид",
+            "genre": "Жанр"
+        }
     }
 }

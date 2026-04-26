@@ -18,6 +18,11 @@ class PagesController extends Controller
         return Inertia::render('Classic', []);
     }
 
+    public function screenshots(): Response
+    {
+        return Inertia::render('Screenshots', []);
+    }
+
     public function characters(): Response
     {
         return Inertia::render('Characters', []);

@@ -1,39 +1,52 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import AttributeCell from "./AttributeCell.vue";
 
 const { t } = useI18n();
+
+type GameMode = "classic" | "screenshots";
 
 interface Attempt {
     guessed: {
         name: string;
         display_name: string;
         cover_url: string;
-        release_year: number | null;
-        rating: number | null;
-        genres: Array<{ id: number; name: string }>;
-        developers: Array<{ id: number; name: string }>;
-        publishers: Array<{ id: number; name: string }>;
-        franchises: Array<{ id: number; name: string }>;
-        collections: Array<{ id: number; name: string }>;
-        game_modes: Array<{ id: number; name: string }>;
-        player_perspectives: Array<{ id: number; name: string }>;
+        release_year?: number | null;
+        rating?: number | null;
+        genres?: Array<{ id: number; name: string }>;
+        developers?: Array<{ id: number; name: string }>;
+        publishers?: Array<{ id: number; name: string }>;
+        franchises?: Array<{ id: number; name: string }>;
+        collections?: Array<{ id: number; name: string }>;
+        game_modes?: Array<{ id: number; name: string }>;
+        player_perspectives?: Array<{ id: number; name: string }>;
     };
     comparison: {
-        release_year: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
-        rating: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
-        genres: { result: "exact" | "close" | "wrong" };
-        developers_publishers: { result: "exact" | "close" | "wrong" };
-        franchises_collections: { result: "exact" | "close" | "wrong" };
-        game_modes: { result: "exact" | "close" | "wrong" };
-        player_perspectives: { result: "exact" | "close" | "wrong" };
+        release_year?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
+        rating?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
+        genres?: { result: "exact" | "close" | "wrong" };
+        developers_publishers?: { result: "exact" | "close" | "wrong" };
+        franchises_collections?: { result: "exact" | "close" | "wrong" };
+        game_modes?: { result: "exact" | "close" | "wrong" };
+        player_perspectives?: { result: "exact" | "close" | "wrong" };
     };
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     attempt: Attempt;
     attemptNumber: number;
-}>();
+    mode?: GameMode;
+}>(), {
+    mode: "classic",
+});
+
+const gridClass = computed(() => {
+    if (props.mode === "screenshots") {
+        return "grid-cols-[60px_1fr_1fr_1fr]";
+    }
+    return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px]";
+});
 
 function formatArrayValue(arr: Array<{ id: number; name: string }> | undefined): string {
     if (!arr || arr.length === 0) return "-";
@@ -125,60 +138,76 @@ function buildGameModeValue() {
 </script>
 
 <template>
-    <div class="grid grid-cols-[50px_80px_repeat(6,_1fr)_80px_80px] gap-2 animate-fade-in">
-        <div class="rounded-lg bg-onyx-light border border-white/10 flex items-center justify-center min-h-[80px]">
-            <span class="text-lg font-black text-primary-500">#{{ attemptNumber }}</span>
+    <div class="grid gap-2 animate-fade-in items-stretch" :class="gridClass">
+        <div class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center justify-center min-h-[80px] p-3">
+            <span class="text-lg font-black text-teal-500">#{{ attemptNumber }}</span>
         </div>
 
-        <div class="rounded-lg bg-onyx-light border border-white/10 flex items-center justify-center min-h-[80px] p-2">
-            <div v-if="attempt.guessed.cover_url" class="w-full h-full flex items-center justify-center">
+        <div class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center gap-3 min-h-[80px] p-3 overflow-hidden">
+            <div v-if="attempt.guessed.cover_url" class="w-14 h-14 shrink-0">
                 <img
                     :src="attempt.guessed.cover_url"
                     :alt="attempt.guessed.display_name"
-                    class="max-w-full max-h-full rounded object-cover"
+                    class="w-full h-full rounded-lg object-cover"
                 />
             </div>
-            <div v-else class="text-xs font-bold text-white text-center px-1">
-                {{ attempt.guessed.display_name }}
+            <div class="min-w-0 flex-1">
+                <p class="text-sm font-bold text-white truncate">
+                    {{ attempt.guessed.display_name }}
+                </p>
             </div>
         </div>
 
-        <AttributeCell
-            :result="attempt.comparison.genres.result"
-            :value="formatArrayValue(attempt.guessed.genres)"
-        />
+        <template v-if="mode === 'classic'">
+            <AttributeCell
+                :result="attempt.comparison.genres?.result || 'wrong'"
+                :value="formatArrayValue(attempt.guessed.genres)"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.developers_publishers.result"
-            :value="buildDevelopersPublishersValue()"
-        />
+            <AttributeCell
+                :result="attempt.comparison.developers_publishers?.result || 'wrong'"
+                :value="buildDevelopersPublishersValue()"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.franchises_collections.result"
-            :value="buildFranchisesCollectionsValue()"
-        />
+            <AttributeCell
+                :result="attempt.comparison.franchises_collections?.result || 'wrong'"
+                :value="buildFranchisesCollectionsValue()"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.game_modes.result"
-            :value="buildGameModeValue()"
-        />
+            <AttributeCell
+                :result="attempt.comparison.player_perspectives?.result || 'wrong'"
+                :value="buildPerspectiveValue()"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.player_perspectives.result"
-            :value="buildPerspectiveValue()"
-        />
+            <AttributeCell
+                :result="attempt.comparison.game_modes?.result || 'wrong'"
+                :value="buildGameModeValue()"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.rating.result"
-            :value="attempt.comparison.rating.value"
-            :arrow="attempt.comparison.rating.arrow"
-        />
+            <AttributeCell
+                :result="attempt.comparison.rating?.result || 'wrong'"
+                :value="attempt.comparison.rating?.value"
+                :arrow="attempt.comparison.rating?.arrow"
+            />
 
-        <AttributeCell
-            :result="attempt.comparison.release_year.result"
-            :value="attempt.comparison.release_year.value"
-            :arrow="attempt.comparison.release_year.arrow"
-        />
+            <AttributeCell
+                :result="attempt.comparison.release_year?.result || 'wrong'"
+                :value="attempt.comparison.release_year?.value"
+                :arrow="attempt.comparison.release_year?.arrow"
+            />
+        </template>
+
+        <template v-else-if="mode === 'screenshots'">
+            <AttributeCell
+                :result="attempt.comparison.franchises_collections?.result || 'wrong'"
+                :value="buildFranchisesCollectionsValue()"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.developers_publishers?.result || 'wrong'"
+                :value="buildDevelopersPublishersValue()"
+            />
+        </template>
     </div>
 </template>
 

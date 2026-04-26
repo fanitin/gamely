@@ -6,7 +6,7 @@
         "games": "Games",
         "change_locale": "Language",
         "choose_language": "Choose language",
-        "more_languages_soon": "More languages coming soon!",
+        "more_languages_soon": "More languages coming soon",
         "back_to_menu": "Back to Menu"
     },
     "modes": {
@@ -19,19 +19,17 @@
             "description": "Guess the game by its screenshots"
         },
         "character_attributes": {
-            "title": "Character Attributes",
+            "title": "Character",
             "description": "Guess the character by their attributes"
         },
         "character_image": {
-            "title": "Character Image",
-            "description": "Guess the hero by their blurred photo"
+            "title": "Silhouette",
+            "description": "Guess the character by their blurred photo"
         }
     },
     "game": {
         "submit": "Guess",
         "share": "Share Result",
-        "give_up": "Give Up",
-        "attempts": "{current} / {max} attempts",
         "loading": "Loading...",
         "no_results": "No results found",
         "search_game": "Search for a game...",
@@ -49,7 +47,6 @@
         "lose_title": "Game Over",
         "answer_was": "The answer was:",
         "next_in": "Next game in:",
-        "play_again": "Play Again",
         "streak": "Streak",
         "played": "Played",
         "win_rate": "Win Rate",
@@ -64,32 +61,24 @@
     },
     "attributes": {
         "game": "Game",
-        "genre": "Genre",
         "genres": "Genres",
-        "year": "Year",
         "release_year": "Year",
         "developer": "Developer",
         "publisher": "Publisher",
-        "developers_publishers": "Developer/Publisher",
-        "companies": "Companies",
-        "platform": "Platform",
+        "developers_publishers": "Developer / Publisher",
         "platforms": "Platforms",
         "rating": "Rating",
         "franchise": "Franchise",
         "collection": "Collection",
-        "franchises": "Franchise/Collection",
-        "game_mode": "Game mode",
+        "franchises": "Franchise / Collection",
+        "game_mode": "Game Mode",
         "player_perspective": "Perspective",
-        "modes": "Modes/Perspective",
-
         "character": "Character",
-        "series": "Series",
         "gender": "Gender",
-        "species": "Species",
-        "first_appearance": "First Appearance"
+        "species": "Species"
     },
     "share": {
-        "title": "GameWordle #{number} · {mode} · {score}/6",
+        "title": "Gamely #{number} · {mode} · {score}",
         "copied": "Copied to clipboard!"
     },
     "errors": {
@@ -104,12 +93,31 @@
     },
     "how_to_play": {
         "intro": "Guess the game using attributes as hints. The indicators show how close your guess was to the solution.",
-        "infinite_hint": "You have unlimited attempts. Keep guessing until you find the game!",
-        "example_genre_match": "The genre matches exactly.",
-        "example_genre_partial": "At least one genre matches.",
-        "example_year_close": "Year is within ±3 years. ▲ means answer is higher.",
-        "example_wrong": "Does not match.",
-        "indicators": "Comparison Indicators",
-        "higher_hint": "Higher (▲) means the correct value is larger."
+        "infinite_hint": "You have unlimited attempts. Keep guessing until you find the answer!",
+        "exact_match": "Exact match.",
+        "partial_match": "Partial match (e.g., one of the genres).",
+        "close_match": "Close match. ▲ means the answer is higher.",
+        "no_match": "No match.",
+        "indicators": "Comparison Indicators"
+    },
+    "screenshots": {
+        "revealed": "Screenshots revealed",
+        "screenshot_alt": "Screenshot {number}",
+        "thumbnail_alt": "Thumbnail {number}",
+        "no_screenshot": "No screenshot available"
+    },
+    "hints": {
+        "unlock_in": "{count} more to unlock | {count} more to unlock",
+        "tap_to_reveal": "Tap to reveal",
+        "no_data": "No data",
+        "types": {
+            "year": "Release Year",
+            "first_letter": "First Letter",
+            "franchises": "Series / Franchise",
+            "companies": "Developer / Publisher",
+            "gender": "Gender",
+            "species": "Species",
+            "genre": "Genre"
+        }
     }
 }

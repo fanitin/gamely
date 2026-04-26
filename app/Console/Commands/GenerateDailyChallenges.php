@@ -74,7 +74,7 @@ class GenerateDailyChallenges extends Command
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32($date);
-        $game = Game::has('screenshots')->inRandomOrder($seed)->first();
+        $game = Game::has('screenshots', '>=', 5)->inRandomOrder($seed)->first();
 
         if (!$game) {
             return null;

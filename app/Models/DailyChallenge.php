@@ -45,8 +45,8 @@ class DailyChallenge extends Model
     public function getEntity(): Model|null
     {
         return match ($this->mode) {
-            GameMode::CLASSIC, GameMode::COVER => $this->game,
-            GameMode::CHARACTER, GameMode::SILHOUETTE => $this->character,
+            GameMode::CLASSIC, GameMode::GAME_SCREENSHOTS => $this->game,
+            GameMode::CHARACTER_ATTRIBUTES, GameMode::CHARACTER_IMAGE => $this->character,
         };
     }
 

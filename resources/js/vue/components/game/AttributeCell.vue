@@ -16,13 +16,13 @@ const props = defineProps<{
 const bgColor = computed(() => {
     switch (props.result) {
         case "exact":
-            return "bg-success-500/90";
+            return "bg-forest-500";
         case "close":
-            return "bg-warning-500/90";
+            return "bg-gold-500";
         case "wrong":
-            return "bg-danger-500/90";
+            return "bg-crimson-500";
         default:
-            return "bg-danger-500/90";
+            return "bg-crimson-500";
     }
 });
 
@@ -31,13 +31,13 @@ const bgArrowOverlay = computed(() => {
 
     switch (props.result) {
         case "exact":
-            return "bg-success-700/30";
+            return "bg-forest-600/30";
         case "close":
-            return "bg-warning-700/30";
+            return "bg-gold-600/30";
         case "wrong":
-            return "bg-danger-700/30";
+            return "bg-crimson-600/30";
         default:
-            return "bg-danger-700/30";
+            return "bg-crimson-600/30";
     }
 });
 
@@ -56,7 +56,7 @@ const displayValue = computed(() => {
     <div
         :class="[
             bgColor,
-            'relative rounded-lg p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
+            'relative rounded-xl p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
         ]"
     >
         <div

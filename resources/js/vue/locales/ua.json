@@ -6,8 +6,8 @@
         "games": "Ігри",
         "change_locale": "Мова",
         "choose_language": "Оберіть мову",
-        "more_languages_soon": "Скоро будуть нові мови!",
-        "back_to_menu": "Назад в меню"
+        "more_languages_soon": "Скоро буде більше мов",
+        "back_to_menu": "В меню"
     },
     "modes": {
         "classic": {
@@ -111,5 +111,27 @@
         "example_wrong": "Не збігається.",
         "indicators": "Індикатори порівняння",
         "higher_hint": "Стрелка вгору (▲) означає, що правильне значення вище."
+    },
+    "screenshots": {
+        "revealed": "Скріншотів відкрито",
+        "screenshot_alt": "Скріншот {number}",
+        "thumbnail_alt": "Мініатюра {number}",
+        "no_screenshot": "Скріншот недоступний",
+        "next_unlock": "Наступний скріншот через {count} спробу | Наступний скріншот через {count} спроби | Наступний скріншот через {count} спроб"
+    },
+    "hints": {
+        "unlock_in": "Ще {count} спроба | Ще {count} спроби | Ще {count} спроб",
+        "tap_to_reveal": "Натисніть, щоб відкрити",
+        "no_data": "Немає даних",
+        "types": {
+            "year": "Рік випуску",
+            "first_letter": "Перша літера",
+            "franchises": "Серія / Франшиза",
+            "companies": "Розробник / Видавець",
+            "gender": "Стать",
+            "species": "Вид",
+            "developer": "Розробник",
+            "genre": "Жанр"
+        }
     }
 }
