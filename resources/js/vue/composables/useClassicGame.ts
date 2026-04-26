@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import axios from "axios";
 import { route } from "ziggy-js";
 import { useLocalStorage } from "@vueuse/core";
@@ -34,15 +34,69 @@ interface Attempt {
     };
 }
 
+interface GameState {
+    attempts: Attempt[];
+    guessedGameIds: number[];
+    isWon: boolean;
+    lastCorrectGuess: GuessedGame | null;
+}
+
+const getDefaultState = (): GameState => ({
+    attempts: [],
+    guessedGameIds: [],
+    isWon: false,
+    lastCorrectGuess: null,
+});
+
+const cleanupOldEntries = () => {
+    const now = new Date();
+    const maxAge = 7;
+
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith('classic_game_')) continue;
+
+        const dateStr = key.replace('classic_game_', '');
+        const entryDate = new Date(dateStr);
+
+        if (!isNaN(entryDate.getTime())) {
+            const diffDays = Math.floor((now.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24));
+            if (diffDays > maxAge) {
+                localStorage.removeItem(key);
+            }
+        }
+    }
+};
+
 export function useClassicGame() {
-    const attempts = ref<Attempt[]>([]);
-    const isWon = ref(false);
+    const todayKey = new Date().toISOString().split("T")[0];
+
+    cleanupOldEntries();
+
+    const gameState = useLocalStorage<GameState>(
+        `classic_game_${todayKey}`,
+        getDefaultState()
+    );
+
+    const attempts = ref<Attempt[]>(gameState.value.attempts);
+    const isWon = ref(gameState.value.isWon);
     const isLoading = ref(false);
     const error = ref<string | null>(null);
-    const guessedGameIds = ref<number[]>([]);
+    const guessedGameIds = ref<number[]>(gameState.value.guessedGameIds);
+    const lastCorrectGuess = ref<GuessedGame | null>(gameState.value.lastCorrectGuess);
 
-    const todayKey = new Date().toISOString().split("T")[0];
-    const completedToday = useLocalStorage(`classic_completed_${todayKey}`, false);
+    const completedToday = useLocalStorage(`classic_completed_${todayKey}`, gameState.value.isWon);
+
+    const saveState = () => {
+        gameState.value = {
+            attempts: attempts.value,
+            guessedGameIds: guessedGameIds.value,
+            isWon: isWon.value,
+            lastCorrectGuess: lastCorrectGuess.value,
+        };
+    };
+
+    watch([attempts, guessedGameIds, isWon, lastCorrectGuess], saveState, { deep: true });
 
     const canGuess = computed(() => !isWon.value && !completedToday.value && !isLoading.value);
 
@@ -66,6 +120,13 @@ export function useClassicGame() {
             }
 
             if (data.is_correct) {
+                attempts.value.push({
+                    guessed: data.comparison.guessed,
+                    comparison: data.comparison.comparison,
+                });
+                guessedGameIds.value.push(gameId);
+                lastCorrectGuess.value = data.comparison.guessed;
+
                 isWon.value = true;
                 completedToday.value = true;
 
@@ -77,7 +138,7 @@ export function useClassicGame() {
 
                 stats.value.total++;
                 stats.value.wins++;
-                const attemptsCount = attempts.value.length + 1;
+                const attemptsCount = attempts.value.length;
                 stats.value.distribution[attemptsCount] = (stats.value.distribution[attemptsCount] || 0) + 1;
             } else {
                 attempts.value.push({
@@ -95,13 +156,6 @@ export function useClassicGame() {
         }
     };
 
-    const reset = () => {
-        attempts.value = [];
-        isWon.value = false;
-        error.value = null;
-        completedToday.value = false;
-    };
-
     return {
         attempts,
         isWon,
@@ -109,7 +163,7 @@ export function useClassicGame() {
         error,
         canGuess,
         guessedGameIds,
+        lastCorrectGuess,
         makeGuess,
-        reset,
     };
 }
