@@ -8,9 +8,10 @@ import AppButton from "@/vue/components/ui/AppButton.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useClassicGame } from "@/vue/composables/useClassicGame";
+import HintCard from "@/vue/components/game/HintCard.vue";
 
 const { t } = useI18n();
-const { attempts, isWon, isLoading, error, canGuess, guessedGameIds, makeGuess } = useClassicGame();
+const { attempts, isWon, isLoading, isLoadingChallenge, error, canGuess, guessedGameIds, hints, attemptsCount, makeGuess } = useClassicGame();
 
 const reversedAttempts = computed(() => [...attempts.value].reverse());
 
@@ -57,6 +58,15 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                 <span class="text-white">{{ error }}</span>
             </div>
 
+            <div v-if="isLoadingChallenge" class="text-center py-12">
+                <div
+                    class="inline-block w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mb-4"
+                ></div>
+                <p class="text-muted">{{ t("game.loading") }}</p>
+            </div>
+
+            <template v-else>
+
             <div
                 v-if="isWon"
                 class="mb-6 bg-success-500/10 border border-success-500/30 rounded-xl p-6 text-center space-y-3 animate-fade-in"
@@ -68,6 +78,17 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                 <p class="text-muted">
                     {{ t("game.attempts_count", { count: attempts.length + 1 }) }}
                 </p>
+            </div>
+
+            <div v-if="hints.length > 0 && !isWon" class="mb-6 grid grid-cols-3 gap-3">
+                <HintCard
+                    v-for="hint in hints"
+                    :key="hint.type"
+                    :type="hint.type"
+                    :value="hint.value"
+                    :unlock-at="hint.unlockAt"
+                    :current-attempts="attemptsCount"
+                />
             </div>
 
             <div v-if="canGuess" class="mb-12 sticky top-4 z-40">
@@ -131,6 +152,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                     </div>
                 </div>
             </div>
+            </template>
         </div>
     </AppLayout>
 </template>

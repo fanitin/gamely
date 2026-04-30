@@ -34,6 +34,12 @@ interface Attempt {
     };
 }
 
+export interface Hint {
+    type: string;
+    value: string | number | null;
+    unlockAt: number;
+}
+
 interface GameState {
     attempts: Attempt[];
     guessedGameIds: number[];
@@ -81,9 +87,12 @@ export function useClassicGame() {
     const attempts = ref<Attempt[]>(gameState.value.attempts);
     const isWon = ref(gameState.value.isWon);
     const isLoading = ref(false);
+    const isLoadingChallenge = ref(true);
     const error = ref<string | null>(null);
     const guessedGameIds = ref<number[]>(gameState.value.guessedGameIds);
     const lastCorrectGuess = ref<GuessedGame | null>(gameState.value.lastCorrectGuess);
+    const hints = ref<Hint[]>([]);
+    const challengeId = ref<number | null>(null);
 
     const completedToday = useLocalStorage(`classic_completed_${todayKey}`, gameState.value.isWon);
 
@@ -98,7 +107,38 @@ export function useClassicGame() {
 
     watch([attempts, guessedGameIds, isWon, lastCorrectGuess], saveState, { deep: true });
 
-    const canGuess = computed(() => !isWon.value && !completedToday.value && !isLoading.value);
+    const canGuess = computed(() => !isWon.value && !completedToday.value && !isLoading.value && !isLoadingChallenge.value);
+
+    const attemptsCount = computed(() => attempts.value.length);
+
+    const loadChallenge = async () => {
+        isLoadingChallenge.value = true;
+        error.value = null;
+
+        try {
+            const response = await axios.get(route("api.challenge.classic"));
+            if (response.data.success) {
+                challengeId.value = response.data.challenge_id;
+
+                if (response.data.hints) {
+                    hints.value = Object.entries(response.data.hints).map(([type, hintData]: [string, any]) => ({
+                        type,
+                        value: hintData.value,
+                        unlockAt: hintData.unlock_at,
+                    }));
+                }
+            } else {
+                error.value = response.data.error || "Failed to load challenge";
+            }
+        } catch (err: any) {
+            console.error("Failed to load challenge:", err);
+            error.value = err.response?.data?.error || "Network error";
+        } finally {
+            isLoadingChallenge.value = false;
+        }
+    };
+
+    loadChallenge();
 
     const makeGuess = async (gameId: number) => {
         if (!canGuess.value) return;
@@ -118,6 +158,7 @@ export function useClassicGame() {
                 error.value = data.error;
                 return;
             }
+
 
             if (data.is_correct) {
                 attempts.value.push({
@@ -160,10 +201,13 @@ export function useClassicGame() {
         attempts,
         isWon,
         isLoading,
+        isLoadingChallenge,
         error,
         canGuess,
         guessedGameIds,
         lastCorrectGuess,
+        hints,
+        attemptsCount,
         makeGuess,
     };
 }
