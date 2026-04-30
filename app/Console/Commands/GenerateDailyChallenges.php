@@ -61,7 +61,7 @@ class GenerateDailyChallenges extends Command
 
     private function generateClassicChallenge(string $date): DailyChallenge
     {
-        $seed = crc32($date);
+        $seed = crc32(now());
         $game = Game::inRandomOrder($seed)->first();
 
         return DailyChallenge::create([
@@ -73,7 +73,7 @@ class GenerateDailyChallenges extends Command
 
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
-        $seed = crc32($date);
+        $seed = crc32(now());
         $game = Game::has('screenshots', '>=', 5)->inRandomOrder($seed)->first();
 
         if (!$game) {
@@ -89,7 +89,7 @@ class GenerateDailyChallenges extends Command
 
     private function generateCharacterAttributesChallenge(string $date): ?DailyChallenge
     {
-        $seed = crc32($date);
+        $seed = crc32(now());
         $character = Character::whereNotNull('gender_id')
             ->whereNotNull('species_id')
             ->inRandomOrder($seed)
@@ -108,7 +108,7 @@ class GenerateDailyChallenges extends Command
 
     private function generateCharacterImageChallenge(string $date): ?DailyChallenge
     {
-        $seed = crc32($date);
+        $seed = crc32(now());
         $character = Character::whereNotNull('mug_shot_url')
             ->whereNotNull('gender_id')
             ->whereNotNull('species_id')

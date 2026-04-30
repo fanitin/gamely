@@ -79,7 +79,7 @@ const search = async () => {
     }
 };
 
-watchDebounced(query, search, { debounce: 300 });
+watchDebounced(query, search, { debounce: 150 });
 
 const select = (item: SearchResult) => {
     emit("select", item);
