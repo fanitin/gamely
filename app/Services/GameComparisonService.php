@@ -26,7 +26,9 @@ class GameComparisonService
         return [
             'gender' => $this->compareGender($guessed, $target),
             'species' => $this->compareSpecies($guessed, $target),
-            'games' => $this->compareCharacterGames($guessed, $target),
+            'first_appearance_year' => $this->compareFirstAppearanceYear($guessed, $target),
+            'franchises' => $this->compareCharacterFranchises($guessed, $target),
+            'collections' => $this->compareCharacterCollections($guessed, $target),
         ];
     }
 
@@ -299,6 +301,99 @@ class GameComparisonService
         $intersection = array_intersect($guessedIds, $targetIds);
         if (!empty($intersection)) {
             return ['result' => 'exact'];
+        }
+
+        return ['result' => 'wrong'];
+    }
+
+    private function compareFirstAppearanceYear(Character $guessed, Character $target): array
+    {
+        $guessedYear = $guessed->firstAppearanceYear();
+        $targetYear = $target->firstAppearanceYear();
+
+        if ($guessedYear === null || $targetYear === null) {
+            return [
+                'result' => 'wrong',
+                'value' => $guessedYear,
+            ];
+        }
+
+        if ($guessedYear === $targetYear) {
+            return [
+                'result' => 'exact',
+                'value' => $guessedYear,
+            ];
+        }
+
+        $diff = abs($guessedYear - $targetYear);
+        $arrow = $guessedYear < $targetYear ? 'up' : 'down';
+
+        if ($diff <= 3) {
+            return [
+                'result' => 'close',
+                'value' => $guessedYear,
+                'arrow' => $arrow,
+            ];
+        }
+
+        return [
+            'result' => 'wrong',
+            'value' => $guessedYear,
+            'arrow' => $arrow,
+        ];
+    }
+
+    private function compareCharacterFranchises(Character $guessed, Character $target): array
+    {
+        $guessedFranchises = $guessed->franchises()->pluck('id')->toArray();
+        $targetFranchises = $target->franchises()->pluck('id')->toArray();
+
+        if (empty($guessedFranchises) && empty($targetFranchises)) {
+            return ['result' => 'exact'];
+        }
+
+        if (empty($guessedFranchises) || empty($targetFranchises)) {
+            return ['result' => 'wrong'];
+        }
+
+        sort($guessedFranchises);
+        sort($targetFranchises);
+
+        if ($guessedFranchises === $targetFranchises) {
+            return ['result' => 'exact'];
+        }
+
+        $intersection = array_intersect($guessedFranchises, $targetFranchises);
+        if (!empty($intersection)) {
+            return ['result' => 'close'];
+        }
+
+        return ['result' => 'wrong'];
+    }
+
+    private function compareCharacterCollections(Character $guessed, Character $target): array
+    {
+        $guessedCollections = $guessed->collections()->pluck('id')->toArray();
+        $targetCollections = $target->collections()->pluck('id')->toArray();
+
+        if (empty($guessedCollections) && empty($targetCollections)) {
+            return ['result' => 'exact'];
+        }
+
+        if (empty($guessedCollections) || empty($targetCollections)) {
+            return ['result' => 'wrong'];
+        }
+
+        sort($guessedCollections);
+        sort($targetCollections);
+
+        if ($guessedCollections === $targetCollections) {
+            return ['result' => 'exact'];
+        }
+
+        $intersection = array_intersect($guessedCollections, $targetCollections);
+        if (!empty($intersection)) {
+            return ['result' => 'close'];
         }
 
         return ['result' => 'wrong'];

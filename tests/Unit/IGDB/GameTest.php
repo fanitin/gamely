@@ -155,6 +155,6 @@ class GameTest extends TestCase
         ]);
 
         $this->assertCount(1, $game->fresh()->screenshots);
-        $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->url);
+        $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->getRawOriginal('url'));
     }
 }

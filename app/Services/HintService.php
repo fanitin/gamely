@@ -59,17 +59,20 @@ class HintService
 
     private function getCharacterAttributesHints(Character $character): array
     {
+        $collections = $character->collections();
+        $firstGame = $character->firstAppearanceGame();
+
         return [
-            'first_letter' => [
-                'value' => mb_strtoupper(mb_substr($character->name, 0, 1)),
+            'collection' => [
+                'value' => $collections->isNotEmpty() ? $collections->pluck('name')->join(', ') : null,
                 'unlock_at' => 5,
             ],
-            'gender' => [
-                'value' => $character->gender?->name,
+            'first_letter' => [
+                'value' => mb_strtoupper(mb_substr($character->name, 0, 1)),
                 'unlock_at' => 10,
             ],
-            'species' => [
-                'value' => $character->species?->name,
+            'first_game' => [
+                'value' => $firstGame?->name,
                 'unlock_at' => 15,
             ],
         ];

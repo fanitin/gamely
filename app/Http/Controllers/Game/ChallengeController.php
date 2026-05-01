@@ -102,7 +102,8 @@ class ChallengeController extends Controller
         $challenge = DailyChallenge::forMode(GameMode::CHARACTER_ATTRIBUTES)
             ->forDate(today()->toDateString())
             ->with([
-                'character.games',
+                'character.games.franchises',
+                'character.games.collections',
                 'character.gender',
                 'character.species',
             ])

@@ -34,7 +34,8 @@ class GuessService
                 'game.collections',
                 'game.gameModes',
                 'game.playerPerspectives',
-                'character.games',
+                'character.games.franchises',
+                'character.games.collections',
                 'character.gender',
                 'character.species'
             ])
@@ -140,7 +141,7 @@ class GuessService
 
     private function compareCharacterGuess(int $guessedId, int $targetId, Character $targetChar): array
     {
-        $guessedChar = Character::with(['games', 'gender', 'species'])
+        $guessedChar = Character::with(['games.franchises', 'games.collections', 'gender', 'species'])
             ->findOrFail($guessedId);
 
         $comparison = $this->comparisonService->compareCharacters($guessedChar, $targetChar);
@@ -154,6 +155,9 @@ class GuessService
                     'mug_shot_url' => $guessedChar->mug_shot_url,
                     'gender' => $guessedChar->gender?->name,
                     'species' => $guessedChar->species?->name,
+                    'first_appearance_year' => $guessedChar->firstAppearanceYear(),
+                    'franchises' => $guessedChar->franchises()->map(fn($f) => ['id' => $f->id, 'name' => $f->name]),
+                    'collections' => $guessedChar->collections()->map(fn($c) => ['id' => $c->id, 'name' => $c->name]),
                 ],
                 'comparison' => $comparison,
             ],

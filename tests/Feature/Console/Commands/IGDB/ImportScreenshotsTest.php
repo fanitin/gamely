@@ -82,7 +82,7 @@ class ImportScreenshotsTest extends TestCase
             ->assertExitCode(0);
 
         $this->assertCount(5, $game->fresh()->screenshots);
-        $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->url);
+        $this->assertEquals('screenshots/20_scr1.webp', $game->screenshots->first()->getRawOriginal('url'));
         $this->assertEquals(1, $game->screenshots->first()->order);
     }
 
