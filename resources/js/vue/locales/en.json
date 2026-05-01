@@ -75,7 +75,8 @@
         "player_perspective": "Perspective",
         "character": "Character",
         "gender": "Gender",
-        "species": "Species"
+        "species": "Species",
+        "first_appearance_year": "First Appearance"
     },
     "share": {
         "title": "Gamely #{number} · {mode} · {score}",
@@ -118,7 +119,10 @@
             "platforms": "Platforms",
             "gender": "Gender",
             "species": "Species",
-            "genre": "Genre"
+        "first_appearance_year": "First Appearance",
+            "genre": "Genre",
+            "collection": "Collection",
+            "first_game": "First Appearance Game"
         }
     }
 }

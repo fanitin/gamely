@@ -262,7 +262,7 @@ class GameComparisonService
         }
 
         if ($guessed->gender_id === null || $target->gender_id === null) {
-            return ['result' => 'wrong'];
+            return ['result' => 'missing'];
         }
 
         if ($guessed->gender_id === $target->gender_id) {
@@ -279,7 +279,7 @@ class GameComparisonService
         }
 
         if ($guessed->species_id === null || $target->species_id === null) {
-            return ['result' => 'wrong'];
+            return ['result' => 'missing'];
         }
 
         if ($guessed->species_id === $target->species_id) {
@@ -313,7 +313,7 @@ class GameComparisonService
 
         if ($guessedYear === null || $targetYear === null) {
             return [
-                'result' => 'wrong',
+                'result' => 'missing',
                 'value' => $guessedYear,
             ];
         }

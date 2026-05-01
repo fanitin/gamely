@@ -75,7 +75,8 @@
         "player_perspective": "Перспектива",
         "character": "Персонаж",
         "gender": "Пол",
-        "species": "Вид"
+        "species": "Раса",
+        "first_appearance_year": "Год первого появления"
     },
     "share": {
         "title": "Gamely #{number} · {mode} · {score}",
@@ -117,8 +118,10 @@
             "companies": "Разработчик / Издатель",
             "platforms": "Платформы",
             "gender": "Пол",
-            "species": "Вид",
-            "genre": "Жанр"
+            "species": "Раса",
+            "genre": "Жанр",
+            "collection": "Коллекция",
+            "first_game": "Первая игра"
         }
     }
 }

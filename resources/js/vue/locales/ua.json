@@ -85,8 +85,9 @@
         "character": "Персонаж",
         "series": "Серія",
         "gender": "Стать",
-        "species": "Вид",
-        "first_appearance": "Перша поява"
+        "species": "Раса",
+        "first_appearance": "Перша поява",
+        "first_appearance_year": "Рік першої появи"
     },
     "share": {
         "title": "GameWordle #{number} · {mode} · {score}/6",
@@ -130,9 +131,11 @@
             "companies": "Розробник / Видавець",
             "platforms": "Платформи",
             "gender": "Стать",
-            "species": "Вид",
+            "species": "Раса",
             "developer": "Розробник",
-            "genre": "Жанр"
+            "genre": "Жанр",
+            "collection": "Колекція",
+            "first_game": "Перша гра"
         }
     }
 }

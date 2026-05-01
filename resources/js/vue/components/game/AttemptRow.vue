@@ -5,13 +5,17 @@ import AttributeCell from "./AttributeCell.vue";
 
 const { t } = useI18n();
 
-type GameMode = "classic" | "screenshots";
+type GameMode = "classic" | "screenshots" | "character_attributes";
 
 interface Attempt {
     guessed: {
         name: string;
-        display_name: string;
-        cover_url: string;
+        display_name?: string;
+        cover_url?: string;
+        mug_shot_url?: string;
+        gender?: string;
+        species?: string;
+        first_appearance_year?: number | null;
         release_year?: number | null;
         rating?: number | null;
         genres?: Array<{ id: number; name: string }>;
@@ -28,8 +32,12 @@ interface Attempt {
         genres?: { result: "exact" | "close" | "wrong" };
         developers_publishers?: { result: "exact" | "close" | "wrong" };
         franchises_collections?: { result: "exact" | "close" | "wrong" };
-        game_modes?: { result: "exact" | "close" | "wrong" };
-        player_perspectives?: { result: "exact" | "close" | "wrong" };
+        game_modes?: { result: "exact" | "close" | "wrong" | "missing" };
+        player_perspectives?: { result: "exact" | "close" | "wrong" | "missing" };
+        gender?: { result: "exact" | "close" | "wrong" | "missing" };
+        species?: { result: "exact" | "close" | "wrong" | "missing" };
+        first_appearance_year?: { result: "exact" | "close" | "wrong" | "missing"; value?: number; arrow?: "up" | "down" };
+        franchises?: { result: "exact" | "close" | "wrong" | "missing" };
     };
 }
 
@@ -44,6 +52,9 @@ const props = withDefaults(defineProps<{
 const gridClass = computed(() => {
     if (props.mode === "screenshots") {
         return "grid-cols-[60px_1fr_1fr_1fr]";
+    }
+    if (props.mode === "character_attributes") {
+        return "grid-cols-[50px_80px_repeat(4,1fr)]";
     }
     return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px]";
 });
@@ -144,16 +155,16 @@ function buildGameModeValue() {
         </div>
 
         <div class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center gap-3 min-h-[80px] p-3 overflow-hidden">
-            <div v-if="attempt.guessed.cover_url" class="w-14 h-14 shrink-0">
+            <div v-if="attempt.guessed.cover_url || attempt.guessed.mug_shot_url" class="w-14 h-14 shrink-0">
                 <img
-                    :src="attempt.guessed.cover_url"
-                    :alt="attempt.guessed.display_name"
+                    :src="attempt.guessed.cover_url || attempt.guessed.mug_shot_url"
+                    :alt="attempt.guessed.display_name || attempt.guessed.name"
                     class="w-full h-full rounded-lg object-cover"
                 />
             </div>
             <div class="min-w-0 flex-1">
                 <p class="text-sm font-bold text-white truncate">
-                    {{ attempt.guessed.display_name }}
+                    {{ attempt.guessed.display_name || attempt.guessed.name }}
                 </p>
             </div>
         </div>
@@ -206,6 +217,29 @@ function buildGameModeValue() {
             <AttributeCell
                 :result="attempt.comparison.developers_publishers?.result || 'wrong'"
                 :value="buildDevelopersPublishersValue()"
+            />
+        </template>
+
+        <template v-else-if="mode === 'character_attributes'">
+            <AttributeCell
+                :result="attempt.comparison.franchises?.result || 'wrong'"
+                :value="formatArrayValue(attempt.guessed.franchises)"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.gender?.result || 'wrong'"
+                :value="attempt.guessed.gender"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.species?.result || 'wrong'"
+                :value="attempt.guessed.species"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.first_appearance_year?.result || 'wrong'"
+                :value="attempt.comparison.first_appearance_year?.value"
+                :arrow="attempt.comparison.first_appearance_year?.arrow"
             />
         </template>
     </div>

@@ -8,7 +8,7 @@ interface MultiValue {
 }
 
 const props = defineProps<{
-    result: "exact" | "close" | "wrong";
+    result: "exact" | "close" | "wrong" | "missing";
     value?: string | number | Array<MultiValue>;
     arrow?: "up" | "down";
 }>();
@@ -21,6 +21,8 @@ const bgColor = computed(() => {
             return "bg-gold-500";
         case "wrong":
             return "bg-crimson-500";
+        case "missing":
+            return "bg-onyx-500 border border-white/10";
         default:
             return "bg-crimson-500";
     }
