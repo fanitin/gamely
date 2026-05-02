@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Services\GameSearchService;
 use App\Services\GuessService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 
 class GameApiController extends Controller
@@ -20,12 +21,13 @@ class GameApiController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('query', '');
-        $type  = $request->input('type', 'game');
+        $validated = $request->validate([
+            'query' => ['required', 'string', 'min:1', 'max:64'],
+            'type' => ['sometimes', 'string', Rule::in(['game', 'character'])],
+        ]);
 
-        if (empty($query)) {
-            return response()->json(['error' => 'Query parameter is required'], 400);
-        }
+        $query = $validated['query'];
+        $type = $validated['type'] ?? 'game';
 
         $results = $this->gameSearchService->search($query, $type);
         return response()->json($results);
@@ -33,14 +35,13 @@ class GameApiController extends Controller
 
     public function guess(Request $request)
     {
-        $entityId  = $request->input('entity_id');
-        $modeValue = $request->input('mode');
+        $validated = $request->validate([
+            'entity_id' => ['required', 'integer', 'min:1'],
+            'mode' => ['required', 'string', Rule::in(array_map(fn (GameMode $mode) => $mode->value, GameMode::cases()))],
+        ]);
 
-        if (empty($entityId) || empty($modeValue)) {
-            return response()->json(['error' => 'Entity ID and mode are required'], 400);
-        }
-
-        $mode = GameMode::tryFrom($modeValue);
+        $entityId = (int) $validated['entity_id'];
+        $mode = GameMode::tryFrom($validated['mode']);
         if (!$mode) {
             return response()->json(['error' => 'Invalid game mode'], 400);
         }
@@ -48,7 +49,17 @@ class GameApiController extends Controller
         $sessionToken = $request->cookie('session_token');
         if (!$sessionToken) {
             $sessionToken = (string)Str::uuid();
-            cookie()->queue('session_token', $sessionToken, 60 * 24 * 365);
+            cookie()->queue(cookie(
+                name: 'session_token',
+                value: $sessionToken,
+                minutes: 60 * 24 * 365,
+                path: '/',
+                domain: null,
+                secure: $request->isSecure(),
+                httpOnly: true,
+                raw: false,
+                sameSite: 'lax',
+            ));
         }
 
         $result = $this->guessService->makeGuess($entityId, $mode, $sessionToken);

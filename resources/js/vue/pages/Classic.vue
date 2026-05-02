@@ -9,8 +9,12 @@ import GuessInput from "@/vue/components/game/GuessInput.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useClassicGame } from "@/vue/composables/useClassicGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
+import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 
 const { t } = useI18n();
+defineProps<{
+    solvedToday: number;
+}>();
 const { attempts, isWon, isLoading, isLoadingChallenge, error, canGuess, guessedGameIds, hints, attemptsCount, makeGuess } = useClassicGame();
 
 const reversedAttempts = computed(() => [...attempts.value].reverse());
@@ -98,6 +102,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                     :exclude-ids="guessedGameIds"
                     @select="handleSelect"
                 />
+                <TodaySolvedCard :count="solvedToday" />
             </div>
 
             <div v-if="isLoading" class="text-center mb-8">
@@ -173,4 +178,3 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
     animation: fade-in 0.3s ease-out;
 }
 </style>
-

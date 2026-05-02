@@ -10,8 +10,12 @@ import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import CharacterImage from "@/vue/components/game/CharacterImage.vue";
 import { useCharacterGame } from "@/vue/composables/useCharacterGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
+import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 
 const { t } = useI18n();
+defineProps<{
+    solvedToday: number;
+}>();
 const {
     attempts,
     isWon,
@@ -128,6 +132,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                                 :exclude-ids="guessedGameIds"
                                 @select="handleSelect"
                             />
+                            <TodaySolvedCard :count="solvedToday" />
                         </div>
                     </div>
                 </div>

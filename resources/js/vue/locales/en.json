@@ -40,7 +40,8 @@
         "how_to_play": "How to Play",
         "exact_match": "Exact match - the attribute is correct",
         "close_match": "Close match - partially correct or within range",
-        "no_match": "No match - the attribute is incorrect"
+        "no_match": "No match - the attribute is incorrect",
+        "solved_today": "{count} solved today"
     },
     "result": {
         "win_title": "Correct!",
@@ -121,7 +122,7 @@
             "platforms": "Platforms",
             "gender": "Gender",
             "species": "Species",
-        "first_appearance_year": "First Appearance",
+            "first_appearance_year": "First Appearance",
             "genre": "Genre",
             "collection": "Collection",
             "first_game": "First Appearance Game"

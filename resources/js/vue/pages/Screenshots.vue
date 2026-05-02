@@ -9,8 +9,12 @@ import GuessInput from "@/vue/components/game/GuessInput.vue";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useScreenshotsGame } from "@/vue/composables/useScreenshotsGame";
+import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 
 const { t } = useI18n();
+defineProps<{
+    solvedToday: number;
+}>();
 const {
     attempts,
     attemptsCount,
@@ -200,6 +204,7 @@ const progressPercentage = computed(() => {
                         :exclude-ids="guessedGameIds"
                         @select="handleSelect"
                     />
+                    <TodaySolvedCard :count="solvedToday" />
                 </div>
 
                 <div v-if="isLoading" class="text-center mb-8">
