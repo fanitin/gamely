@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Enums\GameMode;
+use App\Models\Character;
 use App\Models\DailyChallenge;
 use App\Models\Game;
-use App\Models\Character;
 use Illuminate\Console\Command;
 
 class GenerateDailyChallenges extends Command
@@ -23,6 +23,7 @@ class GenerateDailyChallenges extends Command
         foreach (GameMode::cases() as $mode) {
             if (DailyChallenge::where('mode', $mode->value)->where('date', $date)->exists()) {
                 $this->warn("Challenge for {$mode->value} mode on {$date} already exists");
+
                 continue;
             }
 
@@ -34,10 +35,8 @@ class GenerateDailyChallenges extends Command
                     $entityInfo = " (game #{$challenge->game_id})";
                 } elseif ($mode === GameMode::GAME_SCREENSHOTS) {
                     $entityInfo = " (game #{$challenge->game_id} with screenshots)";
-                } elseif ($mode === GameMode::CHARACTER_ATTRIBUTES) {
-                    $entityInfo = " (character #{$challenge->character_id} by attributes)";
-                } elseif ($mode === GameMode::CHARACTER_IMAGE) {
-                    $entityInfo = " (character #{$challenge->character_id} by mugshot)";
+                } elseif ($mode === GameMode::CHARACTER) {
+                    $entityInfo = " (character #{$challenge->character_id})";
                 }
 
                 $this->info("✓ {$mode->label()}{$entityInfo}");
@@ -54,15 +53,19 @@ class GenerateDailyChallenges extends Command
         return match ($mode) {
             GameMode::CLASSIC => $this->generateClassicChallenge($date),
             GameMode::GAME_SCREENSHOTS => $this->generateScreenshotsChallenge($date),
-            GameMode::CHARACTER_ATTRIBUTES => $this->generateCharacterAttributesChallenge($date),
-            GameMode::CHARACTER_IMAGE => $this->generateCharacterImageChallenge($date),
+            GameMode::CHARACTER => $this->generateCharacterChallenge($date),
         };
     }
 
     private function generateClassicChallenge(string $date): DailyChallenge
     {
         $seed = crc32(now());
-        $game = Game::inRandomOrder($seed)->first();
+        $game = Game::where(function ($query) {
+            $query->where('rating', '>', 70)
+                ->orWhere('rating_count', '>', 100);
+        })
+            ->inRandomOrder($seed)
+            ->first();
 
         return DailyChallenge::create([
             'mode' => GameMode::CLASSIC->value,
@@ -74,9 +77,15 @@ class GenerateDailyChallenges extends Command
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32(now());
-        $game = Game::has('screenshots', '>=', 5)->inRandomOrder($seed)->first();
+        $game = Game::where(function ($query) {
+            $query->where('rating', '>', 70)
+                ->orWhere('rating_count', '>', 100);
+        })
+            ->has('screenshots', '>=', 5)
+            ->inRandomOrder($seed)
+            ->first();
 
-        if (!$game) {
+        if (! $game) {
             return null;
         }
 
@@ -87,40 +96,25 @@ class GenerateDailyChallenges extends Command
         ]);
     }
 
-    private function generateCharacterAttributesChallenge(string $date): ?DailyChallenge
-    {
-        $seed = crc32(now());
-        $character = Character::whereNotNull('gender_id')
-            ->whereNotNull('species_id')
-            ->inRandomOrder($seed)
-            ->first();
-
-        if (!$character) {
-            return null;
-        }
-
-        return DailyChallenge::create([
-            'mode' => GameMode::CHARACTER_ATTRIBUTES->value,
-            'date' => $date,
-            'character_id' => $character->id,
-        ]);
-    }
-
-    private function generateCharacterImageChallenge(string $date): ?DailyChallenge
+    private function generateCharacterChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32(now());
         $character = Character::whereNotNull('mug_shot_url')
             ->whereNotNull('gender_id')
             ->whereNotNull('species_id')
+            ->whereHas('games', function ($query) {
+                $query->where('rating', '>', 70)
+                    ->orWhere('rating_count', '>', 100);
+            })
             ->inRandomOrder($seed)
             ->first();
 
-        if (!$character) {
+        if (! $character) {
             return null;
         }
 
         return DailyChallenge::create([
-            'mode' => GameMode::CHARACTER_IMAGE->value,
+            'mode' => GameMode::CHARACTER->value,
             'date' => $date,
             'character_id' => $character->id,
         ]);

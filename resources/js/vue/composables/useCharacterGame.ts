@@ -60,9 +60,9 @@ const cleanupOldEntries = () => {
 
     for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
-        if (!key || !key.startsWith('character_attributes_game_')) continue;
+        if (!key || !key.startsWith('character_game_')) continue;
 
-        const dateStr = key.replace('character_attributes_game_', '');
+        const dateStr = key.replace('character_game_', '');
         const entryDate = new Date(dateStr);
 
         if (!isNaN(entryDate.getTime())) {
@@ -74,13 +74,13 @@ const cleanupOldEntries = () => {
     }
 };
 
-export function useCharacterAttributesGame() {
+export function useCharacterGame() {
     const todayKey = new Date().toISOString().split("T")[0];
 
     cleanupOldEntries();
 
     const gameState = useLocalStorage<GameState>(
-        `character_attributes_game_${todayKey}`,
+        `character_game_${todayKey}`,
         getDefaultState()
     );
 
@@ -93,8 +93,9 @@ export function useCharacterAttributesGame() {
     const lastCorrectGuess = ref<GuessedGame | null>(gameState.value.lastCorrectGuess);
     const hints = ref<Hint[]>([]);
     const challengeId = ref<number | null>(null);
+    const characterImageUrl = ref<string | null>(null);
 
-    const completedToday = useLocalStorage(`character_attributes_completed_${todayKey}`, gameState.value.isWon);
+    const completedToday = useLocalStorage(`character_completed_${todayKey}`, gameState.value.isWon);
 
     const saveState = () => {
         gameState.value = {
@@ -116,9 +117,10 @@ export function useCharacterAttributesGame() {
         error.value = null;
 
         try {
-            const response = await axios.get(route("api.challenge.character-attributes"));
+            const response = await axios.get(route("api.challenge.character"));
             if (response.data.success) {
                 challengeId.value = response.data.challenge_id;
+                characterImageUrl.value = response.data.character_image ?? null;
 
                 if (response.data.hints) {
                     hints.value = Object.entries(response.data.hints).map(([type, hintData]: [string, any]) => ({
@@ -149,7 +151,7 @@ export function useCharacterAttributesGame() {
         try {
             const response = await axios.post(route("api.guess"), {
                 entity_id: gameId,
-                mode: "character_attributes",
+                mode: "character",
             });
 
             const data = response.data;
@@ -171,7 +173,7 @@ export function useCharacterAttributesGame() {
                 isWon.value = true;
                 completedToday.value = true;
 
-                const stats = useLocalStorage("character_attributes_stats", {
+                const stats = useLocalStorage("character_stats", {
                     total: 0,
                     wins: 0,
                     distribution: {} as Record<number, number>,
@@ -208,6 +210,7 @@ export function useCharacterAttributesGame() {
         lastCorrectGuess,
         hints,
         attemptsCount,
+        characterImageUrl,
         makeGuess,
     };
 }

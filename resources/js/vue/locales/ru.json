@@ -18,14 +18,14 @@
             "title": "Скриншоты",
             "description": "Угадай игру по скриншотам"
         },
-        "character_attributes": {
+        "character": {
             "title": "Персонаж",
-            "description": "Угадай персонажа по атрибутам"
-        },
-        "character_image": {
-            "title": "Силуэт",
-            "description": "Угадай персонажа по размытому фото"
+            "description": "Угадай персонажа по фото и атрибутам"
         }
+    },
+    "character": {
+        "blur_hint": "С каждой попыткой становится чётче",
+        "expand": "Увеличить"
     },
     "game": {
         "submit": "Угадать",
@@ -70,7 +70,9 @@
         "rating": "Рейтинг",
         "franchise": "Франшиза",
         "collection": "Коллекция",
-        "franchises": "Франшиза / Коллекция",
+        "franchises": "Франшизы",
+        "collections": "Коллекции",
+        "franchises_collections": "Франшиза / Коллекция",
         "game_mode": "Режим игры",
         "player_perspective": "Перспектива",
         "character": "Персонаж",

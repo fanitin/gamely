@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DailyChallenge;
 use App\Services\HintService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ChallengeController extends Controller
 {
@@ -28,7 +29,7 @@ class ChallengeController extends Controller
             ])
             ->first();
 
-        if (!$challenge || !$challenge->game) {
+        if (! $challenge || ! $challenge->game) {
             return response()->json([
                 'success' => false,
                 'error' => 'No challenge available for today',
@@ -59,7 +60,7 @@ class ChallengeController extends Controller
             ])
             ->first();
 
-        if (!$challenge || !$challenge->game) {
+        if (! $challenge || ! $challenge->game) {
             return response()->json([
                 'success' => false,
                 'error' => 'No challenge available for today',
@@ -97,9 +98,9 @@ class ChallengeController extends Controller
         ]);
     }
 
-    public function characterAttributes(): JsonResponse
+    public function character(): JsonResponse
     {
-        $challenge = DailyChallenge::forMode(GameMode::CHARACTER_ATTRIBUTES)
+        $challenge = DailyChallenge::forMode(GameMode::CHARACTER)
             ->forDate(today()->toDateString())
             ->with([
                 'character.games.franchises',
@@ -109,7 +110,7 @@ class ChallengeController extends Controller
             ])
             ->first();
 
-        if (!$challenge || !$challenge->character) {
+        if (! $challenge || ! $challenge->character) {
             return response()->json([
                 'success' => false,
                 'error' => 'No challenge available for today',
@@ -117,40 +118,12 @@ class ChallengeController extends Controller
         }
 
         $character = $challenge->character;
-        $hints = $this->hintService->getHintsForMode(GameMode::CHARACTER_ATTRIBUTES, $character);
+        $hints = $this->hintService->getHintsForMode(GameMode::CHARACTER, $character);
 
         return response()->json([
             'success' => true,
             'challenge_id' => $challenge->id,
-            'hints' => $hints,
-        ]);
-    }
-
-    public function characterImage(): JsonResponse
-    {
-        $challenge = DailyChallenge::forMode(GameMode::CHARACTER_IMAGE)
-            ->forDate(today()->toDateString())
-            ->with([
-                'character.games',
-                'character.gender',
-                'character.species',
-            ])
-            ->first();
-
-        if (!$challenge || !$challenge->character) {
-            return response()->json([
-                'success' => false,
-                'error' => 'No challenge available for today',
-            ], 404);
-        }
-
-        $character = $challenge->character;
-        $hints = $this->hintService->getHintsForMode(GameMode::CHARACTER_IMAGE, $character);
-
-        return response()->json([
-            'success' => true,
-            'challenge_id' => $challenge->id,
-            'character_image' => $character->mug_shot_url,
+            'character_image' => $character->mug_shot_url ? Storage::disk('r2')->url($character->mug_shot_url) : null,
             'hints' => $hints,
         ]);
     }

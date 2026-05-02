@@ -5,7 +5,7 @@ import AttributeCell from "./AttributeCell.vue";
 
 const { t } = useI18n();
 
-type GameMode = "classic" | "screenshots" | "character_attributes";
+type GameMode = "classic" | "screenshots" | "character";
 
 interface Attempt {
     guessed: {
@@ -38,6 +38,7 @@ interface Attempt {
         species?: { result: "exact" | "close" | "wrong" | "missing" };
         first_appearance_year?: { result: "exact" | "close" | "wrong" | "missing"; value?: number; arrow?: "up" | "down" };
         franchises?: { result: "exact" | "close" | "wrong" | "missing" };
+        collections?: { result: "exact" | "close" | "wrong" | "missing" };
     };
 }
 
@@ -53,8 +54,8 @@ const gridClass = computed(() => {
     if (props.mode === "screenshots") {
         return "grid-cols-[60px_1fr_1fr_1fr]";
     }
-    if (props.mode === "character_attributes") {
-        return "grid-cols-[50px_80px_repeat(4,1fr)]";
+    if (props.mode === "character") {
+        return "grid-cols-[50px_80px_repeat(5,1fr)]";
     }
     return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px]";
 });
@@ -220,10 +221,15 @@ function buildGameModeValue() {
             />
         </template>
 
-        <template v-else-if="mode === 'character_attributes'">
+        <template v-else-if="mode === 'character'">
             <AttributeCell
                 :result="attempt.comparison.franchises?.result || 'wrong'"
                 :value="formatArrayValue(attempt.guessed.franchises)"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.collections?.result || 'wrong'"
+                :value="formatArrayValue(attempt.guessed.collections)"
             />
 
             <AttributeCell

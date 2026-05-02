@@ -46,7 +46,7 @@ class DailyChallenge extends Model
     {
         return match ($this->mode) {
             GameMode::CLASSIC, GameMode::GAME_SCREENSHOTS => $this->game,
-            GameMode::CHARACTER_ATTRIBUTES, GameMode::CHARACTER_IMAGE => $this->character,
+            GameMode::CHARACTER => $this->character,
         };
     }
 

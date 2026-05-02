@@ -13,8 +13,7 @@ class HintService
         return match ($mode) {
             GameMode::CLASSIC => $this->getClassicHints($entity),
             GameMode::GAME_SCREENSHOTS => $this->getScreenshotsHints($entity),
-            GameMode::CHARACTER_ATTRIBUTES => $this->getCharacterAttributesHints($entity),
-            GameMode::CHARACTER_IMAGE => $this->getCharacterImageHints($entity),
+            GameMode::CHARACTER => $this->getCharacterHints($entity),
         };
     }
 
@@ -57,7 +56,7 @@ class HintService
         ];
     }
 
-    private function getCharacterAttributesHints(Character $character): array
+    private function getCharacterHints(Character $character): array
     {
         $collections = $character->collections();
         $firstGame = $character->firstAppearanceGame();
@@ -65,33 +64,15 @@ class HintService
         return [
             'collection' => [
                 'value' => $collections->isNotEmpty() ? $collections->pluck('name')->join(', ') : null,
-                'unlock_at' => 5,
+                'unlock_at' => 3,
             ],
             'first_letter' => [
                 'value' => mb_strtoupper(mb_substr($character->name, 0, 1)),
-                'unlock_at' => 10,
+                'unlock_at' => 6,
             ],
             'first_game' => [
                 'value' => $firstGame?->name,
-                'unlock_at' => 15,
-            ],
-        ];
-    }
-
-    private function getCharacterImageHints(Character $character): array
-    {
-        return [
-            'gender' => [
-                'value' => $character->gender?->name,
-                'unlock_at' => 4,
-            ],
-            'species' => [
-                'value' => $character->species?->name,
-                'unlock_at' => 8,
-            ],
-            'first_letter' => [
-                'value' => mb_strtoupper(mb_substr($character->name, 0, 1)),
-                'unlock_at' => 12,
+                'unlock_at' => 9,
             ],
         ];
     }

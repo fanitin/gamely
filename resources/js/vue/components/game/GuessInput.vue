@@ -45,7 +45,7 @@ onClickOutside(containerRef, () => {
 });
 
 const search = async () => {
-    if (query.value.length < 2) {
+    if (query.value.length < 1) {
         results.value = [];
         isOpen.value = false;
         return;
@@ -112,7 +112,7 @@ const handleEnter = () => {
                 type="text"
                 class="block w-full pl-12 pr-4 py-4 bg-onyx border border-onyx-light/30 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all text-lg"
                 :placeholder="getPlaceholder()"
-                @click="isOpen = query.length >= 2 && (results.length > 0 || !isLoading)"
+                @click="isOpen = query.length >= 1 && (results.length > 0 || !isLoading)"
                 @keydown.enter="handleEnter"
             />
         </div>
@@ -134,8 +134,11 @@ const handleEnter = () => {
                     <img :src="item.image" :alt="item.name" class="w-full h-full object-cover" />
                 </div>
                 <div>
-                    <div class="text-white font-bold">{{ item.display_name || item.name }}</div>
-                    <div v-if="item.meta" class="text-muted text-sm">
+                    <div class="text-white font-bold">
+                        {{ item.display_name || item.name }}
+                        <span v-if="item.meta && props.type === 'character'" class="text-muted text-sm font-normal ml-2">({{ item.meta }})</span>
+                    </div>
+                    <div v-if="item.meta && props.type !== 'character'" class="text-muted text-sm">
                         {{ item.meta }}
                     </div>
                 </div>
@@ -143,7 +146,7 @@ const handleEnter = () => {
         </div>
 
         <div
-            v-else-if="isOpen && query.length >= 2 && !isLoading"
+            v-else-if="isOpen && query.length >= 1 && !isLoading"
             class="absolute z-50 w-full mt-2 bg-onyx-light border border-onyx-light/50 rounded-2xl p-6 text-center text-muted"
         >
             {{ t("game.no_results") }}

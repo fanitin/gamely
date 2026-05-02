@@ -11,7 +11,6 @@ Route::middleware('api')->name('api.')->group(function () {
     Route::prefix('challenge')->name('challenge.')->group(function () {
         Route::get('/classic', [ChallengeController::class, 'classic'])->name('classic');
         Route::get('/screenshots', [ChallengeController::class, 'screenshots'])->name('screenshots');
-        Route::get('/character-attributes', [ChallengeController::class, 'characterAttributes'])->name('character-attributes');
-        Route::get('/character-image', [ChallengeController::class, 'characterImage'])->name('character-image');
+        Route::get('/character', [ChallengeController::class, 'character'])->name('character');
     });
 });

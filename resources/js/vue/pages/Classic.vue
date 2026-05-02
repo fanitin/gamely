@@ -127,7 +127,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                                 {{ t("attributes.developers_publishers") }}
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                {{ t("attributes.franchises") }}
+                                {{ t("attributes.franchises_collections") }}
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
                                 {{ t("attributes.player_perspective") }}

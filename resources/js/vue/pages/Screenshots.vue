@@ -222,7 +222,7 @@ const progressPercentage = computed(() => {
                                 {{ t("attributes.game") }}
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
-                                {{ t("attributes.franchises") }}
+                                {{ t("attributes.franchises_collections") }}
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
                                 {{ t("attributes.developers_publishers") }}

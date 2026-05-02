@@ -18,14 +18,14 @@
             "title": "Screenshots",
             "description": "Guess the game by its screenshots"
         },
-        "character_attributes": {
+        "character": {
             "title": "Character",
-            "description": "Guess the character by their attributes"
-        },
-        "character_image": {
-            "title": "Silhouette",
-            "description": "Guess the character by their blurred photo"
+            "description": "Guess the character by image and attributes"
         }
+    },
+    "character": {
+        "blur_hint": "Gets clearer with each guess",
+        "expand": "View larger"
     },
     "game": {
         "submit": "Guess",
@@ -70,7 +70,9 @@
         "rating": "Rating",
         "franchise": "Franchise",
         "collection": "Collection",
-        "franchises": "Franchise / Collection",
+        "franchises": "Franchises",
+        "collections": "Collections",
+        "franchises_collections": "Franchise / Collection",
         "game_mode": "Game Mode",
         "player_perspective": "Perspective",
         "character": "Character",

@@ -3,11 +3,11 @@
 namespace App\Services;
 
 use App\Enums\GameMode;
+use App\Models\Character;
 use App\Models\DailyChallenge;
 use App\Models\Game;
 use App\Models\GameSession;
-use App\Models\Character;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class GuessService
 {
@@ -37,13 +37,13 @@ class GuessService
                 'character.games.franchises',
                 'character.games.collections',
                 'character.gender',
-                'character.species'
+                'character.species',
             ])
             ->firstOrFail();
 
         $targetEntity = $challenge->getEntity();
 
-        if (!$targetEntity) {
+        if (! $targetEntity) {
             return [
                 'success' => false,
                 'error' => 'Challenge entity not found',
@@ -52,8 +52,7 @@ class GuessService
 
         $comparison = match ($mode) {
             GameMode::CLASSIC, GameMode::GAME_SCREENSHOTS => $this->compareGameGuess($entityId, $targetEntity->id, $targetEntity),
-            GameMode::CHARACTER_ATTRIBUTES => $this->compareCharacterGuess($entityId, $targetEntity->id, $targetEntity),
-            GameMode::CHARACTER_IMAGE => $this->compareSimpleGuess($entityId, $targetEntity->id, $mode),
+            GameMode::CHARACTER => $this->compareCharacterGuess($entityId, $targetEntity->id, $targetEntity),
         };
 
         $isCorrect = $comparison['is_correct'];
@@ -106,7 +105,7 @@ class GuessService
             'franchises',
             'collections',
             'gameModes',
-            'playerPerspectives'
+            'playerPerspectives',
         ])->findOrFail($guessedId);
 
         $comparison = $this->comparisonService->compareGames($guessedGame, $targetGame);
@@ -121,18 +120,18 @@ class GuessService
                     'cover_url' => $guessedGame->cover_url,
                     'release_year' => $guessedGame->release_date ? substr($guessedGame->release_date, 0, 4) : null,
                     'rating' => $guessedGame->rating,
-                    'genres' => $guessedGame->genres->map(fn($g) => ['id' => $g->id, 'name' => $g->name]),
-                    'platforms' => $guessedGame->platforms->map(fn($p) => [
+                    'genres' => $guessedGame->genres->map(fn ($g) => ['id' => $g->id, 'name' => $g->name]),
+                    'platforms' => $guessedGame->platforms->map(fn ($p) => [
                         'id' => $p->id,
                         'name' => $p->name,
-                        'url' => $p->url
+                        'url' => $p->url,
                     ]),
-                    'developers' => $guessedGame->developers->map(fn($d) => ['id' => $d->id, 'name' => $d->name]),
-                    'publishers' => $guessedGame->publishers->map(fn($p) => ['id' => $p->id, 'name' => $p->name]),
-                    'franchises' => $guessedGame->franchises->map(fn($f) => ['id' => $f->id, 'name' => $f->name]),
-                    'collections' => $guessedGame->collections->map(fn($c) => ['id' => $c->id, 'name' => $c->name]),
-                    'game_modes' => $guessedGame->gameModes->map(fn($m) => ['id' => $m->id, 'name' => $m->name]),
-                    'player_perspectives' => $guessedGame->playerPerspectives->map(fn($p) => ['id' => $p->id, 'name' => $p->name]),
+                    'developers' => $guessedGame->developers->map(fn ($d) => ['id' => $d->id, 'name' => $d->name]),
+                    'publishers' => $guessedGame->publishers->map(fn ($p) => ['id' => $p->id, 'name' => $p->name]),
+                    'franchises' => $guessedGame->franchises->map(fn ($f) => ['id' => $f->id, 'name' => $f->name]),
+                    'collections' => $guessedGame->collections->map(fn ($c) => ['id' => $c->id, 'name' => $c->name]),
+                    'game_modes' => $guessedGame->gameModes->map(fn ($m) => ['id' => $m->id, 'name' => $m->name]),
+                    'player_perspectives' => $guessedGame->playerPerspectives->map(fn ($p) => ['id' => $p->id, 'name' => $p->name]),
                 ],
                 'comparison' => $comparison,
             ],
@@ -152,12 +151,12 @@ class GuessService
                 'guessed' => [
                     'id' => $guessedChar->id,
                     'name' => $guessedChar->name,
-                    'mug_shot_url' => $guessedChar->mug_shot_url,
+                    'mug_shot_url' => $guessedChar->mug_shot_url ? Storage::disk('r2')->url($guessedChar->mug_shot_url) : null,
                     'gender' => $guessedChar->gender?->name,
                     'species' => $guessedChar->species?->name,
                     'first_appearance_year' => $guessedChar->firstAppearanceYear(),
-                    'franchises' => $guessedChar->franchises()->map(fn($f) => ['id' => $f->id, 'name' => $f->name]),
-                    'collections' => $guessedChar->collections()->map(fn($c) => ['id' => $c->id, 'name' => $c->name]),
+                    'franchises' => $guessedChar->franchises()->map(fn ($f) => ['id' => $f->id, 'name' => $f->name]),
+                    'collections' => $guessedChar->collections()->map(fn ($c) => ['id' => $c->id, 'name' => $c->name]),
                 ],
                 'comparison' => $comparison,
             ],

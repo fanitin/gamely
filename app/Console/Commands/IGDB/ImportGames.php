@@ -37,7 +37,7 @@ class ImportGames extends AbstractIgdbImport
             'involved_companies.company.logo.image_id',
         ];
 
-        return 'fields '.implode(', ', $fields).'; where game_type = (0,8,9) & rating_count >= 20 & rating > 60 & first_release_date != null;';
+        return 'fields '.implode(', ', $fields).'; where game_type = (0,8,9) & (rating > 70 | rating_count > 100) & first_release_date != null;';
     }
 
     protected function processItem(array $item): string

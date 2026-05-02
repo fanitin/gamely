@@ -26,16 +26,10 @@ const modes: ModeCard[] = [
         desc: "modes.game_screenshots.description",
     },
     {
-        id: "character_attributes",
-        href: "/character-attributes",
-        title: "modes.character_attributes.title",
-        desc: "modes.character_attributes.description",
-    },
-    {
-        id: "character_image",
-        href: "/character-image",
-        title: "modes.character_image.title",
-        desc: "modes.character_image.description",
+        id: "character",
+        href: "/character",
+        title: "modes.character.title",
+        desc: "modes.character.description",
     },
 ];
 </script>

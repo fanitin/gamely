@@ -23,13 +23,8 @@ class PagesController extends Controller
         return Inertia::render('Screenshots', []);
     }
 
-    public function characterAttributes(): Response
+    public function character(): Response
     {
-        return Inertia::render('CharacterAttributes', []);
-    }
-
-    public function characterSilhouette(): Response
-    {
-        return Inertia::render('CharacterSilhouette', []);
+        return Inertia::render('Character', []);
     }
 }
