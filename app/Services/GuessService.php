@@ -7,6 +7,7 @@ use App\Models\Character;
 use App\Models\DailyChallenge;
 use App\Models\Game;
 use App\Models\GameSession;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
 
 class GuessService
@@ -71,13 +72,24 @@ class GuessService
 
             $attempts = $this->countAttempts($challenge->id, $sessionToken) + 1;
 
-            $session = GameSession::create([
-                'mode' => $mode,
-                'session_token' => $sessionToken,
-                'challenge_id' => $challenge->id,
-                'attempts' => $attempts,
-                'completed_at' => now(),
-            ]);
+            try {
+                $session = GameSession::create([
+                    'mode' => $mode,
+                    'session_token' => $sessionToken,
+                    'challenge_id' => $challenge->id,
+                    'attempts' => $attempts,
+                    'completed_at' => now(),
+                ]);
+            } catch (QueryException $exception) {
+                if ($this->isDuplicateSessionException($exception)) {
+                    return [
+                        'success' => false,
+                        'error' => 'Already completed this challenge',
+                    ];
+                }
+
+                throw $exception;
+            }
 
             return [
                 'success' => true,
@@ -175,5 +187,16 @@ class GuessService
         return GameSession::where('challenge_id', $challengeId)
             ->where('session_token', $sessionToken)
             ->count();
+    }
+
+    private function isDuplicateSessionException(QueryException $exception): bool
+    {
+        $sqlState = $exception->errorInfo[0] ?? null;
+
+        if ($sqlState === '23000') {
+            return true;
+        }
+
+        return str_contains($exception->getMessage(), 'game_sessions_challenge_session_unique');
     }
 }
