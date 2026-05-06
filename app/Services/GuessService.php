@@ -20,6 +20,7 @@ class GuessService
         int $entityId,
         GameMode $mode,
         string $sessionToken,
+        ?int $attemptsCount = null,
         ?string $date = null
     ): array {
         $date = $date ?? today()->toDateString();
@@ -70,7 +71,7 @@ class GuessService
                 ];
             }
 
-            $attempts = $this->countAttempts($challenge->id, $sessionToken) + 1;
+            $attempts = $attemptsCount ?? ($this->countAttempts($challenge->id, $sessionToken) + 1);
 
             try {
                 $session = GameSession::create([

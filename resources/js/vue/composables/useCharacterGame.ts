@@ -152,6 +152,7 @@ export function useCharacterGame() {
             const response = await axios.post(route("api.guess"), {
                 entity_id: gameId,
                 mode: "character",
+                attempts_count: attempts.value.length + 1,
             });
 
             const data = response.data;

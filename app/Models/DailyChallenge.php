@@ -57,11 +57,11 @@ class DailyChallenge extends Model
 
     public function scopeForDate($query, string $date)
     {
-        return $query->where('date', $date);
+        return $query->whereDate('date', $date);
     }
 
     public function scopeToday($query)
     {
-        return $query->where('date', today());
+        return $query->whereDate('date', today()->toDateString());
     }
 }

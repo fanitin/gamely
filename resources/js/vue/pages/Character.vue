@@ -130,6 +130,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                                 type="character"
                                 :placeholder="t('game.search_character')"
                                 :exclude-ids="guessedGameIds"
+                                :focus-trigger="attemptsCount"
                                 @select="handleSelect"
                             />
                             <TodaySolvedCard :count="solvedToday" />

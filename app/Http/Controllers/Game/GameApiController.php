@@ -7,17 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Services\GameSearchService;
 use App\Services\GuessService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class GameApiController extends Controller
 {
     public function __construct(
         private GameSearchService $gameSearchService,
-        private GuessService      $guessService
-    )
-    {
-    }
+        private GuessService $guessService
+    ) {}
 
     public function search(Request $request)
     {
@@ -30,6 +28,7 @@ class GameApiController extends Controller
         $type = $validated['type'] ?? 'game';
 
         $results = $this->gameSearchService->search($query, $type);
+
         return response()->json($results);
     }
 
@@ -38,17 +37,18 @@ class GameApiController extends Controller
         $validated = $request->validate([
             'entity_id' => ['required', 'integer', 'min:1'],
             'mode' => ['required', 'string', Rule::in(array_map(fn (GameMode $mode) => $mode->value, GameMode::cases()))],
+            'attempts_count' => ['sometimes', 'integer', 'min:1'],
         ]);
 
         $entityId = (int) $validated['entity_id'];
         $mode = GameMode::tryFrom($validated['mode']);
-        if (!$mode) {
+        if (! $mode) {
             return response()->json(['error' => 'Invalid game mode'], 400);
         }
 
         $sessionToken = $request->cookie('session_token');
-        if (!$sessionToken) {
-            $sessionToken = (string)Str::uuid();
+        if (! $sessionToken) {
+            $sessionToken = (string) Str::uuid();
             cookie()->queue(cookie(
                 name: 'session_token',
                 value: $sessionToken,
@@ -62,7 +62,12 @@ class GameApiController extends Controller
             ));
         }
 
-        $result = $this->guessService->makeGuess($entityId, $mode, $sessionToken);
+        $result = $this->guessService->makeGuess(
+            $entityId,
+            $mode,
+            $sessionToken,
+            $validated['attempts_count'] ?? null
+        );
 
         return response()->json($result);
     }

@@ -22,6 +22,7 @@ export function useGame(modeId: string) {
             const response = await axios.post(route('api.guess'), {
                 mode: modeId,
                 entity_id: entityId,
+                attempts_count: attempts.value.length + 1,
             });
 
             const result = response.data as GameAttempt;

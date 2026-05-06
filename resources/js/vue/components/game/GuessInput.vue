@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import { watchDebounced, onClickOutside } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
@@ -19,9 +19,13 @@ const props = withDefaults(defineProps<{
     type?: string;
     placeholder?: string;
     excludeIds?: number[];
+    autoFocus?: boolean;
+    focusTrigger?: number;
 }>(), {
     type: "game",
     excludeIds: () => [],
+    autoFocus: true,
+    focusTrigger: 0,
 });
 
 const getPlaceholder = (): string => {
@@ -39,6 +43,7 @@ const results = ref<SearchResult[]>([]);
 const isOpen = ref(false);
 const isLoading = ref(false);
 const containerRef = ref(null);
+const inputRef = ref<HTMLInputElement | null>(null);
 
 onClickOutside(containerRef, () => {
     isOpen.value = false;
@@ -86,6 +91,9 @@ const select = (item: SearchResult) => {
     query.value = "";
     isOpen.value = false;
     results.value = [];
+    nextTick(() => {
+        inputRef.value?.focus();
+    });
 };
 
 const handleEnter = () => {
@@ -93,6 +101,25 @@ const handleEnter = () => {
         select(results.value[0]);
     }
 };
+
+onMounted(() => {
+    if (props.autoFocus) {
+        nextTick(() => {
+            inputRef.value?.focus();
+        });
+    }
+});
+
+watch(
+    () => props.focusTrigger,
+    () => {
+        if (props.autoFocus) {
+            nextTick(() => {
+                inputRef.value?.focus();
+            });
+        }
+    }
+);
 </script>
 
 <template>
@@ -108,6 +135,7 @@ const handleEnter = () => {
                 />
             </div>
             <input
+                ref="inputRef"
                 v-model="query"
                 type="text"
                 class="block w-full pl-12 pr-4 py-4 bg-onyx border border-onyx-light/30 rounded-2xl text-white placeholder-muted focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 transition-all text-lg"
@@ -179,4 +207,3 @@ const handleEnter = () => {
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 </style>
-
