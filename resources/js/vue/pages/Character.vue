@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
-import { ArrowLeft, Trophy, AlertCircle } from "lucide-vue-next";
+import { computed, ref, watch } from "vue";
+import { ArrowLeft, AlertCircle } from "lucide-vue-next";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
@@ -11,6 +11,7 @@ import CharacterImage from "@/vue/components/game/CharacterImage.vue";
 import { useCharacterGame } from "@/vue/composables/useCharacterGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
+import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
 defineProps<{
@@ -26,11 +27,19 @@ const {
     guessedGameIds,
     hints,
     attemptsCount,
+    lastCorrectGuess,
     characterImageUrl,
     makeGuess,
 } = useCharacterGame();
 
 const reversedAttempts = computed(() => [...attempts.value].reverse());
+
+const showModal = ref(false);
+watch(isWon, (newVal) => {
+    if (newVal) {
+        showModal.value = true;
+    }
+});
 
 const blurAmount = computed(() => {
     const maxBlur = 30;
@@ -91,18 +100,15 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
             <template v-else>
 
-                <div
-                    v-if="isWon"
-                    class="mb-6 bg-success-500/10 border border-success-500/30 rounded-xl p-6 text-center space-y-3 animate-fade-in"
-                >
-                    <Trophy class="w-12 h-12 text-success-500 mx-auto" />
-                    <h2 class="text-2xl font-bold text-white">
-                        {{ t("game.you_won") }}!
-                    </h2>
-                    <p class="text-muted">
-                        {{ t("game.attempts_count", { count: attemptsCount }) }}
-                    </p>
-                </div>
+                <ResultModal
+                    :show="showModal"
+                    @close="showModal = false"
+                    mode="character"
+                    :attempts-count="attempts.length"
+                    :attempts="attempts"
+                    :entity-name="lastCorrectGuess?.display_name || lastCorrectGuess?.name || ''"
+                    :challenge-date="new Date().toISOString().split('T')[0]"
+                />
 
                 <div class="flex flex-col lg:flex-row gap-8 mb-8">
                     <div v-if="characterImageUrl" class="shrink-0 flex justify-center lg:justify-start">

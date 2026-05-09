@@ -70,5 +70,19 @@ class AppServiceProvider extends ServiceProvider
                     ], 429, $headers);
                 });
         });
+
+        RateLimiter::for('stats-read', function (Request $request) {
+            $sessionToken = (string) $request->cookie('session_token', '');
+            $visitorKey = $request->ip().'|'.($sessionToken !== '' ? $sessionToken : sha1((string) $request->userAgent()));
+
+            return Limit::perMinute(120)
+                ->by($visitorKey)
+                ->response(function (Request $request, array $headers) {
+                    return response()->json([
+                        'error' => 'Too many stats requests. Please retry later.',
+                        'retry_after' => (int) ($headers['Retry-After'] ?? 60),
+                    ], 429, $headers);
+                });
+        });
     }
 }

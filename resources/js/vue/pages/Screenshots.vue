@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
-import { ArrowLeft, Trophy, AlertCircle, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import { computed, ref, watch } from "vue";
+import { ArrowLeft, AlertCircle, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
@@ -10,6 +10,7 @@ import HintCard from "@/vue/components/game/HintCard.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useScreenshotsGame } from "@/vue/composables/useScreenshotsGame";
 import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
+import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
 defineProps<{
@@ -29,6 +30,7 @@ const {
     totalScreenshots,
     currentScreenshotIndex,
     hints,
+    lastCorrectGuess,
     makeGuess,
     goToScreenshot,
     nextScreenshot,
@@ -40,6 +42,13 @@ const currentScreenshot = computed(() => {
 });
 
 const reversedAttempts = computed(() => [...attempts.value].reverse());
+
+const showModal = ref(false);
+watch(isWon, (newVal) => {
+    if (newVal) {
+        showModal.value = true;
+    }
+});
 
 const handleSelect = async (item: { id: number | string }) => {
     if (!canGuess.value) return;
@@ -108,18 +117,15 @@ const progressPercentage = computed(() => {
                     />
                 </div>
 
-                <div
-                    v-if="isWon"
-                    class="mb-6 bg-forest-500/10 border border-forest-500/30 rounded-xl p-6 text-center space-y-3 animate-fade-in"
-                >
-                    <Trophy class="w-12 h-12 text-forest-500 mx-auto" />
-                    <h2 class="text-2xl font-bold text-white">
-                        {{ t("game.you_won") }}!
-                    </h2>
-                    <p class="text-muted">
-                        {{ t("game.attempts_count", { count: attempts.length }) }}
-                    </p>
-                </div>
+                <ResultModal
+                    :show="showModal"
+                    @close="showModal = false"
+                    mode="game_screenshots"
+                    :attempts-count="attempts.length"
+                    :attempts="attempts"
+                    :entity-name="lastCorrectGuess?.display_name || lastCorrectGuess?.name || ''"
+                    :challenge-date="new Date().toISOString().split('T')[0]"
+                />
 
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-2">
@@ -132,7 +138,7 @@ const progressPercentage = computed(() => {
                     </div>
                     <div class="h-2 bg-onyx-light rounded-full overflow-hidden">
                         <div
-                            class="h-full bg-gradient-to-r from-teal-600 to-teal-400 rounded-full transition-all duration-500"
+                            class="h-full bg-linear-to-r from-teal-600 to-teal-400 rounded-full transition-all duration-500"
                             :style="{ width: `${progressPercentage}%` }"
                         ></div>
                     </div>

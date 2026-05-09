@@ -95,6 +95,12 @@
         "title": "GameWordle #{number} · {mode} · {score}/6",
         "copied": "Скопійовано!"
     },
+    "win_stats": {
+        "distribution_title": "Розподіл перемог за сьогодні",
+        "total_players": "Гравців вгадало: {count}",
+        "copy": "Скопіювати результат",
+        "share_header": "Я вгадав {date} {name} ({mode}) за {attempts} спроб!"
+    },
     "errors": {
         "game_not_found": "Гру не знайдено",
         "already_played": "Ви вже грали у сьогоднішній виклик",

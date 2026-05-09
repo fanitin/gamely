@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, Link } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
-import { computed } from "vue";
-import { ArrowLeft, Trophy, AlertCircle } from "lucide-vue-next";
+import { computed, ref, watch } from "vue";
+import { ArrowLeft, AlertCircle } from "lucide-vue-next";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
@@ -10,14 +10,22 @@ import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useClassicGame } from "@/vue/composables/useClassicGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
+import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
 defineProps<{
     solvedToday: number;
 }>();
-const { attempts, isWon, isLoading, isLoadingChallenge, error, canGuess, guessedGameIds, hints, attemptsCount, makeGuess } = useClassicGame();
+const { attempts, isWon, isLoading, isLoadingChallenge, error, canGuess, guessedGameIds, hints, attemptsCount, lastCorrectGuess, makeGuess } = useClassicGame();
 
 const reversedAttempts = computed(() => [...attempts.value].reverse());
+
+const showModal = ref(false);
+watch(isWon, (newVal) => {
+    if (newVal) {
+        showModal.value = true;
+    }
+});
 
 const handleSelect = async (item: { id: number | string; name: string }) => {
     if (!canGuess.value) return;
@@ -71,18 +79,15 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
             <template v-else>
 
-            <div
-                v-if="isWon"
-                class="mb-6 bg-success-500/10 border border-success-500/30 rounded-xl p-6 text-center space-y-3 animate-fade-in"
-            >
-                <Trophy class="w-12 h-12 text-success-500 mx-auto" />
-                <h2 class="text-2xl font-bold text-white">
-                    {{ t("game.you_won") }}!
-                </h2>
-                <p class="text-muted">
-                    {{ t("game.attempts_count", { count: attempts.length + 1 }) }}
-                </p>
-            </div>
+            <ResultModal
+                :show="showModal"
+                @close="showModal = false"
+                mode="classic"
+                :attempts-count="attempts.length"
+                :attempts="attempts"
+                :entity-name="lastCorrectGuess?.display_name || lastCorrectGuess?.name || ''"
+                :challenge-date="new Date().toISOString().split('T')[0]"
+            />
 
             <div v-if="hints.length > 0 && !isWon" class="mb-6 grid grid-cols-3 gap-3">
                 <HintCard
@@ -119,7 +124,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
                 <div class="overflow-x-auto pb-4">
                     <div class="min-w-[900px] space-y-3">
-                        <div class="grid grid-cols-[50px_80px_repeat(6,_1fr)_80px_80px] gap-2 mb-2">
+                        <div class="grid grid-cols-[50px_80px_repeat(6,1fr)_80px_80px] gap-2 mb-2">
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
                                 #
                             </div>

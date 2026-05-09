@@ -85,6 +85,12 @@
         "title": "Gamely #{number} · {mode} · {score}",
         "copied": "Скопировано!"
     },
+    "win_stats": {
+        "distribution_title": "Распределение побед за сегодня",
+        "total_players": "Игроков угадало: {count}",
+        "copy": "Скопировать результат",
+        "share_header": "Я угадал {date} {name} ({mode}) за {attempts} попыток!"
+    },
     "errors": {
         "game_not_found": "Игра не найдена",
         "already_played": "Вы уже играли сегодня",

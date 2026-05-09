@@ -85,6 +85,12 @@
         "title": "Gamely #{number} · {mode} · {score}",
         "copied": "Copied to clipboard!"
     },
+    "win_stats": {
+        "distribution_title": "Today's win distribution",
+        "total_players": "Players solved: {count}",
+        "copy": "Copy result",
+        "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!"
+    },
     "errors": {
         "game_not_found": "Game not found",
         "already_played": "You already played today's challenge",

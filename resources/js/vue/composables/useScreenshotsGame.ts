@@ -2,6 +2,7 @@ import { ref, computed, watch } from "vue";
 import axios from "axios";
 import { route } from "ziggy-js";
 import { useLocalStorage } from "@vueuse/core";
+import { usePersonalStats } from "@/vue/composables/usePersonalStats";
 
 interface Screenshot {
     id: number;
@@ -212,17 +213,7 @@ export function useScreenshotsGame() {
                 lastCorrectGuess.value = data.comparison.guessed;
                 isWon.value = true;
                 completedToday.value = true;
-
-                const stats = useLocalStorage("screenshots_stats", {
-                    total: 0,
-                    wins: 0,
-                    distribution: {} as Record<number, number>,
-                });
-                stats.value.total++;
-                stats.value.wins++;
-                const totalAttempts = attempts.value.length;
-                stats.value.distribution[totalAttempts] =
-                    (stats.value.distribution[totalAttempts] || 0) + 1;
+                recordWin("game_screenshots", attempts.value.length, todayKey);
             } else {
                 attempts.value.push({
                     gameId,
@@ -288,3 +279,4 @@ export function useScreenshotsGame() {
         loadChallenge,
     };
 }
+    const { recordWin } = usePersonalStats();
