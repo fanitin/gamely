@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeUnmount, watch } from "vue";
 import {
     Dialog,
     DialogPanel,
@@ -32,6 +33,32 @@ const sizeClasses = {
     xl: "max-w-xl",
     "2xl": "max-w-2xl",
 };
+
+let previousBodyOverflow = "";
+
+const lockBodyScroll = () => {
+    previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+};
+
+const unlockBodyScroll = () => {
+    document.body.style.overflow = previousBodyOverflow;
+};
+
+watch(
+    () => props.isOpen,
+    (isOpen) => {
+        if (isOpen) {
+            lockBodyScroll();
+            return;
+        }
+        unlockBodyScroll();
+    },
+);
+
+onBeforeUnmount(() => {
+    unlockBodyScroll();
+});
 </script>
 
 <template>

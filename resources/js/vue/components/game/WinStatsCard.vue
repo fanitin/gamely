@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Trophy, Copy } from "lucide-vue-next";
 import { useStats, type ModeValue } from "@/vue/composables/useStats";
+import { getComparisonKeysForMode } from "@/vue/composables/useComparisonKeys";
 
 type ComparisonResult = { result: "exact" | "close" | "wrong" };
 type AttemptLike = { comparison: Record<string, ComparisonResult> };
@@ -36,13 +37,16 @@ const emojiMap: Record<ComparisonResult["result"], string> = {
 
 const rows = computed(() =>
     props.attempts.map((attempt) =>
-        Object.values(attempt.comparison)
+        getComparisonKeysForMode(props.mode, Object.keys(attempt.comparison))
+            .map((key) => attempt.comparison[key])
+            .filter((cell): cell is ComparisonResult => Boolean(cell))
             .map((cell) => emojiMap[cell.result] ?? "🟥")
-            .join("")
+            .join(""),
     )
 );
 
-const extraAttempts = computed(() => Math.max(props.attemptsCount - 5, 0));
+const visibleRows = computed(() => [...rows.value].reverse().slice(0, 5));
+const extraAttempts = computed(() => Math.max(rows.value.length - visibleRows.value.length, 0));
 
 const shareText = computed(() => {
     const header = t("win_stats.share_header", {
@@ -52,7 +56,7 @@ const shareText = computed(() => {
         attempts: props.attemptsCount,
     });
     const extras = extraAttempts.value > 0 ? `\n➕(${extraAttempts.value})` : "";
-    return `${header}\n${rows.value.join("\n")}${extras}\n${shareLink.value}`;
+    return `${header}\n${visibleRows.value.join("\n")}${extras}\n${shareLink.value}`;
 });
 
 const copyShare = async () => {
