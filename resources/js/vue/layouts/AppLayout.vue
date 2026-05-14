@@ -6,6 +6,7 @@ import PersonalStatsModal from "@/vue/components/shared/PersonalStatsModal.vue";
 import DevPersonalStatsPreviewModal from "@/vue/components/dev/DevPersonalStatsPreviewModal.vue";
 import DevWinStatsPreviewModal from "@/vue/components/dev/DevWinStatsPreviewModal.vue";
 import AppFooter from "@/vue/components/layout/AppFooter.vue";
+import AppToastStack from "@/vue/components/ui/AppToastStack.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { CircleHelp, BarChart3, Library } from "lucide-vue-next";
@@ -22,6 +23,7 @@ const showDevTools = import.meta.env.DEV;
 
 <template>
     <div class="min-h-screen flex flex-col bg-onyx-dark text-white relative">
+        <AppToastStack />
         <div
             class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
             style="background-image: url(&quot;&quot;)"
