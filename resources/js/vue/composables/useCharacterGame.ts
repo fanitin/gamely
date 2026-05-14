@@ -3,6 +3,7 @@ import axios from "axios";
 import { route } from "ziggy-js";
 import { useLocalStorage } from "@vueuse/core";
 import { usePersonalStats } from "@/vue/composables/usePersonalStats";
+import { getLocalDateKey } from "@/vue/utils/date";
 
 interface GuessedGame {
     id: number;
@@ -61,9 +62,10 @@ const cleanupOldEntries = () => {
 
     for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
-        if (!key || !key.startsWith('character_game_')) continue;
+        if (!key) continue;
+        if (!key.startsWith("character_game_")) continue;
 
-        const dateStr = key.replace('character_game_', '');
+        const dateStr = key.replace("character_game_", "");
         const entryDate = new Date(dateStr);
 
         if (!isNaN(entryDate.getTime())) {
@@ -76,7 +78,8 @@ const cleanupOldEntries = () => {
 };
 
 export function useCharacterGame() {
-    const todayKey = new Date().toISOString().split("T")[0];
+    const todayKey = getLocalDateKey();
+    const { recordWin } = usePersonalStats();
 
     cleanupOldEntries();
 
@@ -96,8 +99,6 @@ export function useCharacterGame() {
     const challengeId = ref<number | null>(null);
     const characterImageUrl = ref<string | null>(null);
 
-    const completedToday = useLocalStorage(`character_completed_${todayKey}`, gameState.value.isWon);
-
     const saveState = () => {
         gameState.value = {
             attempts: attempts.value,
@@ -109,7 +110,7 @@ export function useCharacterGame() {
 
     watch([attempts, guessedGameIds, isWon, lastCorrectGuess], saveState, { deep: true });
 
-    const canGuess = computed(() => !isWon.value && !completedToday.value && !isLoading.value && !isLoadingChallenge.value);
+    const canGuess = computed(() => !isWon.value && !isLoading.value && !isLoadingChallenge.value);
 
     const attemptsCount = computed(() => attempts.value.length);
 
@@ -173,7 +174,6 @@ export function useCharacterGame() {
                 lastCorrectGuess.value = data.comparison.guessed;
 
                 isWon.value = true;
-                completedToday.value = true;
                 recordWin("character", attempts.value.length, todayKey);
             } else {
                 attempts.value.push({
@@ -206,4 +206,3 @@ export function useCharacterGame() {
         makeGuess,
     };
 }
-    const { recordWin } = usePersonalStats();

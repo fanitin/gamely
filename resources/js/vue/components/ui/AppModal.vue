@@ -22,6 +22,10 @@ const props = defineProps({
         type: String,
         default: "md", // sm, md, lg, xl, 2xl
     },
+    hideHeader: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 defineEmits(["close"]);
@@ -32,6 +36,8 @@ const sizeClasses = {
     lg: "max-w-lg",
     xl: "max-w-xl",
     "2xl": "max-w-2xl",
+    "7xl": "max-w-7xl",
+    "8xl": "max-w-[96rem]",
 };
 
 let previousBodyOverflow = "";
@@ -73,7 +79,7 @@ onBeforeUnmount(() => {
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div class="fixed inset-0 bg-black/60 backdrop-blur-xs" />
+                <div class="fixed inset-0 bg-black/60" />
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
@@ -91,11 +97,11 @@ onBeforeUnmount(() => {
                     >
                         <DialogPanel
                             :class="[
-                                'w-full transform overflow-visible rounded-2xl bg-onyx-dark/95 border border-white/10 p-8 text-left align-middle shadow-2xl backdrop-blur-md',
+                                'w-full max-h-[calc(100dvh-2rem)] transform overflow-x-visible overflow-y-auto rounded-2xl bg-onyx-dark/95 border border-white/10 p-8 text-left align-middle shadow-2xl',
                                 sizeClasses[props.size] || sizeClasses.md,
                             ]"
                         >
-                            <div class="flex items-center justify-between mb-6">
+                            <div v-if="!props.hideHeader" class="flex items-center justify-between mb-6">
                                 <DialogTitle
                                     as="h3"
                                     class="text-xl font-medium leading-6 text-white"

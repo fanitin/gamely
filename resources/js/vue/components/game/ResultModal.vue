@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { Trophy } from "lucide-vue-next";
+import { Trophy, X } from "lucide-vue-next";
 import { useStats, type ModeValue } from "@/vue/composables/useStats";
 import AppModal from "@/vue/components/ui/AppModal.vue";
 import GameBarChart from "./GameBarChart.vue";
@@ -61,14 +61,25 @@ watch(
 </script>
 
 <template>
-    <AppModal :is-open="props.show" :title="''" size="lg" @close="emit('close')">
-        <div class="space-y-6">
-            <div class="text-center space-y-2">
-                <Trophy class="w-12 h-12 text-success-500 mx-auto" />
-                <h3 class="text-2xl font-bold text-white uppercase tracking-tighter">
-                    {{ t("game.you_won") }}!
-                </h3>
-                <p class="text-muted">{{ t("game.attempts_count", { count: attemptsCount }) }}</p>
+    <AppModal :is-open="props.show" :title="''" size="lg" :hide-header="true" @close="emit('close')">
+        <div class="space-y-4">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex items-start gap-3">
+                    <Trophy class="w-9 h-9 text-success-500 shrink-0 mt-0.5" />
+                    <div class="space-y-1">
+                        <h3 class="text-xl font-bold text-white uppercase tracking-tight">
+                            {{ t("game.you_won") }}!
+                        </h3>
+                        <p class="text-sm text-muted">{{ t("game.attempts_count", { count: attemptsCount }) }}</p>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    class="rounded-lg p-1 text-muted hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+                    @click="emit('close')"
+                >
+                    <X class="w-5 h-5" />
+                </button>
             </div>
 
             <GameBarChart :bins="bins" :total-players="totalPlayers" />

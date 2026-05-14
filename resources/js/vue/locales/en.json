@@ -133,5 +133,16 @@
             "collection": "Collection",
             "first_game": "First Appearance Game"
         }
+    },
+    "personal_stats": {
+        "title": "Personal Stats",
+        "wins_total": "Wins total",
+        "avg_attempts": "Avg attempts",
+        "first_try_wins": "First-try wins",
+        "current_streak": "Current streak",
+        "best_streak": "Best streak",
+        "daily_attempts": "Daily attempts",
+        "daily_attempts_chart": "Daily attempts by mode chart",
+        "empty": "No personal stats yet"
     }
 }

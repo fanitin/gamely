@@ -145,5 +145,16 @@
             "collection": "Колекція",
             "first_game": "Перша гра"
         }
+    },
+    "personal_stats": {
+        "title": "Особиста статистика",
+        "wins_total": "Усього перемог",
+        "avg_attempts": "Середня кількість спроб",
+        "first_try_wins": "Перемоги з 1-ї спроби",
+        "current_streak": "Поточна серія",
+        "best_streak": "Найкраща серія",
+        "daily_attempts": "Спроби за днями",
+        "daily_attempts_chart": "Графік спроб за днями і режимами",
+        "empty": "Особистої статистики поки немає"
     }
 }

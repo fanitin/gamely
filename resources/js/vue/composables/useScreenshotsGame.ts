@@ -3,6 +3,7 @@ import axios from "axios";
 import { route } from "ziggy-js";
 import { useLocalStorage } from "@vueuse/core";
 import { usePersonalStats } from "@/vue/composables/usePersonalStats";
+import { getLocalDateKey } from "@/vue/utils/date";
 
 interface Screenshot {
     id: number;
@@ -91,7 +92,8 @@ const cleanupOldEntries = () => {
 };
 
 export function useScreenshotsGame() {
-    const todayKey = new Date().toISOString().split("T")[0];
+    const todayKey = getLocalDateKey();
+    const { recordWin } = usePersonalStats();
     cleanupOldEntries();
 
     const gameState = useLocalStorage<GameState>(
@@ -113,11 +115,6 @@ export function useScreenshotsGame() {
     const challengeId = ref<number | null>(null);
     const hints = ref<Hint[]>([]);
 
-    const completedToday = useLocalStorage(
-        `screenshots_completed_${todayKey}`,
-        gameState.value.isWon
-    );
-
     const saveState = () => {
         gameState.value = {
             attempts: attempts.value,
@@ -135,7 +132,7 @@ export function useScreenshotsGame() {
     );
 
     const canGuess = computed(
-        () => !isWon.value && !completedToday.value && !isLoading.value && !isLoadingChallenge.value
+        () => !isWon.value && !isLoading.value && !isLoadingChallenge.value
     );
 
     const visibleScreenshots = computed(() => {
@@ -212,7 +209,6 @@ export function useScreenshotsGame() {
                 guessedGameIds.value.push(gameId);
                 lastCorrectGuess.value = data.comparison.guessed;
                 isWon.value = true;
-                completedToday.value = true;
                 recordWin("game_screenshots", attempts.value.length, todayKey);
             } else {
                 attempts.value.push({
@@ -279,4 +275,3 @@ export function useScreenshotsGame() {
         loadChallenge,
     };
 }
-    const { recordWin } = usePersonalStats();
