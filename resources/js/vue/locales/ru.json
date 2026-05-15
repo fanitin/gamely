@@ -76,6 +76,8 @@
         "franchises_collections": "Франшиза / Коллекция",
         "game_mode": "Режим игры",
         "player_perspective": "Перспектива",
+        "popularity": "Популярность",
+        "franchise_year": "Начало серии",
         "character": "Персонаж",
         "gender": "Пол",
         "species": "Раса",
@@ -130,7 +132,8 @@
             "species": "Раса",
             "genre": "Жанр",
             "collection": "Коллекция",
-            "first_game": "Первая игра"
+            "first_game": "Первая игра",
+            "franchise_start_year": "Год начала серии"
         }
     },
     "personal_stats": {

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\IGDB;
 
+use App\Enums\PopularityTier;
 use App\Models\Collection;
 use App\Models\Company;
 use App\Models\Franchise;
@@ -30,7 +31,7 @@ class ImportGames extends AbstractIgdbImport
     {
         $fields = [
             'id', 'name', 'slug', 'summary', 'storyline', 'first_release_date',
-            'rating', 'rating_count', 'game_type', 'cover',
+            'rating', 'rating_count', 'total_rating_count', 'hypes', 'game_type', 'cover',
             'collections', 'franchises', 'genres', 'platforms', 'themes', 'game_modes', 'player_perspectives',
             'involved_companies.developer', 'involved_companies.publisher',
             'involved_companies.company.name', 'involved_companies.company.slug', 'involved_companies.company.id',
@@ -47,6 +48,9 @@ class ImportGames extends AbstractIgdbImport
             $date = Carbon::createFromTimestamp($item['first_release_date'])->toDateString();
         }
 
+        $ratingCount = $item['total_rating_count'] ?? $item['rating_count'] ?? 0;
+        $hypes = $item['hypes'] ?? 0;
+
         $game = Game::updateOrCreate(
             ['igdb_id' => $item['id']],
             [
@@ -57,6 +61,8 @@ class ImportGames extends AbstractIgdbImport
                 'release_date' => $date,
                 'rating' => $item['rating'] ?? null,
                 'rating_count' => $item['rating_count'] ?? null,
+                'hypes' => $hypes,
+                'popularity_tier' => PopularityTier::fromRatingCount($ratingCount, $hypes),
                 'game_type' => $item['game_type'] ?? 0,
                 'cover_igdb_id' => $item['cover'] ?? null,
             ]

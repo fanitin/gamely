@@ -83,6 +83,8 @@
         "franchises_collections": "Франшиза / Колекція",
         "game_mode": "Режим гри",
         "player_perspective": "Перспектива",
+        "popularity": "Популярність",
+        "franchise_year": "Початок серії",
         "modes": "Режими/Перспектива",
         "character": "Персонаж",
         "series": "Серія",
@@ -143,7 +145,8 @@
             "developer": "Розробник",
             "genre": "Жанр",
             "collection": "Колекція",
-            "first_game": "Перша гра"
+            "first_game": "Перша гра",
+            "franchise_start_year": "Рік початку серії"
         }
     },
     "personal_stats": {

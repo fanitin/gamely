@@ -60,10 +60,11 @@ class GenerateDailyChallenges extends Command
     private function generateClassicChallenge(string $date): DailyChallenge
     {
         $seed = crc32(now());
-        $game = Game::where(function ($query) {
-            $query->where('rating', '>', 70)
-                ->orWhere('rating_count', '>', 100);
-        })
+        $game = Game::where('rating_count', '>', 10)
+            ->where(function ($query) {
+                $query->where('rating', '>', 70)
+                    ->orWhere('rating_count', '>', 100);
+            })
             ->inRandomOrder($seed)
             ->first();
 
@@ -77,10 +78,11 @@ class GenerateDailyChallenges extends Command
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
         $seed = crc32(now());
-        $game = Game::where(function ($query) {
-            $query->where('rating', '>', 70)
-                ->orWhere('rating_count', '>', 100);
-        })
+        $game = Game::where('rating_count', '>', 10)
+            ->where(function ($query) {
+                $query->where('rating', '>', 70)
+                    ->orWhere('rating_count', '>', 100);
+            })
             ->has('screenshots', '>=', 5)
             ->inRandomOrder($seed)
             ->first();
@@ -103,7 +105,8 @@ class GenerateDailyChallenges extends Command
             ->whereNotNull('gender_id')
             ->whereNotNull('species_id')
             ->whereHas('games', function ($query) {
-                $query->where('rating', '>', 70)
+                $query->where('rating_count', '>', 10)
+                    ->where('rating', '>', 70)
                     ->orWhere('rating_count', '>', 100);
             })
             ->inRandomOrder($seed)

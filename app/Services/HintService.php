@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Enums\GameMode;
-use App\Models\Game;
 use App\Models\Character;
+use App\Models\Game;
 
 class HintService
 {
@@ -31,7 +31,7 @@ class HintService
             'companies' => [
                 'value' => collect([
                     $game->developers->pluck('name')->join(', '),
-                    $game->publishers->pluck('name')->join(', ')
+                    $game->publishers->pluck('name')->join(', '),
                 ])->filter()->join(' / ') ?: null,
                 'unlock_at' => 15,
             ],

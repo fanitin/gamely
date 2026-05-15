@@ -76,6 +76,8 @@
         "franchises_collections": "Franchise / Collection",
         "game_mode": "Game Mode",
         "player_perspective": "Perspective",
+        "popularity": "Popularity",
+        "franchise_year": "Series Start",
         "character": "Character",
         "gender": "Gender",
         "species": "Species",
@@ -131,7 +133,8 @@
             "first_appearance_year": "First Appearance",
             "genre": "Genre",
             "collection": "Collection",
-            "first_game": "First Appearance Game"
+            "first_game": "First Appearance Game",
+            "franchise_start_year": "Series Start Year"
         }
     },
     "personal_stats": {

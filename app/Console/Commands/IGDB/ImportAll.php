@@ -30,6 +30,7 @@ class ImportAll extends Command
             ['signature' => 'import:artworks', 'arguments' => ['--limit' => 100]],
             ['signature' => 'import:screenshots', 'arguments' => ['--limit' => 100]],
             ['signature' => 'import:character-mug-shots', 'arguments' => ['--limit' => 100]],
+            ['signature' => 'games:recalculate-meta'],
         ];
 
         $this->info('Starting full IGDB import process...');

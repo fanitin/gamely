@@ -18,6 +18,8 @@ interface Attempt {
         first_appearance_year?: number | null;
         release_year?: number | null;
         rating?: number | null;
+        popularity_tier?: string | null;
+        franchise_start_year?: number | null;
         genres?: Array<{ id: number; name: string }>;
         developers?: Array<{ id: number; name: string }>;
         publishers?: Array<{ id: number; name: string }>;
@@ -34,6 +36,8 @@ interface Attempt {
         franchises_collections?: { result: "exact" | "close" | "wrong" };
         game_modes?: { result: "exact" | "close" | "wrong" | "missing" };
         player_perspectives?: { result: "exact" | "close" | "wrong" | "missing" };
+        popularity?: { result: "exact" | "close" | "wrong"; value?: string; arrow?: "up" | "down" };
+        franchise_start_year?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
         gender?: { result: "exact" | "close" | "wrong" | "missing" };
         species?: { result: "exact" | "close" | "wrong" | "missing" };
         first_appearance_year?: { result: "exact" | "close" | "wrong" | "missing"; value?: number; arrow?: "up" | "down" };
@@ -52,12 +56,12 @@ const props = withDefaults(defineProps<{
 
 const gridClass = computed(() => {
     if (props.mode === "screenshots") {
-        return "grid-cols-[60px_1fr_90px_1fr_1fr]";
+        return "grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px]";
     }
     if (props.mode === "character") {
         return "grid-cols-[50px_80px_repeat(5,1fr)]";
     }
-    return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px]";
+    return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px_90px]";
 });
 
 function formatArrayValue(arr: Array<{ id: number; name: string }> | undefined): string {
@@ -207,6 +211,12 @@ function buildGameModeValue() {
                 :value="attempt.comparison.release_year?.value"
                 :arrow="attempt.comparison.release_year?.arrow"
             />
+
+            <AttributeCell
+                :result="attempt.comparison.popularity?.result || 'wrong'"
+                :value="attempt.comparison.popularity?.value"
+                :arrow="attempt.comparison.popularity?.arrow"
+            />
         </template>
 
         <template v-else-if="mode === 'screenshots'">
@@ -224,6 +234,18 @@ function buildGameModeValue() {
             <AttributeCell
                 :result="attempt.comparison.developers_publishers?.result || 'wrong'"
                 :value="buildDevelopersPublishersValue()"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.popularity?.result || 'wrong'"
+                :value="attempt.comparison.popularity?.value"
+                :arrow="attempt.comparison.popularity?.arrow"
+            />
+
+            <AttributeCell
+                :result="attempt.comparison.franchise_start_year?.result || 'wrong'"
+                :value="attempt.comparison.franchise_start_year?.value"
+                :arrow="attempt.comparison.franchise_start_year?.arrow"
             />
         </template>
 

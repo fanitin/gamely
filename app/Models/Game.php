@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\GameType;
+use App\Enums\PopularityTier;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,6 +24,9 @@ class Game extends Model
         'release_date',
         'rating',
         'rating_count',
+        'hypes',
+        'franchise_start_year',
+        'popularity_tier',
         'game_type',
         'cover_igdb_id',
         'cover_url',
@@ -38,6 +42,9 @@ class Game extends Model
             'release_date' => 'date',
             'rating' => 'decimal:2',
             'rating_count' => 'integer',
+            'hypes' => 'integer',
+            'franchise_start_year' => 'integer',
+            'popularity_tier' => PopularityTier::class,
             'game_type' => GameType::class,
         ];
     }

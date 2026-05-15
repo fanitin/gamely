@@ -124,7 +124,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
                 <div class="overflow-x-auto pb-4">
                     <div class="min-w-[900px] space-y-3">
-                        <div class="grid grid-cols-[50px_80px_repeat(6,1fr)_80px_80px] gap-2 mb-2">
+                        <div class="grid grid-cols-[50px_80px_repeat(6,1fr)_80px_80px_90px] gap-2 mb-2">
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
                                 #
                             </div>
@@ -151,6 +151,9 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
                                 {{ t("attributes.release_year") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
+                                {{ t("attributes.popularity") }}
                             </div>
                         </div>
 

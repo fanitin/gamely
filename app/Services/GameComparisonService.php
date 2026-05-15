@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PopularityTier;
 use App\Models\Game;
 use App\Models\Character;
 
@@ -18,6 +19,8 @@ class GameComparisonService
             'franchises_collections' => $this->compareFranchisesAndCollections($guessed, $target),
             'game_modes' => $this->compareGameModes($guessed, $target),
             'player_perspectives' => $this->comparePlayerPerspectives($guessed, $target),
+            'popularity' => $this->comparePopularity($guessed->popularity_tier, $target->popularity_tier),
+            'franchise_start_year' => $this->compareFranchiseStartYear($guessed->franchise_start_year, $target->franchise_start_year),
         ];
     }
 
@@ -253,6 +256,65 @@ class GameComparisonService
         }
 
         return ['result' => 'wrong'];
+    }
+
+    private function comparePopularity(?PopularityTier $guessed, ?PopularityTier $target): array
+    {
+        if ($guessed === null || $target === null) {
+            return [
+                'result' => 'wrong',
+                'value' => $guessed?->label(),
+            ];
+        }
+
+        if ($guessed === $target) {
+            return [
+                'result' => 'exact',
+                'value' => $guessed->label(),
+            ];
+        }
+
+        $arrow = $guessed->order() < $target->order() ? 'up' : 'down';
+
+        return [
+            'result' => 'wrong',
+            'value' => $guessed->label(),
+            'arrow' => $arrow,
+        ];
+    }
+
+    private function compareFranchiseStartYear(?int $guessedYear, ?int $targetYear): array
+    {
+        if ($guessedYear === null || $targetYear === null) {
+            return [
+                'result' => 'wrong',
+                'value' => $guessedYear,
+            ];
+        }
+
+        if ($guessedYear === $targetYear) {
+            return [
+                'result' => 'exact',
+                'value' => $guessedYear,
+            ];
+        }
+
+        $diff = abs($guessedYear - $targetYear);
+        $arrow = $guessedYear < $targetYear ? 'up' : 'down';
+
+        if ($diff <= 3) {
+            return [
+                'result' => 'close',
+                'value' => $guessedYear,
+                'arrow' => $arrow,
+            ];
+        }
+
+        return [
+            'result' => 'wrong',
+            'value' => $guessedYear,
+            'arrow' => $arrow,
+        ];
     }
 
     private function compareGender(Character $guessed, Character $target): array

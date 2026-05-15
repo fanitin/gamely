@@ -133,6 +133,8 @@ class GuessService
                     'cover_url' => $guessedGame->cover_url,
                     'release_year' => $guessedGame->release_date ? substr($guessedGame->release_date, 0, 4) : null,
                     'rating' => $guessedGame->rating,
+                    'popularity_tier' => $guessedGame->popularity_tier?->label(),
+                    'franchise_start_year' => $guessedGame->franchise_start_year,
                     'genres' => $guessedGame->genres->map(fn ($g) => ['id' => $g->id, 'name' => $g->name]),
                     'platforms' => $guessedGame->platforms->map(fn ($p) => [
                         'id' => $p->id,

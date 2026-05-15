@@ -226,7 +226,7 @@ const progressPercentage = computed(() => {
                     </h2>
 
                     <div class="space-y-3">
-                        <div class="grid grid-cols-[60px_1fr_90px_1fr_1fr] gap-2">
+                        <div class="grid grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px] gap-2">
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
                                 #
                             </div>
@@ -241,6 +241,12 @@ const progressPercentage = computed(() => {
                             </div>
                             <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
                                 {{ t("attributes.developers_publishers") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                                {{ t("attributes.popularity") }}
+                            </div>
+                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                                {{ t("attributes.franchise_year") }}
                             </div>
                         </div>
 
