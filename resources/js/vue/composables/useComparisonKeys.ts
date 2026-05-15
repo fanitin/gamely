@@ -8,6 +8,7 @@ const defaultComparisonOrder = [
     "game_modes",
     "rating",
     "release_year",
+    "popularity",
 ] as const;
 
 const modeComparisonKeys: Partial<Record<ModeValue, readonly string[]>> = {
@@ -19,7 +20,13 @@ const modeComparisonKeys: Partial<Record<ModeValue, readonly string[]>> = {
         "species",
         "first_appearance_year",
     ],
-    game_screenshots: ["release_year", "franchises_collections", "developers_publishers"],
+    game_screenshots: [
+        "release_year",
+        "franchises_collections",
+        "developers_publishers",
+        "popularity",
+        "franchise_start_year",
+    ],
 };
 
 export const getComparisonKeysForMode = (
