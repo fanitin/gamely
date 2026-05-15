@@ -19,7 +19,7 @@ const modeComparisonKeys: Partial<Record<ModeValue, readonly string[]>> = {
         "species",
         "first_appearance_year",
     ],
-    game_screenshots: ["franchises_collections", "developers_publishers"],
+    game_screenshots: ["release_year", "franchises_collections", "developers_publishers"],
 };
 
 export const getComparisonKeysForMode = (

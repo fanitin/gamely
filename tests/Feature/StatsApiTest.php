@@ -81,7 +81,7 @@ class StatsApiTest extends TestCase
             ->assertJsonPath('from', '2026-05-01')
             ->assertJsonPath('to', '2026-05-03')
             ->assertJsonCount(3, 'points')
-            ->assertJsonPath('points.0.classic_avg_attempts', 3.0)
+            ->assertJsonPath('points.0.classic_avg_attempts', 3)
             ->assertJsonPath('points.1.classic_avg_attempts', null)
             ->assertJsonPath('points.2.classic_avg_attempts', null);
     }

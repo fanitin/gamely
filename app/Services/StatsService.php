@@ -82,7 +82,7 @@ class StatsService
 
         $indexed = [];
         foreach ($raw as $row) {
-            $indexed[$row->date][$row->mode] = round((float) $row->avg_attempts, 2);
+            $indexed[$row->date][$row->mode->value] = round((float) $row->avg_attempts, 2);
         }
 
         $points = [];

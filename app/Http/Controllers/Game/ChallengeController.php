@@ -52,6 +52,7 @@ class ChallengeController extends Controller
             ->forDate(today()->toDateString())
             ->with([
                 'game.screenshots',
+                'game.platforms',
                 'game.genres',
                 'game.developers',
                 'game.publishers',

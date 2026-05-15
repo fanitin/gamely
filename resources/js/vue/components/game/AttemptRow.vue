@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<{
 
 const gridClass = computed(() => {
     if (props.mode === "screenshots") {
-        return "grid-cols-[60px_1fr_1fr_1fr]";
+        return "grid-cols-[60px_1fr_90px_1fr_1fr]";
     }
     if (props.mode === "character") {
         return "grid-cols-[50px_80px_repeat(5,1fr)]";
@@ -210,6 +210,12 @@ function buildGameModeValue() {
         </template>
 
         <template v-else-if="mode === 'screenshots'">
+            <AttributeCell
+                :result="attempt.comparison.release_year?.result || 'wrong'"
+                :value="attempt.comparison.release_year?.value"
+                :arrow="attempt.comparison.release_year?.arrow"
+            />
+
             <AttributeCell
                 :result="attempt.comparison.franchises_collections?.result || 'wrong'"
                 :value="buildFranchisesCollectionsValue()"

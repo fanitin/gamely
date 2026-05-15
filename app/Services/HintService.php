@@ -41,8 +41,8 @@ class HintService
     private function getScreenshotsHints(Game $game): array
     {
         return [
-            'year' => [
-                'value' => $game->release_date?->year,
+            'platforms' => [
+                'value' => $game->platforms->pluck('name')->join(', ') ?: null,
                 'unlock_at' => 4,
             ],
             'genre' => [
