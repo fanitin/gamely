@@ -17,28 +17,28 @@ const { t } = useI18n();
 
 const examples = computed(() => [
     {
-        property: "genre",
+        property: "genres",
         name: "Action, RPG",
         status: "exact",
-        description: t("how_to_play.example_genre_match"),
+        description: t("how_to_play.exact_match"),
     },
     {
-        property: "genre",
+        property: "genres",
         name: "Action, RPG",
         status: "close",
-        description: t("how_to_play.example_genre_partial"),
+        description: t("how_to_play.partial_match"),
     },
     {
-        property: "year",
+        property: "release_year",
         name: "2015 ▲",
         status: "close",
-        description: t("how_to_play.example_year_close"),
+        description: t("how_to_play.close_match"),
     },
     {
-        property: "platform",
+        property: "platforms",
         name: "PS5",
         status: "wrong",
-        description: t("how_to_play.example_wrong"),
+        description: t("how_to_play.no_match"),
     },
 ]);
 </script>
@@ -92,6 +92,12 @@ const examples = computed(() => [
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="space-y-2 pt-2 border-t border-white/10">
+                <p class="text-sm leading-relaxed font-medium text-white/90">
+                    {{ t("how_to_play.hints_info") }}
+                </p>
             </div>
 
             <AppButton

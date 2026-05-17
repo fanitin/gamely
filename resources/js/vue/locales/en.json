@@ -13,15 +13,18 @@
     "modes": {
         "classic": {
             "title": "Classic",
-            "description": "Guess the game by its attributes"
+            "description": "Guess the game by its attributes",
+            "stats": "This should be easy..."
         },
         "game_screenshots": {
             "title": "Screenshots",
-            "description": "Guess the game by its screenshots"
+            "description": "Guess the game by its screenshots",
+            "stats": "I've seen this somewhere"
         },
         "character": {
             "title": "Character",
-            "description": "Guess the character by image and attributes"
+            "description": "Guess the character by image and attributes",
+            "stats": "This is my favorite!"
         }
     },
     "character": {
@@ -111,7 +114,8 @@
         "partial_match": "Partial match (e.g., one of the genres).",
         "close_match": "Close match. ▲ means the answer is higher.",
         "no_match": "No match.",
-        "indicators": "Comparison Indicators"
+        "indicators": "Comparison Indicators",
+        "hints_info": "A new hint is revealed every 4-5 attempts."
     },
     "screenshots": {
         "revealed": "Screenshots revealed",

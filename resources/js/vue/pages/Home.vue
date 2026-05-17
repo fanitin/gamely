@@ -35,7 +35,7 @@ const modes: GameMode[] = [
         title: "modes.classic.title",
         desc: "modes.classic.description",
         icon: Gamepad2,
-        stats: "Daily Challenge",
+        stats: "modes.classic.stats",
     },
     {
         id: "game_screenshots",
@@ -43,7 +43,7 @@ const modes: GameMode[] = [
         title: "modes.game_screenshots.title",
         desc: "modes.game_screenshots.description",
         icon: ImageIcon,
-        stats: "Visual Memory",
+        stats: "modes.game_screenshots.stats",
     },
     {
         id: "character",
@@ -51,7 +51,7 @@ const modes: GameMode[] = [
         title: "modes.character.title",
         desc: "modes.character.description",
         icon: VenetianMask,
-        stats: "Lore Knowledge",
+        stats: "modes.character.stats",
     },
 ];
 </script>
@@ -88,7 +88,7 @@ const modes: GameMode[] = [
                     :desc="t(mode.desc)"
                     :icon="mode.icon"
                     :badge="mode.badge"
-                    :stats="mode.stats"
+                    :stats="mode.stats ? t(mode.stats) : undefined"
                 />
             </div>
         </div>

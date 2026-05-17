@@ -29,30 +29,55 @@ interface Attempt {
         player_perspectives?: Array<{ id: number; name: string }>;
     };
     comparison: {
-        release_year?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
-        rating?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
+        release_year?: {
+            result: "exact" | "close" | "wrong";
+            value?: number;
+            arrow?: "up" | "down";
+        };
+        rating?: {
+            result: "exact" | "close" | "wrong";
+            value?: number;
+            arrow?: "up" | "down";
+        };
         genres?: { result: "exact" | "close" | "wrong" };
         developers_publishers?: { result: "exact" | "close" | "wrong" };
         franchises_collections?: { result: "exact" | "close" | "wrong" };
         game_modes?: { result: "exact" | "close" | "wrong" | "missing" };
-        player_perspectives?: { result: "exact" | "close" | "wrong" | "missing" };
-        popularity?: { result: "exact" | "close" | "wrong"; value?: string; arrow?: "up" | "down" };
-        franchise_start_year?: { result: "exact" | "close" | "wrong"; value?: number; arrow?: "up" | "down" };
+        player_perspectives?: {
+            result: "exact" | "close" | "wrong" | "missing";
+        };
+        popularity?: {
+            result: "exact" | "close" | "wrong";
+            value?: string;
+            arrow?: "up" | "down";
+        };
+        franchise_start_year?: {
+            result: "exact" | "close" | "wrong";
+            value?: number;
+            arrow?: "up" | "down";
+        };
         gender?: { result: "exact" | "close" | "wrong" | "missing" };
         species?: { result: "exact" | "close" | "wrong" | "missing" };
-        first_appearance_year?: { result: "exact" | "close" | "wrong" | "missing"; value?: number; arrow?: "up" | "down" };
+        first_appearance_year?: {
+            result: "exact" | "close" | "wrong" | "missing";
+            value?: number;
+            arrow?: "up" | "down";
+        };
         franchises?: { result: "exact" | "close" | "wrong" | "missing" };
         collections?: { result: "exact" | "close" | "wrong" | "missing" };
     };
 }
 
-const props = withDefaults(defineProps<{
-    attempt: Attempt;
-    attemptNumber: number;
-    mode?: GameMode;
-}>(), {
-    mode: "classic",
-});
+const props = withDefaults(
+    defineProps<{
+        attempt: Attempt;
+        attemptNumber: number;
+        mode?: GameMode;
+    }>(),
+    {
+        mode: "classic",
+    },
+);
 
 const gridClass = computed(() => {
     if (props.mode === "screenshots") {
@@ -64,20 +89,28 @@ const gridClass = computed(() => {
     return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px_90px]";
 });
 
-function formatArrayValue(arr: Array<{ id: number; name: string }> | undefined): string {
+function formatArrayValue(
+    arr: Array<{ id: number; name: string }> | undefined,
+): string {
     if (!arr || arr.length === 0) return "-";
-    return arr.map(item => item.name).join(", ");
+    return arr.map((item) => item.name).join(", ");
 }
 
 function buildDevelopersPublishersValue() {
     const developers = props.attempt.guessed.developers || [];
     const publishers = props.attempt.guessed.publishers || [];
 
-    const devIds = developers.map(d => d.id).sort().join(',');
-    const pubIds = publishers.map(p => p.id).sort().join(',');
+    const devIds = developers
+        .map((d) => d.id)
+        .sort()
+        .join(",");
+    const pubIds = publishers
+        .map((p) => p.id)
+        .sort()
+        .join(",");
 
-    const devNames = developers.map(d => d.name).join(", ");
-    const pubNames = publishers.map(p => p.name).join(", ");
+    const devNames = developers.map((d) => d.name).join(", ");
+    const pubNames = publishers.map((p) => p.name).join(", ");
 
     if (devIds === pubIds && devIds) {
         return devNames;
@@ -87,15 +120,15 @@ function buildDevelopersPublishersValue() {
 
     if (developers.length > 0) {
         result.push({
-            label: t('attributes.developer'),
-            value: devNames
+            label: t("attributes.developer"),
+            value: devNames,
         });
     }
 
     if (publishers.length > 0) {
         result.push({
-            label: t('attributes.publisher'),
-            value: pubNames
+            label: t("attributes.publisher"),
+            value: pubNames,
         });
     }
 
@@ -106,8 +139,8 @@ function buildFranchisesCollectionsValue() {
     const franchises = props.attempt.guessed.franchises || [];
     const collections = props.attempt.guessed.collections || [];
 
-    const franchiseNames = franchises.map(f => f.name).join(", ");
-    const collectionNames = collections.map(c => c.name).join(", ");
+    const franchiseNames = franchises.map((f) => f.name).join(", ");
+    const collectionNames = collections.map((c) => c.name).join(", ");
 
     if (franchises.length === 0 && collections.length > 0) {
         return collectionNames;
@@ -117,7 +150,11 @@ function buildFranchisesCollectionsValue() {
         return franchiseNames;
     }
 
-    if (franchises.length === 1 && collections.length === 1 && franchiseNames === collectionNames) {
+    if (
+        franchises.length === 1 &&
+        collections.length === 1 &&
+        franchiseNames === collectionNames
+    ) {
         return franchiseNames;
     }
 
@@ -125,15 +162,15 @@ function buildFranchisesCollectionsValue() {
 
     if (franchises.length > 0) {
         result.push({
-            label: t('attributes.franchise'),
-            value: franchiseNames
+            label: t("attributes.franchise"),
+            value: franchiseNames,
         });
     }
 
     if (collections.length > 0) {
         result.push({
-            label: t('attributes.collection'),
-            value: collectionNames
+            label: t("attributes.collection"),
+            value: collectionNames,
         });
     }
 
@@ -143,26 +180,38 @@ function buildFranchisesCollectionsValue() {
 function buildPerspectiveValue() {
     const perspectives = props.attempt.guessed.player_perspectives || [];
     if (perspectives.length === 0) return "-";
-    return perspectives.map(p => p.name).join(", ");
+    return perspectives.map((p) => p.name).join(", ");
 }
 
 function buildGameModeValue() {
     const modes = props.attempt.guessed.game_modes || [];
     if (modes.length === 0) return "-";
-    return modes.map(m => m.name).join(", ");
+    return modes.map((m) => m.name).join(", ");
 }
 </script>
 
 <template>
     <div class="grid gap-2 animate-fade-in items-stretch" :class="gridClass">
-        <div class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center justify-center min-h-[80px] p-3">
-            <span class="text-lg font-black text-teal-500">#{{ attemptNumber }}</span>
+        <div
+            class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center justify-center min-h-[80px] p-3"
+        >
+            <span class="text-lg font-black text-teal-500"
+                >#{{ attemptNumber }}</span
+            >
         </div>
 
-        <div class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center gap-3 min-h-[80px] p-3 overflow-hidden">
-            <div v-if="attempt.guessed.cover_url || attempt.guessed.mug_shot_url" class="w-14 h-14 shrink-0">
+        <div
+            class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center gap-3 min-h-[80px] p-3 overflow-hidden"
+        >
+            <div
+                v-if="attempt.guessed.cover_url || attempt.guessed.mug_shot_url"
+                class="w-14 h-14 shrink-0"
+            >
                 <img
-                    :src="attempt.guessed.cover_url || attempt.guessed.mug_shot_url"
+                    :src="
+                        attempt.guessed.cover_url ||
+                        attempt.guessed.mug_shot_url
+                    "
                     :alt="attempt.guessed.display_name || attempt.guessed.name"
                     class="w-full h-full rounded-lg object-cover"
                 />
@@ -181,17 +230,23 @@ function buildGameModeValue() {
             />
 
             <AttributeCell
-                :result="attempt.comparison.developers_publishers?.result || 'wrong'"
+                :result="
+                    attempt.comparison.developers_publishers?.result || 'wrong'
+                "
                 :value="buildDevelopersPublishersValue()"
             />
 
             <AttributeCell
-                :result="attempt.comparison.franchises_collections?.result || 'wrong'"
+                :result="
+                    attempt.comparison.franchises_collections?.result || 'wrong'
+                "
                 :value="buildFranchisesCollectionsValue()"
             />
 
             <AttributeCell
-                :result="attempt.comparison.player_perspectives?.result || 'wrong'"
+                :result="
+                    attempt.comparison.player_perspectives?.result || 'wrong'
+                "
                 :value="buildPerspectiveValue()"
             />
 
@@ -227,12 +282,16 @@ function buildGameModeValue() {
             />
 
             <AttributeCell
-                :result="attempt.comparison.franchises_collections?.result || 'wrong'"
+                :result="
+                    attempt.comparison.franchises_collections?.result || 'wrong'
+                "
                 :value="buildFranchisesCollectionsValue()"
             />
 
             <AttributeCell
-                :result="attempt.comparison.developers_publishers?.result || 'wrong'"
+                :result="
+                    attempt.comparison.developers_publishers?.result || 'wrong'
+                "
                 :value="buildDevelopersPublishersValue()"
             />
 
@@ -243,7 +302,9 @@ function buildGameModeValue() {
             />
 
             <AttributeCell
-                :result="attempt.comparison.franchise_start_year?.result || 'wrong'"
+                :result="
+                    attempt.comparison.franchise_start_year?.result || 'wrong'
+                "
                 :value="attempt.comparison.franchise_start_year?.value"
                 :arrow="attempt.comparison.franchise_start_year?.arrow"
             />
@@ -271,7 +332,9 @@ function buildGameModeValue() {
             />
 
             <AttributeCell
-                :result="attempt.comparison.first_appearance_year?.result || 'wrong'"
+                :result="
+                    attempt.comparison.first_appearance_year?.result || 'wrong'
+                "
                 :value="attempt.comparison.first_appearance_year?.value"
                 :arrow="attempt.comparison.first_appearance_year?.arrow"
             />

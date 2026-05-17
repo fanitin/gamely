@@ -26,6 +26,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    overflowVisible: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 defineEmits(["close"]);
@@ -97,7 +101,8 @@ onBeforeUnmount(() => {
                     >
                         <DialogPanel
                             :class="[
-                                'w-full max-h-[calc(100dvh-2rem)] transform overflow-x-visible overflow-y-auto rounded-2xl bg-onyx-dark/95 border border-white/10 p-8 text-left align-middle shadow-2xl',
+                                'w-full transform rounded-3xl bg-onyx-dark/80 backdrop-blur-2xl border border-white/10 p-8 text-left align-middle shadow-[0_8px_32px_rgba(0,0,0,0.5)]',
+                                overflowVisible ? 'overflow-visible' : 'max-h-[calc(100dvh-2rem)] overflow-x-visible overflow-y-auto',
                                 sizeClasses[props.size] || sizeClasses.md,
                             ]"
                         >

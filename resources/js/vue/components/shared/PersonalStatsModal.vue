@@ -42,23 +42,23 @@ watch(
     >
         <div class="space-y-7">
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-5">
-                <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
                     <p class="text-sm uppercase tracking-wide text-muted">{{ t('personal_stats.wins_total') }}</p>
                     <p class="mt-2 text-3xl font-semibold text-white">{{ viewModel.wins_total }}</p>
                 </div>
-                <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
                     <p class="text-sm uppercase tracking-wide text-muted">{{ t('personal_stats.avg_attempts') }}</p>
                     <p class="mt-2 text-3xl font-semibold text-white">{{ viewModel.average_attempts }}</p>
                 </div>
-                <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
                     <p class="text-sm uppercase tracking-wide text-muted">{{ t('personal_stats.first_try_wins') }}</p>
                     <p class="mt-2 text-3xl font-semibold text-white">{{ viewModel.first_try_wins }}</p>
                 </div>
-                <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
                     <p class="text-sm uppercase tracking-wide text-muted">{{ t('personal_stats.current_streak') }}</p>
                     <p class="mt-2 text-3xl font-semibold text-white">{{ viewModel.current_streak_days }}</p>
                 </div>
-                <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
                     <p class="text-sm uppercase tracking-wide text-muted">{{ t('personal_stats.best_streak') }}</p>
                     <p class="mt-2 text-3xl font-semibold text-white">{{ viewModel.best_streak_days }}</p>
                 </div>

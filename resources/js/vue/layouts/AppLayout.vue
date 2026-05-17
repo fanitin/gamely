@@ -31,12 +31,12 @@ const showDevTools = import.meta.env.DEV;
             "
         ></div>
         <div
-            class="absolute inset-0 z-0 bg-gradient-to-b from-onyx-dark/30 via-onyx-dark/60 to-onyx-dark pointer-events-none"
+            class="absolute inset-0 z-0 bg-gradient-to-b from-onyx-dark/30 via-onyx-dark/70 to-onyx-dark pointer-events-none"
         ></div>
 
         <header class="relative z-50 pt-4 px-4 sm:px-6 mb-4">
             <div
-                class="max-w-5xl mx-auto h-14 flex items-center justify-between bg-onyx-dark/40 backdrop-blur-xl border border-white/10 rounded-2xl px-4 shadow-lg"
+                class="max-w-5xl mx-auto h-16 flex items-center justify-between bg-onyx-dark/40 backdrop-blur-xl border border-white/10 rounded-2xl px-4 shadow-lg"
             >
                 <Link
                     href="/"
@@ -51,26 +51,35 @@ const showDevTools = import.meta.env.DEV;
                 <div class="flex items-center gap-1 sm:gap-2">
                     <a
                         href="/games"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.games')"
                     >
-                        <Library class="w-5 h-5" />
+                        <Library class="w-5 h-5 mb-1" />
+                        <span class="text-[10px] font-medium leading-none">{{
+                            t("nav.games")
+                        }}</span>
                     </a>
 
                     <button
                         @click="isPersonalStatsOpen = true"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.stats')"
                     >
-                        <BarChart3 class="w-5 h-5" />
+                        <BarChart3 class="w-5 h-5 mb-1" />
+                        <span class="text-[10px] font-medium leading-none">{{
+                            t("nav.stats")
+                        }}</span>
                     </button>
 
                     <button
                         @click="isHelpOpen = true"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.how_to_play')"
                     >
-                        <CircleHelp class="w-5 h-5" />
+                        <CircleHelp class="w-5 h-5 mb-1" />
+                        <span class="text-[10px] font-medium leading-none">{{
+                            t("nav.how_to_play")
+                        }}</span>
                     </button>
 
                     <!-- DEV TOOLING -->
@@ -92,16 +101,10 @@ const showDevTools = import.meta.env.DEV;
                     </template>
 
                     <div
-                        class="w-px h-4 bg-white/10 mx-1 hidden sm:block"
+                        class="w-px h-8 bg-white/10 mx-1 hidden sm:block"
                     ></div>
 
                     <LanguageSelector />
-
-                    <span
-                        class="text-xs font-bold text-muted/80 w-6 text-center select-none"
-                    >
-                        {{ currentLanguage }}
-                    </span>
                 </div>
             </div>
         </header>

@@ -161,6 +161,10 @@ export function useScreenshotsGame() {
                         unlockAt: data.unlock_at,
                     }));
                 }
+
+                if (isWon.value) {
+                    visibleScreenshotsCount.value = response.data.total_screenshots;
+                }
             } else {
                 error.value = response.data.error || "Failed to load challenge";
             }
@@ -209,6 +213,7 @@ export function useScreenshotsGame() {
                 guessedGameIds.value.push(gameId);
                 lastCorrectGuess.value = data.comparison.guessed;
                 isWon.value = true;
+                visibleScreenshotsCount.value = totalScreenshots.value;
                 recordWin("game_screenshots", attempts.value.length, todayKey);
             } else {
                 attempts.value.push({

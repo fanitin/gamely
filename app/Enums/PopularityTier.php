@@ -34,9 +34,9 @@ enum PopularityTier: string
         $score = $ratingCount + ($hypes * 2);
 
         return match (true) {
-            $score >= 5000 => self::LEGENDARY,
-            $score >= 1000 => self::POPULAR,
-            $score >= 200 => self::NOTABLE,
+            $score >= 1500 => self::LEGENDARY,
+            $score >= 400 => self::POPULAR,
+            $score >= 100 => self::NOTABLE,
             default => self::NICHE,
         };
     }
