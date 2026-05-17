@@ -1,35 +1,57 @@
 <script setup lang="ts">
-import { Head, Link } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
+import ModeCard from "@/vue/components/ui/ModeCard.vue";
+import {
+    Gamepad2,
+    Image as ImageIcon,
+    VenetianMask,
+    Sparkles,
+    Flame,
+    Star,
+} from "lucide-vue-next";
 
 const { t } = useI18n();
 
-interface ModeCard {
+interface GameMode {
     id: string;
     href: string;
     title: string;
     desc: string;
+    icon: any;
+    badge?: {
+        text: string;
+        icon: any;
+        colorClass: string;
+    };
+    stats?: string;
 }
 
-const modes: ModeCard[] = [
+const modes: GameMode[] = [
     {
         id: "classic",
         href: "/classic",
         title: "modes.classic.title",
         desc: "modes.classic.description",
+        icon: Gamepad2,
+        stats: "Daily Challenge",
     },
     {
         id: "game_screenshots",
         href: "/screenshots",
         title: "modes.game_screenshots.title",
         desc: "modes.game_screenshots.description",
+        icon: ImageIcon,
+        stats: "Visual Memory",
     },
     {
         id: "character",
         href: "/character",
         title: "modes.character.title",
         desc: "modes.character.description",
+        icon: VenetianMask,
+        stats: "Lore Knowledge",
     },
 ];
 </script>
@@ -38,38 +60,36 @@ const modes: ModeCard[] = [
     <AppLayout>
         <Head :title="t('nav.home')" />
 
-        <div class="max-w-5xl mx-auto px-4 py-16">
-            <div class="text-center mb-16">
+        <div
+            class="max-w-3xl mx-auto px-4 py-12 sm:py-20 flex flex-col items-center"
+        >
+            <div class="text-center mb-12 sm:mb-16 w-full relative">
+                <div
+                    class="absolute inset-0 bg-teal-500/20 blur-[100px] rounded-full w-48 h-48 mx-auto -top-10 -z-10"
+                ></div>
                 <h1
-                    class="text-5xl font-extrabold mb-4 text-white tracking-tight"
+                    class="text-5xl sm:text-7xl font-black mb-6 text-white tracking-tighter drop-shadow-lg"
                 >
-                    Game<span class="text-primary-500">ly</span>
+                    Game<span class="text-teal-500">ly</span>
                 </h1>
-                <p class="text-muted text-lg max-w-2xl mx-auto">
-                    {{ t("how_to_play.intro") }}
+                <p
+                    class="text-muted text-lg sm:text-xl max-w-xl mx-auto font-medium tracking-wide"
+                >
+                    {{ t("nav.site_description") }}
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Link
+            <div class="w-full flex flex-col gap-5 sm:gap-6">
+                <ModeCard
                     v-for="mode in modes"
                     :key="mode.id"
                     :href="mode.href"
-                    class="group block"
-                >
-                    <div
-                        class="h-full bg-onyx border border-white/5 rounded-2xl p-10 text-center transition-all duration-300 transform group-hover:scale-[1.02] group-hover:bg-onyx-light/20 group-hover:border-white/10 group-active:scale-[0.98] shadow-lg"
-                    >
-                        <h2
-                            class="text-2xl font-bold text-white mb-3 transition-colors group-hover:text-primary-400"
-                        >
-                            {{ t(mode.title) }}
-                        </h2>
-                        <p class="text-muted text-base leading-relaxed">
-                            {{ t(mode.desc) }}
-                        </p>
-                    </div>
-                </Link>
+                    :title="t(mode.title)"
+                    :desc="t(mode.desc)"
+                    :icon="mode.icon"
+                    :badge="mode.badge"
+                    :stats="mode.stats"
+                />
             </div>
         </div>
     </AppLayout>

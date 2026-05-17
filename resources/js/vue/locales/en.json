@@ -7,7 +7,8 @@
         "change_locale": "Language",
         "choose_language": "Choose language",
         "more_languages_soon": "More languages coming soon",
-        "back_to_menu": "Back to Menu"
+        "back_to_menu": "Back to Menu",
+        "site_description": "Guess the game every day!"
     },
     "modes": {
         "classic": {

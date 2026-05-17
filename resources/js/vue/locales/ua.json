@@ -7,7 +7,8 @@
         "change_locale": "Мова",
         "choose_language": "Оберіть мову",
         "more_languages_soon": "Скоро буде більше мов",
-        "back_to_menu": "В меню"
+        "back_to_menu": "В меню",
+        "site_description": "Відгадуй відеоігри щодня!"
     },
     "modes": {
         "classic": {
