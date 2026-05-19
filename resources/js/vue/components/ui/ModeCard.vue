@@ -12,7 +12,6 @@ defineProps<{
         icon: any;
         colorClass: string;
     };
-    stats?: string;
 }>();
 </script>
 
@@ -25,7 +24,7 @@ defineProps<{
             class="relative overflow-hidden bg-onyx-dark/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 transition-all duration-300 ease-out group-hover:scale-[1.01] group-hover:bg-onyx-dark/80 group-hover:border-teal-500/30 group-active:scale-[0.99] shadow-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center"
         >
             <div
-                class="absolute -inset-x-full inset-y-0 w-1/2 z-0 bg-gradient-to-r from-transparent via-white/5 to-transparent group-hover:animate-shimmer transform -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                class="absolute -inset-x-full inset-y-0 w-1/2 z-0 bg-linear-to-r from-transparent via-white/5 to-transparent group-hover:animate-shimmer transform -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             ></div>
 
             <div
@@ -57,28 +56,15 @@ defineProps<{
                 </div>
 
                 <p
-                    class="text-muted text-base sm:text-lg leading-relaxed mb-4 sm:mb-0 max-w-xl"
+                    class="text-muted text-base sm:text-lg leading-relaxed max-w-xl"
                 >
                     {{ desc }}
                 </p>
-
-                <div
-                    v-if="stats"
-                    class="sm:hidden flex items-center text-sm font-medium text-muted/80"
-                >
-                    {{ stats }}
-                </div>
             </div>
 
             <div
                 class="hidden sm:flex flex-col items-end gap-3 shrink-0 relative z-10"
             >
-                <div
-                    v-if="stats"
-                    class="text-sm font-medium text-muted/80 px-3 py-1.5 rounded-lg bg-white/5 border border-white/5"
-                >
-                    {{ stats }}
-                </div>
                 <div
                     class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-onyx transition-all duration-300"
                 >

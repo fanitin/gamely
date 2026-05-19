@@ -13,18 +13,15 @@
     "modes": {
         "classic": {
             "title": "Classic",
-            "description": "Guess the game by its attributes",
-            "stats": "This should be easy..."
+            "description": "Guess the game by its attributes"
         },
         "game_screenshots": {
             "title": "Screenshots",
-            "description": "Guess the game by its screenshots",
-            "stats": "I've seen this somewhere"
+            "description": "Guess the game by its screenshots"
         },
         "character": {
             "title": "Character",
-            "description": "Guess the character by image and attributes",
-            "stats": "This is my favorite!"
+            "description": "Guess the character by image and attributes"
         }
     },
     "character": {
