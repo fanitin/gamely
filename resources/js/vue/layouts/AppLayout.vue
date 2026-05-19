@@ -34,9 +34,9 @@ const showDevTools = import.meta.env.DEV;
             class="absolute inset-0 z-0 bg-gradient-to-b from-onyx-dark/30 via-onyx-dark/70 to-onyx-dark pointer-events-none"
         ></div>
 
-        <header class="relative z-50 pt-4 px-4 sm:px-6 mb-4">
+        <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark/60 backdrop-blur-xl">
             <div
-                class="max-w-5xl mx-auto h-16 flex items-center justify-between bg-onyx-dark/40 backdrop-blur-xl border border-white/10 rounded-2xl px-4 shadow-lg"
+                class="max-w-5xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6"
             >
                 <Link
                     href="/"
@@ -51,7 +51,7 @@ const showDevTools = import.meta.env.DEV;
                 <div class="flex items-center gap-1 sm:gap-2">
                     <a
                         href="/games"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
                         :title="t('nav.games')"
                     >
                         <Library class="w-5 h-5 mb-1" />
@@ -62,7 +62,7 @@ const showDevTools = import.meta.env.DEV;
 
                     <button
                         @click="isPersonalStatsOpen = true"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
                         :title="t('nav.stats')"
                     >
                         <BarChart3 class="w-5 h-5 mb-1" />
@@ -73,7 +73,7 @@ const showDevTools = import.meta.env.DEV;
 
                     <button
                         @click="isHelpOpen = true"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
                         :title="t('nav.how_to_play')"
                     >
                         <CircleHelp class="w-5 h-5 mb-1" />
