@@ -94,6 +94,20 @@
         "copy": "Скопировать результат",
         "share_header": "Я угадал {date} {name} ({mode}) за {attempts} попыток!"
     },
+    "footer": {
+        "privacy": "Конфиденциальность",
+        "contact": "Контакт",
+        "disclaimer": "Не связано с Sony, Microsoft или Nintendo. Данные от",
+        "by": ""
+    },
+    "a11y": {
+        "close_notification": "Закрыть уведомление",
+        "character_image": "Персонаж"
+    },
+    "mode_card": {
+        "avg": "среднее",
+        "next_in": "след. через"
+    },
     "errors": {
         "game_not_found": "Игра не найдена",
         "already_played": "Вы уже играли сегодня",

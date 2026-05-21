@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { CheckCircle2, CircleAlert, Info, TriangleAlert, X } from "lucide-vue-next";
 import { useToast, type ToastItem } from "@/vue/composables/useToast";
 
+const { t } = useI18n();
 const { toasts, dismissToast } = useToast();
 
 const iconByType = {
@@ -63,7 +65,7 @@ const hasToasts = computed(() => toasts.length > 0);
                         type="button"
                         class="text-white/60 hover:text-white transition-colors"
                         @click="dismissToast(toast.id)"
-                        aria-label="Close notification"
+                        :aria-label="t('a11y.close_notification')"
                     >
                         <X class="w-4 h-4" />
                     </button>

@@ -104,6 +104,20 @@
         "copy": "Скопіювати результат",
         "share_header": "Я вгадав {date} {name} ({mode}) за {attempts} спроб!"
     },
+    "footer": {
+        "privacy": "Конфіденційність",
+        "contact": "Контакт",
+        "disclaimer": "Не пов'язано з Sony, Microsoft чи Nintendo. Дані від",
+        "by": ""
+    },
+    "a11y": {
+        "close_notification": "Закрити сповіщення",
+        "character_image": "Персонаж"
+    },
+    "mode_card": {
+        "avg": "середнє",
+        "next_in": "наст. через"
+    },
     "errors": {
         "game_not_found": "Гру не знайдено",
         "already_played": "Ви вже грали у сьогоднішній виклик",

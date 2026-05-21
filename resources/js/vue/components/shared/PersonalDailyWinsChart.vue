@@ -30,7 +30,6 @@ const { t } = useI18n();
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Legend, Tooltip);
 
-// ── helpers ─────────────────────────────────────────────────────────────
 const parseDateKey = (key: string): Date | null => {
     const [year, month, day] = key.split("-").map(Number);
     if (!year || !month || !day) {
@@ -51,13 +50,6 @@ const monthShortKey = (date: Date): string =>
 const formatMonth = (date: Date): string =>
     `${t(monthShortKey(date))} ${String(date.getFullYear()).slice(2)}`;
 
-const startOfWeek = (date: Date): Date => {
-    const day = (date.getDay() + 6) % 7;
-    const out = new Date(date);
-    out.setDate(date.getDate() - day);
-    return out;
-};
-
 interface Point { date: Date; value: number | null; }
 
 const sortedRows = computed<Point[]>(() => {
@@ -76,42 +68,56 @@ const sortedRows = computed<Point[]>(() => {
     return rows;
 });
 
-const displayed = computed<{ rows: Point[]; bucket: "day" | "week" }>(() => {
+const displayed = computed<{ rows: Point[]; bucket: "day" | "month" }>(() => {
     if (props.range === "365") {
-        const groups = new Map<string, { date: Date; sum: number; count: number }>();
+        const dataByMonth = new Map<string, { sum: number; count: number }>();
         sortedRows.value.forEach((row) => {
-            const wkStart = startOfWeek(row.date);
-            const key = wkStart.toISOString().slice(0, 10);
-            const bucket = groups.get(key) ?? { date: wkStart, sum: 0, count: 0 };
+            const key = `${row.date.getFullYear()}-${row.date.getMonth()}`;
+            const bucket = dataByMonth.get(key) ?? { sum: 0, count: 0 };
             if (row.value != null) {
                 bucket.sum += row.value;
                 bucket.count += 1;
             }
-            groups.set(key, bucket);
+            dataByMonth.set(key, bucket);
         });
-        const rows: Point[] = [...groups.values()]
-            .sort((a, b) => a.date.getTime() - b.date.getTime())
-            .map((g) => ({
-                date: g.date,
-                value: g.count > 0 ? Number((g.sum / g.count).toFixed(1)) : null,
-            }));
-        return { rows, bucket: "week" };
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const rows: Point[] = [];
+        for (let i = 11; i >= 0; i--) {
+            const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+            const key = `${d.getFullYear()}-${d.getMonth()}`;
+            const g = dataByMonth.get(key);
+            rows.push({
+                date: d,
+                value: g && g.count > 0 ? Number((g.sum / g.count).toFixed(1)) : 0,
+            });
+        }
+        return { rows, bucket: "month" };
     }
 
     const days = Number(props.range);
-    const cutoff = new Date();
-    cutoff.setHours(0, 0, 0, 0);
-    cutoff.setDate(cutoff.getDate() - (days - 1));
-    return {
-        rows: sortedRows.value.filter((row) => row.date >= cutoff),
-        bucket: "day",
-    };
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dataByDay = new Map<string, number>();
+    sortedRows.value.forEach((row) => {
+        if (row.value != null) {
+            dataByDay.set(row.date.toDateString(), row.value);
+        }
+    });
+    const rows: Point[] = [];
+    for (let i = days - 1; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        rows.push({ date: d, value: dataByDay.get(d.toDateString()) ?? 0 });
+    }
+    return { rows, bucket: "day" };
 });
 
 const chartData = computed<ChartData<"line">>(() => ({
-    labels: displayed.value.rows.map((r) =>
-        displayed.value.bucket === "week" ? formatMonth(r.date) : formatDay(r.date),
-    ),
+    labels: displayed.value.bucket === "month"
+        ? displayed.value.rows.map((r) => formatMonth(r.date))
+        : displayed.value.rows.map((r) => formatDay(r.date)),
     datasets: [
         {
             label: t(`modes.${props.mode}.title`),
@@ -119,19 +125,18 @@ const chartData = computed<ChartData<"line">>(() => ({
             borderColor: props.color,
             backgroundColor: props.color,
             borderWidth: 4,
-            pointRadius: displayed.value.bucket === "week" ? 3 : 4,
+            pointRadius: 4,
             pointHoverRadius: 6,
             pointBorderWidth: 2,
             pointBorderColor: "#0f172a",
             pointBackgroundColor: props.color,
             tension: 0.35,
             fill: false,
-            spanGaps: true,
         },
     ],
 }));
 
-const chartOptions = computed<ChartOptions<"line">>(() => ({
+const chartOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
     animation: { duration: 250 },
@@ -154,13 +159,8 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
                     if (!items.length) return "";
                     const row = displayed.value.rows[items[0].dataIndex];
                     if (!row) return "";
-                    if (displayed.value.bucket === "week") {
-                        const end = new Date(row.date);
-                        end.setDate(end.getDate() + 6);
-                        return t("personal_stats.week_of", {
-                            from: formatDay(row.date),
-                            to: formatDay(end),
-                        });
+                    if (displayed.value.bucket === "month") {
+                        return formatMonth(row.date);
                     }
                     return formatFullDay(row.date);
                 },
@@ -168,7 +168,7 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
                     const v = item.parsed.y;
                     if (v == null) return "";
                     const suffix =
-                        displayed.value.bucket === "week"
+                        displayed.value.bucket === "month"
                             ? ` ${t("personal_stats.avg_suffix")}`
                             : "";
                     return `${item.dataset.label}: ${v}${suffix}`;

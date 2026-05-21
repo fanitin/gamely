@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { Link } from "@inertiajs/vue3";
 import { ArrowRight } from "lucide-vue-next";
+
+const { t } = useI18n();
 
 type ModeKey = "classic" | "screens" | "character";
 
@@ -110,7 +113,7 @@ const colorClasses = computed(() => {
                     <span
                         class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
                     >
-                        avg
+                        {{ t("mode_card.avg") }}
                     </span>
                 </div>
 
@@ -121,7 +124,7 @@ const colorClasses = computed(() => {
                     <span
                         class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
                     >
-                        next in
+                        {{ t("mode_card.next_in") }}
                     </span>
                 </div>
 

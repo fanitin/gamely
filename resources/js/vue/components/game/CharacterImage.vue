@@ -25,7 +25,7 @@ const isModalOpen = ref(false);
         >
             <img
                 :src="imageUrl"
-                alt="Character"
+                :alt="t('a11y.character_image')"
                 class="w-full h-full object-cover object-top transition-all duration-700"
                 :style="{ filter: `blur(${blurAmount})`, transform: 'scale(1.06)' }"
             />
@@ -68,7 +68,7 @@ const isModalOpen = ref(false);
                 <div class="relative w-full rounded-xl overflow-hidden" style="max-height: 70vh;">
                     <img
                         :src="imageUrl"
-                        alt="Character"
+                        :alt="t('a11y.character_image')"
                         class="w-full h-full object-contain object-top transition-all duration-700"
                         :style="{ filter: `blur(${blurAmount})` }"
                     />

@@ -94,6 +94,20 @@
         "copy": "Copy result",
         "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!"
     },
+    "footer": {
+        "privacy": "Privacy",
+        "contact": "Contact",
+        "disclaimer": "Not affiliated with Sony, Microsoft or Nintendo. Data by",
+        "by": "by"
+    },
+    "a11y": {
+        "close_notification": "Close notification",
+        "character_image": "Character"
+    },
+    "mode_card": {
+        "avg": "avg",
+        "next_in": "next in"
+    },
     "errors": {
         "game_not_found": "Game not found",
         "already_played": "You already played today's challenge",

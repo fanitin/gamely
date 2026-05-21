@@ -12,6 +12,17 @@ import {
 
 const { t } = useI18n();
 
+const props = defineProps<{
+    avgAttempts: { classic: number | null; game_screenshots: number | null; character: number | null };
+}>();
+
+const FALLBACK_AVG = { classic: 4.2, game_screenshots: 5.8, character: 6.1 };
+
+function avgFor(key: keyof typeof FALLBACK_AVG): string {
+    const val = props.avgAttempts?.[key];
+    return (val != null ? val : FALLBACK_AVG[key]).toFixed(1);
+}
+
 type ModeKey = "classic" | "screens" | "character";
 
 interface GameMode {
@@ -20,7 +31,7 @@ interface GameMode {
     title: string;
     desc: string;
     icon: any;
-    avg: string; // TODO: replace with real stat from backend
+    avgKey: keyof typeof FALLBACK_AVG;
 }
 
 const modes: GameMode[] = [
@@ -30,7 +41,7 @@ const modes: GameMode[] = [
         title: "modes.classic.title",
         desc: "modes.classic.description",
         icon: Gamepad2,
-        avg: "4.2",
+        avgKey: "classic",
     },
     {
         id: "screens",
@@ -38,7 +49,7 @@ const modes: GameMode[] = [
         title: "modes.game_screenshots.title",
         desc: "modes.game_screenshots.description",
         icon: ImageIcon,
-        avg: "5.8",
+        avgKey: "game_screenshots",
     },
     {
         id: "character",
@@ -46,7 +57,7 @@ const modes: GameMode[] = [
         title: "modes.character.title",
         desc: "modes.character.description",
         icon: VenetianMask,
-        avg: "6.1",
+        avgKey: "character",
     },
 ];
 
@@ -101,7 +112,7 @@ const nextIn = computed(() => {
                     :desc="t(mode.desc)"
                     :icon="mode.icon"
                     :mode-key="mode.id"
-                    :avg-attempts="mode.avg"
+                    :avg-attempts="avgFor(mode.avgKey)"
                     :next-in="nextIn"
                 />
             </div>
