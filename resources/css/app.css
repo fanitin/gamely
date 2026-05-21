@@ -43,6 +43,11 @@
     /* Slate/Muted */
     --color-muted: #64748B;
 
+    /* Per-mode accent colors — used on Home cards AND in PersonalDailyWinsChart */
+    --color-mode-classic: #14b8a6;   /* teal */
+    --color-mode-screens: #f59e0b;   /* amber */
+    --color-mode-character: #8b5cf6; /* violet */
+
     /* Semantic Aliases */
     --color-primary-500: var(--color-teal-500);
     --color-primary-600: var(--color-teal-600);

@@ -22,7 +22,7 @@ const bgColor = computed(() => {
         case "wrong":
             return "bg-crimson-500";
         case "missing":
-            return "bg-onyx-500 border border-white/10";
+            return "bg-onyx-light border border-white/10";
         default:
             return "bg-crimson-500";
     }
@@ -47,7 +47,7 @@ const isMultiValue = computed(() => Array.isArray(props.value));
 
 const displayValue = computed(() => {
     if (!props.value) return "-";
-    if (typeof props.value === "string" || typeof props.value === "number") {
+    if (typeof props.value === 'string' || typeof props.value === 'number') {
         return props.value.toString();
     }
     return "-";
@@ -65,19 +65,16 @@ const displayValue = computed(() => {
             v-if="arrow"
             :class="[
                 bgArrowOverlay,
-                'absolute inset-0 flex items-center justify-center pointer-events-none',
+                'absolute inset-0 flex items-center justify-center pointer-events-none'
             ]"
         >
             <ArrowUp v-if="arrow === 'up'" class="w-20 h-20 opacity-15" />
             <ArrowDown v-if="arrow === 'down'" class="w-20 h-20 opacity-15" />
         </div>
 
-        <div
-            v-if="isMultiValue"
-            class="relative z-10 w-full max-w-[85%] mx-auto space-y-2"
-        >
+        <div v-if="isMultiValue" class="relative z-10 w-full max-w-[85%] mx-auto space-y-2">
             <div
-                v-for="(item, index) in value as Array<MultiValue>"
+                v-for="(item, index) in (value as Array<MultiValue>)"
                 :key="index"
                 class="text-sm leading-snug"
             >
@@ -86,10 +83,7 @@ const displayValue = computed(() => {
             </div>
         </div>
 
-        <div
-            v-else
-            class="relative z-10 text-sm font-bold text-center w-full max-w-[85%] mx-auto break-words leading-snug"
-        >
+        <div v-else class="relative z-10 text-sm font-bold text-center w-full max-w-[85%] mx-auto break-words leading-snug">
             {{ displayValue }}
         </div>
     </div>

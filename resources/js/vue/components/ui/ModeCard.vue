@@ -1,89 +1,146 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
-import { ChevronRight } from "lucide-vue-next";
+import { ArrowRight } from "lucide-vue-next";
 
-defineProps<{
+type ModeKey = "classic" | "screens" | "character";
+
+const props = defineProps<{
     href: string;
     title: string;
     desc: string;
     icon: any;
-    badge?: {
-        text: string;
-        icon: any;
-        colorClass: string;
-    };
+    modeKey: ModeKey;
+    avgAttempts?: string;
+    nextIn?: string;
 }>();
+
+const colorClasses = computed(() => {
+    const map: Record<
+        ModeKey,
+        {
+            iconBg: string;
+            iconText: string;
+            iconBorder: string;
+            title: string;
+            ctaBg: string;
+            edge: string;
+            glow: string;
+            border: string;
+        }
+    > = {
+        classic: {
+            iconBg: "group-hover:bg-mode-classic/10",
+            iconText: "group-hover:text-mode-classic",
+            iconBorder: "group-hover:border-mode-classic/30",
+            title: "group-hover:text-mode-classic",
+            ctaBg: "group-hover:bg-mode-classic group-hover:border-mode-classic group-hover:text-onyx-dark",
+            edge: "before:bg-mode-classic",
+            glow: "after:bg-mode-classic/10",
+            border: "group-hover:border-mode-classic/30",
+        },
+        screens: {
+            iconBg: "group-hover:bg-mode-screens/10",
+            iconText: "group-hover:text-mode-screens",
+            iconBorder: "group-hover:border-mode-screens/30",
+            title: "group-hover:text-mode-screens",
+            ctaBg: "group-hover:bg-mode-screens group-hover:border-mode-screens group-hover:text-onyx-dark",
+            edge: "before:bg-mode-screens",
+            glow: "after:bg-mode-screens/10",
+            border: "group-hover:border-mode-screens/30",
+        },
+        character: {
+            iconBg: "group-hover:bg-mode-character/10",
+            iconText: "group-hover:text-mode-character",
+            iconBorder: "group-hover:border-mode-character/30",
+            title: "group-hover:text-mode-character",
+            ctaBg: "group-hover:bg-mode-character group-hover:border-mode-character group-hover:text-onyx-dark",
+            edge: "before:bg-mode-character",
+            glow: "after:bg-mode-character/10",
+            border: "group-hover:border-mode-character/30",
+        },
+    };
+    return map[props.modeKey];
+});
 </script>
 
 <template>
     <Link
         :href="href"
-        class="group block w-full outline-none focus-visible:ring-2 focus-visible:ring-teal-500 rounded-3xl"
+        class="group block w-full outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-2xl"
     >
         <div
-            class="relative overflow-hidden bg-onyx-dark/60 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 transition-all duration-300 ease-out group-hover:scale-[1.01] group-hover:bg-onyx-dark/80 group-hover:border-teal-500/30 group-active:scale-[0.99] shadow-2xl flex flex-col sm:flex-row gap-6 items-start sm:items-center"
+            class="relative overflow-hidden bg-onyx-dark/90 border border-white/10 rounded-2xl p-5 sm:p-6 flex items-center gap-4 sm:gap-5 transition-all duration-300 ease-out hover:-translate-y-px hover:bg-onyx-dark/80"
+            :class="[
+                colorClasses.border,
+                `before:content-[''] before:absolute before:left-0 before:top-[18%] before:bottom-[18%] before:w-[2px] before:rounded-full before:opacity-0 before:transition-all before:duration-300 group-hover:before:opacity-100 group-hover:before:top-[8%] group-hover:before:bottom-[8%]`,
+                colorClasses.edge,
+                `after:content-[''] after:absolute after:inset-0 after:opacity-0 after:[mask-image:radial-gradient(60%_120%_at_0%_50%,black,transparent_60%)] after:transition-opacity after:duration-300 group-hover:after:opacity-100 after:pointer-events-none`,
+                colorClasses.glow,
+            ]"
         >
             <div
-                class="absolute -inset-x-full inset-y-0 w-1/2 z-0 bg-linear-to-r from-transparent via-white/5 to-transparent group-hover:animate-shimmer transform -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-            ></div>
-
-            <div
-                class="shrink-0 relative z-10 flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/5 border border-white/10 group-hover:border-teal-500/30 group-hover:bg-teal-500/10 transition-colors duration-300"
+                class="relative shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white/5 border border-white/10 text-white transition-colors duration-300"
+                :class="[
+                    colorClasses.iconBg,
+                    colorClasses.iconBorder,
+                    colorClasses.iconText,
+                ]"
             >
-                <component
-                    :is="icon"
-                    class="w-8 h-8 sm:w-10 sm:h-10 text-white group-hover:text-teal-400 transition-colors duration-300"
-                    stroke-width="1.5"
-                />
+                <component :is="icon" class="w-5 h-5 sm:w-6 sm:h-6" stroke-width="1.75" />
             </div>
 
-            <div class="flex-1 relative z-10 min-w-0">
-                <div class="flex items-center gap-3 mb-2 flex-wrap">
-                    <h2
-                        class="text-2xl sm:text-3xl font-bold text-white tracking-tight truncate"
-                    >
-                        {{ title }}
-                    </h2>
-
-                    <span
-                        v-if="badge"
-                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border uppercase tracking-wider"
-                        :class="badge.colorClass"
-                    >
-                        <component :is="badge.icon" class="w-3 h-3" />
-                        {{ badge.text }}
-                    </span>
-                </div>
-
-                <p
-                    class="text-muted text-base sm:text-lg leading-relaxed max-w-xl"
+            <div class="relative flex-1 min-w-0">
+                <h2
+                    class="text-lg sm:text-xl font-bold text-white tracking-tight transition-colors duration-300"
+                    :class="colorClasses.title"
                 >
+                    {{ title }}
+                </h2>
+                <p class="text-muted text-sm sm:text-[15px] leading-snug line-clamp-2">
                     {{ desc }}
                 </p>
             </div>
 
-            <div
-                class="hidden sm:flex flex-col items-end gap-3 shrink-0 relative z-10"
-            >
-                <div
-                    class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-teal-500 group-hover:text-onyx transition-all duration-300"
-                >
-                    <ChevronRight
-                        class="w-5 h-5 text-muted group-hover:text-onyx-dark transition-colors"
-                    />
+            <div class="relative hidden sm:flex items-center gap-5 shrink-0">
+                <div v-if="avgAttempts" class="flex flex-col items-end">
+                    <span class="font-mono text-sm text-white font-medium tabular-nums">
+                        {{ avgAttempts }}
+                    </span>
+                    <span
+                        class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
+                    >
+                        avg
+                    </span>
                 </div>
+
+                <div v-if="nextIn" class="flex flex-col items-end">
+                    <span class="font-mono text-sm text-white font-medium tabular-nums">
+                        {{ nextIn }}
+                    </span>
+                    <span
+                        class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
+                    >
+                        next in
+                    </span>
+                </div>
+
+                <div
+                    class="w-9 h-9 rounded-full bg-white/5 border border-white/10 text-muted flex items-center justify-center transition-all duration-300"
+                    :class="colorClasses.ctaBg"
+                >
+                    <ArrowRight class="w-4 h-4" stroke-width="2" />
+                </div>
+            </div>
+
+            <div
+                v-if="avgAttempts && nextIn"
+                class="sm:hidden absolute right-5 top-5 flex items-center gap-3 font-mono text-[10px] uppercase tracking-wider text-muted/70"
+            >
+                <span>{{ avgAttempts }} avg</span>
+                <span>·</span>
+                <span>{{ nextIn }}</span>
             </div>
         </div>
     </Link>
 </template>
-
-<style scoped>
-@keyframes shimmer {
-    100% {
-        transform: translateX(300%) skewX(-12deg);
-    }
-}
-.animate-shimmer {
-    animation: shimmer 1.5s infinite;
-}
-</style>

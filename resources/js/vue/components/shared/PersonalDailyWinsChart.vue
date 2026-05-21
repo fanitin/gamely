@@ -12,6 +12,7 @@ import {
     Tooltip,
     type ChartData,
     type ChartOptions,
+    type ScriptableScaleContext,
 } from "chart.js";
 import type { PersonalMode } from "@/vue/composables/usePersonalStats";
 
@@ -25,11 +26,17 @@ const { t } = useI18n();
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Legend, Tooltip);
 
-const modes: Array<{ key: PersonalMode; color: string }> = [
-    { key: "classic", color: "#14b8a6" },
-    { key: "game_screenshots", color: "#f59e0b" },
-    { key: "character", color: "#3b82f6" },
-];
+function cssVar(name: string): string {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+type ModeEntry = { key: PersonalMode; color: string };
+
+const modes = computed<ModeEntry[]>(() => [
+    { key: "classic", color: cssVar("--color-mode-classic") },
+    { key: "game_screenshots", color: cssVar("--color-mode-screens") },
+    { key: "character", color: cssVar("--color-mode-character") },
+]);
 
 const sortedDates = computed(() =>
     Object.keys(props.dailyAttempts)
@@ -49,7 +56,7 @@ const labels = computed(() => sortedDates.value.map(formatDate));
 
 const chartData = computed<ChartData<"line">>(() => ({
     labels: labels.value,
-    datasets: modes.map((mode) => ({
+    datasets: modes.value.map((mode) => ({
         label: t(`modes.${mode.key}.title`),
         data: sortedDates.value.map((date) => Number(props.dailyAttempts[date]?.[mode.key]) || 0),
         borderColor: mode.color,
@@ -58,7 +65,7 @@ const chartData = computed<ChartData<"line">>(() => ({
         pointRadius: 4,
         pointHoverRadius: 6,
         pointBorderWidth: 2,
-        pointBorderColor: "#0f172a",
+        pointBorderColor: cssVar("--color-onyx-dark"),
         tension: 0.35,
         fill: false,
     })),
@@ -124,7 +131,7 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
                 maxTicksLimit: 8,
                 maxRotation: 0,
                 minRotation: 0,
-                font: (ctx) => ({
+                font: (ctx: ScriptableScaleContext) => ({
                     size: ctx.chart.width < 700 ? 12 : 14,
                     weight: "600",
                 }),
@@ -138,7 +145,7 @@ const chartOptions = computed<ChartOptions<"line">>(() => ({
             ticks: {
                 color: "rgba(255, 255, 255, 0.78)",
                 precision: 0,
-                font: (ctx) => ({
+                font: (ctx: ScriptableScaleContext) => ({
                     size: ctx.chart.width < 700 ? 12 : 14,
                     weight: "600",
                 }),
