@@ -92,7 +92,11 @@
         "distribution_title": "Распределение побед за сегодня",
         "total_players": "Игроков угадало: {count}",
         "copy": "Скопировать результат",
-        "share_header": "Я угадал {date} {name} ({mode}) за {attempts} попыток!"
+        "share_header": "Я угадал {date} {name} ({mode}) за {attempts} попыток!",
+        "your_tries": "Ваши попытки",
+        "best": "Лучший сегодня",
+        "average": "Среднее",
+        "faster_than": "быстрее {percent}% угадавших"
     },
     "footer": {
         "privacy": "Конфиденциальность",

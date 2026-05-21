@@ -33,38 +33,51 @@ class StatsService
 
     public function getModeDistribution(GameMode $mode, string $date): array
     {
-        $challenge = DailyChallenge::query()
-            ->with('stats')
-            ->forMode($mode)
-            ->forDate($date)
-            ->first();
+        $cacheKey = "mode_distribution_{$mode->value}_{$date}";
 
-        if (! $challenge || ! $challenge->stats) {
+        return Cache::remember($cacheKey, 1800, function () use ($mode, $date) {
+            $challenge = DailyChallenge::query()
+                ->with('stats')
+                ->forMode($mode)
+                ->forDate($date)
+                ->first();
+
+            if (! $challenge || ! $challenge->stats) {
+                return [
+                    'mode' => $mode->value,
+                    'date' => $date,
+                    'total_players' => 0,
+                    'average' => null,
+                    'bins' => [],
+                ];
+            }
+
+            $distribution = $challenge->stats->attempts_distribution ?? [];
+            $bins = [];
+            foreach ($distribution as $attempts => $players) {
+                $bins[] = [
+                    'attempts' => (int) $attempts,
+                    'players' => (int) $players,
+                ];
+            }
+
+            usort($bins, fn ($a, $b) => $a['attempts'] <=> $b['attempts']);
+
+            $totalPlayers = $challenge->stats->total_players ?? 0;
+            $average = null;
+            if ($totalPlayers > 0) {
+                $sum = array_sum(array_map(fn ($b) => $b['attempts'] * $b['players'], $bins));
+                $average = round($sum / $totalPlayers, 1);
+            }
+
             return [
                 'mode' => $mode->value,
                 'date' => $date,
-                'total_players' => 0,
-                'bins' => [],
+                'total_players' => $totalPlayers,
+                'average' => $average,
+                'bins' => $bins,
             ];
-        }
-
-        $distribution = $challenge->stats->attempts_distribution ?? [];
-        $bins = [];
-        foreach ($distribution as $attempts => $players) {
-            $bins[] = [
-                'attempts' => (int) $attempts,
-                'players' => (int) $players,
-            ];
-        }
-
-        usort($bins, fn ($a, $b) => $a['attempts'] <=> $b['attempts']);
-
-        return [
-            'mode' => $mode->value,
-            'date' => $date,
-            'total_players' => $challenge->stats->total_players ?? 0,
-            'bins' => $bins,
-        ];
+        });
     }
 
     public function getSolvedTodaySnapshot(string $date): array

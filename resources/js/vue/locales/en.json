@@ -92,7 +92,11 @@
         "distribution_title": "Today's win distribution",
         "total_players": "Players solved: {count}",
         "copy": "Copy result",
-        "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!"
+        "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!",
+        "your_tries": "Your tries",
+        "best": "Best today",
+        "average": "Average",
+        "faster_than": "faster than {percent}% of solvers"
     },
     "footer": {
         "privacy": "Privacy",

@@ -102,7 +102,11 @@
         "distribution_title": "Розподіл перемог за сьогодні",
         "total_players": "Гравців вгадало: {count}",
         "copy": "Скопіювати результат",
-        "share_header": "Я вгадав {date} {name} ({mode}) за {attempts} спроб!"
+        "share_header": "Я вгадав {date} {name} ({mode}) за {attempts} спроб!",
+        "your_tries": "Ваші спроби",
+        "best": "Найкращий сьогодні",
+        "average": "Середнє",
+        "faster_than": "швидше {percent}% угадувачів"
     },
     "footer": {
         "privacy": "Конфіденційність",
