@@ -279,7 +279,7 @@ watch(
 
             <div class="pt-5">
                 <div class="rounded-xl px-4 py-4 bg-black/25 border border-white/10">
-                    <pre class="font-mono text-[12.5px] leading-[1.55] whitespace-pre text-center text-white/85 overflow-x-auto">{{ shareText }}</pre>
+                    <pre class="font-mono text-[12.5px] leading-[1.55] whitespace-pre-wrap wrap-break-word text-center text-white/85">{{ shareText }}</pre>
                 </div>
                 <div class="mt-4 flex items-center justify-end">
                     <button

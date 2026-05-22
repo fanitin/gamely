@@ -50,7 +50,9 @@ const monthShortKey = (date: Date): string =>
 const formatMonth = (date: Date): string =>
     `${t(monthShortKey(date))} ${String(date.getFullYear()).slice(2)}`;
 
-interface Point { date: Date; value: number | null; }
+interface Point { date: Date; value: number | null; rawValue: number | null; }
+
+const Y_CAP = 25;
 
 const sortedRows = computed<Point[]>(() => {
     const rows: Point[] = [];
@@ -62,11 +64,14 @@ const sortedRows = computed<Point[]>(() => {
                 return;
             }
             const raw = props.dailyAttempts[dateKey]?.[props.mode];
-            const value = raw != null && Number(raw) > 0 ? Number(raw) : null;
-            rows.push({ date, value });
+            const rawValue = raw != null && Number(raw) > 0 ? Number(raw) : null;
+            rows.push({ date, value: rawValue, rawValue });
         });
     return rows;
 });
+
+const capValue = (value: number | null): number | null =>
+    value == null ? value : Math.min(value, Y_CAP);
 
 const displayed = computed<{ rows: Point[]; bucket: "day" | "month" }>(() => {
     if (props.range === "365") {
@@ -74,8 +79,8 @@ const displayed = computed<{ rows: Point[]; bucket: "day" | "month" }>(() => {
         sortedRows.value.forEach((row) => {
             const key = `${row.date.getFullYear()}-${row.date.getMonth()}`;
             const bucket = dataByMonth.get(key) ?? { sum: 0, count: 0 };
-            if (row.value != null) {
-                bucket.sum += row.value;
+            if (row.rawValue != null) {
+                bucket.sum += row.rawValue;
                 bucket.count += 1;
             }
             dataByMonth.set(key, bucket);
@@ -88,9 +93,11 @@ const displayed = computed<{ rows: Point[]; bucket: "day" | "month" }>(() => {
             const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
             const key = `${d.getFullYear()}-${d.getMonth()}`;
             const g = dataByMonth.get(key);
+            const rawAvg = g && g.count > 0 ? Number((g.sum / g.count).toFixed(1)) : 0;
             rows.push({
                 date: d,
-                value: g && g.count > 0 ? Number((g.sum / g.count).toFixed(1)) : 0,
+                value: capValue(rawAvg),
+                rawValue: rawAvg,
             });
         }
         return { rows, bucket: "month" };
@@ -101,15 +108,16 @@ const displayed = computed<{ rows: Point[]; bucket: "day" | "month" }>(() => {
     today.setHours(0, 0, 0, 0);
     const dataByDay = new Map<string, number>();
     sortedRows.value.forEach((row) => {
-        if (row.value != null) {
-            dataByDay.set(row.date.toDateString(), row.value);
+        if (row.rawValue != null) {
+            dataByDay.set(row.date.toDateString(), row.rawValue);
         }
     });
     const rows: Point[] = [];
     for (let i = days - 1; i >= 0; i--) {
         const d = new Date(today);
         d.setDate(today.getDate() - i);
-        rows.push({ date: d, value: dataByDay.get(d.toDateString()) ?? 0 });
+        const rawValue = dataByDay.get(d.toDateString()) ?? 0;
+        rows.push({ date: d, value: capValue(rawValue), rawValue });
     }
     return { rows, bucket: "day" };
 });
@@ -124,13 +132,13 @@ const chartData = computed<ChartData<"line">>(() => ({
             data: displayed.value.rows.map((r) => r.value),
             borderColor: props.color,
             backgroundColor: props.color,
-            borderWidth: 4,
-            pointRadius: 4,
-            pointHoverRadius: 6,
+            borderWidth: 3,
+            pointRadius: 3,
+            pointHoverRadius: 5,
             pointBorderWidth: 2,
             pointBorderColor: "#0f172a",
             pointBackgroundColor: props.color,
-            tension: 0.35,
+            tension: 0,
             fill: false,
         },
     ],
@@ -139,7 +147,9 @@ const chartData = computed<ChartData<"line">>(() => ({
 const chartOptions = computed(() => ({
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 250 },
+    animation: false,
+    animations: { colors: false, x: false, y: false },
+    transitions: { active: { animation: { duration: 100 } } },
     interaction: { mode: "index", intersect: false },
     plugins: {
         legend: { display: false },
@@ -165,7 +175,9 @@ const chartOptions = computed(() => ({
                     return formatFullDay(row.date);
                 },
                 label: (item) => {
-                    const v = item.parsed.y;
+                    const row = displayed.value.rows[item.dataIndex];
+                    if (!row) return "";
+                    const v = row.rawValue;
                     if (v == null) return "";
                     const suffix =
                         displayed.value.bucket === "month"
@@ -194,11 +206,16 @@ const chartOptions = computed(() => ({
         },
         y: {
             beginAtZero: true,
+            suggestedMax: Y_CAP,
             grid: { color: "rgba(255, 255, 255, 0.08)" },
             border: { display: false },
             ticks: {
                 color: "rgba(255, 255, 255, 0.6)",
                 precision: 0,
+                callback: (value: number | string) => {
+                    const num = Number(value);
+                    return num >= Y_CAP ? `${Y_CAP}+` : num;
+                },
                 font: (ctx) => ({
                     size: ctx.chart.width < 700 ? 12 : 13,
                     weight: "600",

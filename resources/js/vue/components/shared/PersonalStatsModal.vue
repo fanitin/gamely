@@ -111,6 +111,13 @@ watch(
                 </h3>
 
                 <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:p-4">
+                    <p class="hidden md:inline-flex items-center gap-2 text-[12px] text-muted font-medium mb-3">
+                        <MousePointerClick class="w-3.5 h-3.5" stroke-width="1.75" />
+                        {{ t('personal_stats.focus_hint') }}
+                        <template v-if="selectedRange === '365'">
+                            · {{ t('personal_stats.weekly_averages') }}
+                        </template>
+                    </p>
                     <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                         <div
                             class="inline-flex p-1 bg-black/25 border border-white/5 rounded-full"
@@ -141,14 +148,6 @@ watch(
                                 {{ t(mode.labelKey) }}
                             </button>
                         </div>
-
-                        <span class="hidden md:inline-flex items-center gap-2 text-[13px] text-muted font-medium">
-                            <MousePointerClick class="w-3.5 h-3.5" stroke-width="1.75" />
-                            {{ t('personal_stats.focus_hint') }}
-                            <template v-if="selectedRange === '365'">
-                                · {{ t('personal_stats.weekly_averages') }}
-                            </template>
-                        </span>
 
                         <div
                             class="inline-flex p-[3px] bg-black/25 border border-white/5 rounded-full"
