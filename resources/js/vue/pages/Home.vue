@@ -91,14 +91,14 @@ const nextIn = computed(() => {
     <AppLayout>
         <Head :title="t('nav.home')" />
 
-        <div class="max-w-2xl mx-auto px-4 py-10 sm:py-14 flex flex-col items-center">
-            <div class="self-start mb-10 sm:mb-12">
+        <div class="max-w-2xl mx-auto px-4 py-6 sm:py-14 flex flex-col items-center">
+            <div class="self-stretch sm:self-start text-center sm:text-left mb-6 sm:mb-12">
                 <h1
-                    class="text-5xl sm:text-6xl font-black mb-3 text-white tracking-tighter leading-none"
+                    class="text-4xl sm:text-6xl font-black mb-2 sm:mb-3 text-white tracking-tighter leading-none"
                 >
                     Game<span class="text-teal-400">ly</span>
                 </h1>
-                <p class="text-muted text-base sm:text-lg max-w-md leading-relaxed">
+                <p class="text-muted text-sm sm:text-lg max-w-md leading-relaxed mx-auto sm:mx-0">
                     {{ t("nav.site_description") }}
                 </p>
             </div>

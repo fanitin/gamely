@@ -61,7 +61,7 @@ watch(
     >
         <div class="space-y-7">
             <div
-                class="grid grid-cols-2 sm:grid-cols-5 border-y border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10"
+                class="hidden sm:grid grid-cols-2 sm:grid-cols-5 border-y border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10"
             >
                 <div class="px-3 py-4 sm:py-5 text-center">
                     <p class="text-3xl font-semibold tracking-tight tabular-nums text-white leading-none">
@@ -149,7 +149,7 @@ watch(
                         </div>
 
                         <div
-                            class="inline-flex p-[3px] bg-black/25 border border-white/5 rounded-full"
+                            class="hidden sm:inline-flex p-[3px] bg-black/25 border border-white/5 rounded-full"
                             role="tablist"
                             :aria-label="t('personal_stats.pick_range')"
                         >
@@ -171,6 +171,14 @@ watch(
                     </div>
 
                     <PersonalDailyWinsChart
+                        class="sm:hidden"
+                        :daily-attempts="viewModel.daily_attempts"
+                        :mode="selectedMode"
+                        range="7"
+                        :color="MODE_OPTIONS.find((m) => m.key === selectedMode)?.color ?? '#14B8A6'"
+                    />
+                    <PersonalDailyWinsChart
+                        class="hidden sm:block"
                         :daily-attempts="viewModel.daily_attempts"
                         :mode="selectedMode"
                         :range="selectedRange"

@@ -22,7 +22,7 @@ const showDevTools = import.meta.env.DEV;
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col bg-onyx-dark text-white relative">
+    <div class="min-h-screen flex flex-col bg-onyx-dark text-white relative overflow-x-hidden">
         <AppToastStack />
         <div
             class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
@@ -36,7 +36,7 @@ const showDevTools = import.meta.env.DEV;
 
         <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark/60 backdrop-blur-xl">
             <div
-                class="max-w-5xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6"
+                class="max-w-7xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6"
             >
                 <Link
                     href="/"
@@ -48,36 +48,36 @@ const showDevTools = import.meta.env.DEV;
                     >
                 </Link>
 
-                <div class="flex items-center gap-1 sm:gap-2">
+                <div class="flex items-center gap-0.5 sm:gap-2">
                     <a
                         href="/games"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.games')"
                     >
-                        <Library class="w-5 h-5 mb-1" />
-                        <span class="text-[10px] font-medium leading-none">{{
+                        <Library class="w-5 h-5 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
                             t("nav.games")
                         }}</span>
                     </a>
 
                     <button
                         @click="isPersonalStatsOpen = true"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.stats')"
                     >
-                        <BarChart3 class="w-5 h-5 mb-1" />
-                        <span class="text-[10px] font-medium leading-none">{{
+                        <BarChart3 class="w-5 h-5 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
                             t("nav.stats")
                         }}</span>
                     </button>
 
                     <button
                         @click="isHelpOpen = true"
-                        class="flex flex-col items-center justify-center min-w-[3.5rem] h-12 text-muted hover:text-white rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.how_to_play')"
                     >
-                        <CircleHelp class="w-5 h-5 mb-1" />
-                        <span class="text-[10px] font-medium leading-none">{{
+                        <CircleHelp class="w-5 h-5 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
                             t("nav.how_to_play")
                         }}</span>
                     </button>

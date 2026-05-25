@@ -10,13 +10,9 @@ import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import CharacterImage from "@/vue/components/game/CharacterImage.vue";
 import { useCharacterGame } from "@/vue/composables/useCharacterGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
-import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
-defineProps<{
-    solvedToday: number;
-}>();
 const {
     attempts,
     isWon,
@@ -61,14 +57,16 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
     <AppLayout>
         <Head :title="t('modes.character.title')" />
 
-        <div class="max-w-5/6 mx-auto px-4 py-8">
-            <div class="flex items-center justify-between mb-12">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12"
+            >
                 <AppButton
                     :as="Link"
                     href="/"
                     variant="ghost"
                     size="sm"
-                    class="group"
+                    class="group self-start"
                 >
                     <ArrowLeft
                         class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"
@@ -78,16 +76,16 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
                 <div class="text-center flex-1">
                     <h1
-                        class="text-3xl font-black text-white mb-2 uppercase tracking-tighter"
+                        class="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter"
                     >
                         {{ t("modes.character.title") }}
                     </h1>
-                    <p class="text-muted">
+                    <p class="text-muted text-sm sm:text-base">
                         {{ t("modes.character.description") }}
                     </p>
                 </div>
 
-                <div class="w-[120px]"></div>
+                <div class="hidden sm:block w-[120px]"></div>
             </div>
 
             <div
@@ -155,7 +153,6 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                                 :focus-trigger="attemptsCount"
                                 @select="handleSelect"
                             />
-                            <TodaySolvedCard :count="solvedToday" />
                         </div>
                     </div>
                 </div>

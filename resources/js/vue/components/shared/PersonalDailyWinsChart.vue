@@ -17,7 +17,7 @@ import {
 import type { PersonalMode } from "@/vue/composables/usePersonalStats";
 
 type DailyAttempts = Record<string, Partial<Record<PersonalMode, number>>>;
-type RangeKey = "30" | "90" | "365";
+type RangeKey = "7" | "30" | "90" | "365";
 
 const props = defineProps<{
     dailyAttempts: DailyAttempts;

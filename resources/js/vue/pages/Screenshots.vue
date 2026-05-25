@@ -14,13 +14,9 @@ import GuessInput from "@/vue/components/game/GuessInput.vue";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useScreenshotsGame } from "@/vue/composables/useScreenshotsGame";
-import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
-defineProps<{
-    solvedToday: number;
-}>();
 const {
     attempts,
     attemptsCount,
@@ -70,14 +66,16 @@ const progressPercentage = computed(() => {
     <AppLayout>
         <Head :title="t('modes.game_screenshots.title')" />
 
-        <div class="max-w-5xl mx-auto px-4 py-8">
-            <div class="flex items-center justify-between mb-8">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+            >
                 <AppButton
                     :as="Link"
                     href="/"
                     variant="ghost"
                     size="sm"
-                    class="group"
+                    class="group self-start"
                 >
                     <ArrowLeft
                         class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"
@@ -87,16 +85,16 @@ const progressPercentage = computed(() => {
 
                 <div class="text-center flex-1">
                     <h1
-                        class="text-3xl font-black text-white mb-2 uppercase tracking-tighter"
+                        class="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter"
                     >
                         {{ t("modes.game_screenshots.title") }}
                     </h1>
-                    <p class="text-muted">
+                    <p class="text-muted text-sm sm:text-base">
                         {{ t("modes.game_screenshots.description") }}
                     </p>
                 </div>
 
-                <div class="w-[120px]"></div>
+                <div class="hidden sm:block w-[120px]"></div>
             </div>
 
             <div
@@ -246,7 +244,6 @@ const progressPercentage = computed(() => {
                         :auto-focus="false"
                         @select="handleSelect"
                     />
-                    <TodaySolvedCard :count="solvedToday" />
                 </div>
 
                 <div v-if="isLoading" class="text-center mb-8">

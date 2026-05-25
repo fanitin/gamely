@@ -7,7 +7,7 @@ const { t } = useI18n();
     <footer
         class="mt-auto border-t border-white/5 bg-onyx-dark/50 relative z-10 select-none"
     >
-        <div class="max-w-5xl mx-auto px-4 py-4">
+        <div class="max-w-7xl mx-auto px-4 py-4">
             <div
                 class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted/80"
             >

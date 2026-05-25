@@ -62,10 +62,10 @@ const displayValue = computed(() => {
     >
         <div
             v-if="label"
-            class="lg:hidden bg-onyx-dark/40 px-2 py-1 border-b border-black/20"
+            class="lg:hidden flex items-center bg-onyx-dark/40 px-2 h-7 border-b border-black/20 shrink-0"
         >
             <span
-                class="text-[10px] uppercase font-black tracking-widest text-white/70"
+                class="text-[10px] uppercase font-black tracking-widest text-white/70 truncate"
             >
                 {{ label }}
             </span>
