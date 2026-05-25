@@ -12,12 +12,26 @@ class GenerateDailyChallenges extends Command
 {
     protected $signature = 'challenges:generate {date?}';
 
-    protected $description = 'Generate daily challenges for specified date (tomorrow by default)';
+    protected $description = 'Generate daily challenges for specified date (tomorrow by default; also backfills today)';
 
     public function handle(): void
     {
-        $date = $this->argument('date') ?? today()->toDateString();
+        if ($explicit = $this->argument('date')) {
+            $this->generateForDate($explicit);
 
+            $this->info("\nDone!");
+
+            return;
+        }
+
+        $this->generateForDate(today()->toDateString());
+        $this->generateForDate(today()->addDay()->toDateString());
+
+        $this->info("\nDone!");
+    }
+
+    private function generateForDate(string $date): void
+    {
         $this->info("Generating challenges for {$date}...");
 
         foreach (GameMode::cases() as $mode) {
@@ -44,8 +58,6 @@ class GenerateDailyChallenges extends Command
                 $this->error("✗ Failed to generate challenge for {$mode->value}");
             }
         }
-
-        $this->info("\nDone!");
     }
 
     private function generateChallenge(GameMode $mode, string $date): ?DailyChallenge

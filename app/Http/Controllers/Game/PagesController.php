@@ -15,6 +15,7 @@ class PagesController extends Controller
     {
         return Inertia::render('Home', [
             'avgAttempts' => $stats->getAvgAttemptsPerMode(),
+            'nextResetAt' => today()->addDay()->toIso8601String(),
         ]);
     }
 

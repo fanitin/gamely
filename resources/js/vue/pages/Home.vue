@@ -14,6 +14,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
     avgAttempts: { classic: number | null; game_screenshots: number | null; character: number | null };
+    nextResetAt: string;
 }>();
 
 const FALLBACK_AVG = { classic: 4.2, game_screenshots: 5.8, character: 6.1 };
@@ -70,17 +71,10 @@ onBeforeUnmount(() => {
     if (timer) clearInterval(timer);
 });
 
+const nextResetMs = computed(() => Date.parse(props.nextResetAt));
+
 const nextIn = computed(() => {
-    const d = new Date(now.value);
-    const next = Date.UTC(
-        d.getUTCFullYear(),
-        d.getUTCMonth(),
-        d.getUTCDate() + 1,
-        0,
-        0,
-        0,
-    );
-    const diff = Math.max(0, next - now.value);
+    const diff = Math.max(0, nextResetMs.value - now.value);
     const h = Math.floor(diff / 3_600_000);
     const m = Math.floor((diff % 3_600_000) / 60_000);
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
