@@ -110,9 +110,8 @@ watch(
                     {{ t("personal_stats.daily_attempts") }}
                 </h3>
 
-                <div class="rounded-xl border border-white/10 bg-white/[0.03] p-3 sm:p-4">
+                <div class="rounded-xl border border-white/10 bg-white/3 p-3 sm:p-4">
                     <p class="hidden md:inline-flex items-center gap-2 text-[12px] text-muted font-medium mb-3">
-                        <MousePointerClick class="w-3.5 h-3.5" stroke-width="1.75" />
                         {{ t('personal_stats.focus_hint') }}
                         <template v-if="selectedRange === '365'">
                             · {{ t('personal_stats.weekly_averages') }}
