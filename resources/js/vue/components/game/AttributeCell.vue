@@ -16,15 +16,15 @@ const props = defineProps<{
 const bgColor = computed(() => {
     switch (props.result) {
         case "exact":
-            return "bg-forest-500";
+            return "bg-forest-500 border-forest-600 shadow-[inset_0_0_0_2px_var(--color-forest-400)]";
         case "close":
-            return "bg-gold-500";
+            return "bg-gold-500 border-gold-600 shadow-[inset_0_0_0_2px_var(--color-gold-400)]";
         case "wrong":
-            return "bg-crimson-500";
+            return "bg-crimson-500 border-crimson-600 shadow-[inset_0_0_0_2px_var(--color-crimson-400)]";
         case "missing":
-            return "bg-onyx-light border border-white/10";
+            return "bg-onyx-light border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)]";
         default:
-            return "bg-crimson-500";
+            return "bg-crimson-500 border-crimson-600 shadow-[inset_0_0_0_2px_var(--color-crimson-400)]";
     }
 });
 
@@ -58,7 +58,7 @@ const displayValue = computed(() => {
     <div
         :class="[
             bgColor,
-            'relative rounded-xl p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
+            'relative border-[3px] p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
         ]"
     >
         <div

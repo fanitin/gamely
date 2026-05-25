@@ -16,17 +16,17 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const bgColorClass = computed(() => {
-    if (props.isHeader) return "bg-transparent";
+    if (props.isHeader) return "bg-transparent border-transparent shadow-none";
 
     switch (props.result) {
         case "exact":
-            return "bg-success-500";
+            return "bg-success-500 border-forest-600 shadow-[inset_0_0_0_2px_var(--color-forest-400)]";
         case "close":
-            return "bg-warning-500";
+            return "bg-warning-500 border-gold-600 shadow-[inset_0_0_0_2px_var(--color-gold-400)]";
         case "wrong":
-            return "bg-danger-500";
+            return "bg-danger-500 border-crimson-600 shadow-[inset_0_0_0_2px_var(--color-crimson-400)]";
         default:
-            return "bg-danger-500";
+            return "bg-danger-500 border-crimson-600 shadow-[inset_0_0_0_2px_var(--color-crimson-400)]";
     }
 });
 
@@ -62,7 +62,8 @@ const displayValue = computed(() => {
     <div
         :class="[
             bgColorClass,
-            'relative rounded-lg p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
+            isHeader ? '' : 'border-[3px]',
+            'relative p-3 text-white transition-all duration-300 min-h-[80px] flex items-center justify-center overflow-hidden',
         ]"
     >
         <!-- Стрелка на фоне с затемнением -->

@@ -193,7 +193,7 @@ function buildGameModeValue() {
 <template>
     <div class="grid gap-2 animate-fade-in items-stretch" :class="gridClass">
         <div
-            class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center justify-center min-h-[80px] p-3"
+            class="bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] flex items-center justify-center min-h-[80px] p-3"
         >
             <span class="text-lg font-black text-teal-500"
                 >#{{ attemptNumber }}</span
@@ -201,7 +201,7 @@ function buildGameModeValue() {
         </div>
 
         <div
-            class="rounded-xl bg-onyx-light border border-onyx-light/50 flex items-center gap-3 min-h-[80px] p-3 overflow-hidden"
+            class="bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] flex items-center gap-3 min-h-[80px] p-3 overflow-hidden"
         >
             <div
                 v-if="attempt.guessed.cover_url || attempt.guessed.mug_shot_url"
@@ -213,7 +213,7 @@ function buildGameModeValue() {
                         attempt.guessed.mug_shot_url
                     "
                     :alt="attempt.guessed.display_name || attempt.guessed.name"
-                    class="w-full h-full rounded-lg object-cover"
+                    class="w-full h-full object-cover"
                 />
             </div>
             <div class="min-w-0 flex-1">
