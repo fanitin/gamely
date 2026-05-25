@@ -135,7 +135,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                     <div class="flex-1">
                         <div
                             v-if="hints.length > 0 && !isWon"
-                            class="mb-6 grid grid-cols-3 gap-3"
+                            class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
                         >
                             <HintCard
                                 v-for="hint in hints"
@@ -171,56 +171,54 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                         {{ t("game.your_attempts") }}
                     </h2>
 
-                    <div class="overflow-x-auto pb-4">
-                        <div class="min-w-[900px] space-y-3">
+                    <div class="space-y-3">
+                        <div
+                            class="hidden lg:grid grid-cols-[50px_80px_repeat(5,1fr)] gap-2 mb-2"
+                        >
                             <div
-                                class="grid grid-cols-[50px_80px_repeat(5,1fr)] gap-2 mb-2"
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
                             >
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    #
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.character") }}
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.franchises") }}
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.collections") }}
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.gender") }}
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.species") }}
-                                </div>
-                                <div
-                                    class="text-center text-xs font-black uppercase tracking-wider text-muted"
-                                >
-                                    {{ t("attributes.first_appearance_year") }}
-                                </div>
+                                #
                             </div>
-
-                            <AttemptRow
-                                v-for="(attempt, index) in reversedAttempts"
-                                :key="index"
-                                mode="character"
-                                :attempt="attempt"
-                                :attempt-number="attempts.length - index"
-                            />
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.character") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.franchises") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.collections") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.gender") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.species") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.first_appearance_year") }}
+                            </div>
                         </div>
+
+                        <AttemptRow
+                            v-for="(attempt, index) in reversedAttempts"
+                            :key="index"
+                            mode="character"
+                            :attempt="attempt"
+                            :attempt-number="attempts.length - index"
+                        />
                     </div>
                 </div>
             </template>

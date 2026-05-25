@@ -117,7 +117,7 @@ const progressPercentage = computed(() => {
             <template v-else>
                 <div
                     v-if="hints.length > 0 && !isWon"
-                    class="mb-6 grid grid-cols-3 gap-3"
+                    class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
                 >
                     <HintCard
                         v-for="hint in hints"
@@ -262,7 +262,7 @@ const progressPercentage = computed(() => {
 
                     <div class="space-y-3">
                         <div
-                            class="grid grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px] gap-2"
+                            class="hidden lg:grid grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px] gap-2"
                         >
                             <div
                                 class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"

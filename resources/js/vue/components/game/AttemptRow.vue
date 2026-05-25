@@ -68,6 +68,19 @@ interface Attempt {
     };
 }
 
+interface MultiValue {
+    label: string;
+    value: string;
+}
+
+interface CellDescriptor {
+    key: string;
+    label: string;
+    result: "exact" | "close" | "wrong" | "missing";
+    value?: string | number | Array<MultiValue>;
+    arrow?: "up" | "down";
+}
+
 const props = withDefaults(
     defineProps<{
         attempt: Attempt;
@@ -79,14 +92,14 @@ const props = withDefaults(
     },
 );
 
-const gridClass = computed(() => {
+const desktopGridClass = computed(() => {
     if (props.mode === "screenshots") {
-        return "grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px]";
+        return "lg:grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px]";
     }
     if (props.mode === "character") {
-        return "grid-cols-[50px_80px_repeat(5,1fr)]";
+        return "lg:grid-cols-[50px_80px_repeat(5,1fr)]";
     }
-    return "grid-cols-[50px_80px_repeat(5,1fr)_80px_80px_90px]";
+    return "lg:grid-cols-[50px_80px_repeat(5,1fr)_80px_80px_90px]";
 });
 
 function formatArrayValue(
@@ -96,7 +109,7 @@ function formatArrayValue(
     return arr.map((item) => item.name).join(", ");
 }
 
-function buildDevelopersPublishersValue() {
+function buildDevelopersPublishersValue(): string | Array<MultiValue> {
     const developers = props.attempt.guessed.developers || [];
     const publishers = props.attempt.guessed.publishers || [];
 
@@ -116,26 +129,20 @@ function buildDevelopersPublishersValue() {
         return devNames;
     }
 
-    const result = [];
+    const result: Array<MultiValue> = [];
 
     if (developers.length > 0) {
-        result.push({
-            label: t("attributes.developer"),
-            value: devNames,
-        });
+        result.push({ label: t("attributes.developer"), value: devNames });
     }
 
     if (publishers.length > 0) {
-        result.push({
-            label: t("attributes.publisher"),
-            value: pubNames,
-        });
+        result.push({ label: t("attributes.publisher"), value: pubNames });
     }
 
     return result.length > 0 ? result : "-";
 }
 
-function buildFranchisesCollectionsValue() {
+function buildFranchisesCollectionsValue(): string | Array<MultiValue> {
     const franchises = props.attempt.guessed.franchises || [];
     const collections = props.attempt.guessed.collections || [];
 
@@ -158,187 +165,222 @@ function buildFranchisesCollectionsValue() {
         return franchiseNames;
     }
 
-    const result = [];
+    const result: Array<MultiValue> = [];
 
     if (franchises.length > 0) {
-        result.push({
-            label: t("attributes.franchise"),
-            value: franchiseNames,
-        });
+        result.push({ label: t("attributes.franchise"), value: franchiseNames });
     }
 
     if (collections.length > 0) {
-        result.push({
-            label: t("attributes.collection"),
-            value: collectionNames,
-        });
+        result.push({ label: t("attributes.collection"), value: collectionNames });
     }
 
     return result.length > 0 ? result : "-";
 }
 
-function buildPerspectiveValue() {
+function buildPerspectiveValue(): string {
     const perspectives = props.attempt.guessed.player_perspectives || [];
     if (perspectives.length === 0) return "-";
     return perspectives.map((p) => p.name).join(", ");
 }
 
-function buildGameModeValue() {
+function buildGameModeValue(): string {
     const modes = props.attempt.guessed.game_modes || [];
     if (modes.length === 0) return "-";
     return modes.map((m) => m.name).join(", ");
 }
+
+const coverUrl = computed(
+    () => props.attempt.guessed.cover_url || props.attempt.guessed.mug_shot_url,
+);
+
+const guessedName = computed(
+    () => props.attempt.guessed.display_name || props.attempt.guessed.name,
+);
+
+const cells = computed<CellDescriptor[]>(() => {
+    const c = props.attempt.comparison;
+
+    if (props.mode === "screenshots") {
+        return [
+            {
+                key: "release_year",
+                label: t("attributes.release_year"),
+                result: c.release_year?.result || "wrong",
+                value: c.release_year?.value,
+                arrow: c.release_year?.arrow,
+            },
+            {
+                key: "franchises_collections",
+                label: t("attributes.franchises_collections"),
+                result: c.franchises_collections?.result || "wrong",
+                value: buildFranchisesCollectionsValue(),
+            },
+            {
+                key: "developers_publishers",
+                label: t("attributes.developers_publishers"),
+                result: c.developers_publishers?.result || "wrong",
+                value: buildDevelopersPublishersValue(),
+            },
+            {
+                key: "popularity",
+                label: t("attributes.popularity"),
+                result: c.popularity?.result || "wrong",
+                value: c.popularity?.value,
+                arrow: c.popularity?.arrow,
+            },
+            {
+                key: "franchise_start_year",
+                label: t("attributes.franchise_year"),
+                result: c.franchise_start_year?.result || "wrong",
+                value: c.franchise_start_year?.value,
+                arrow: c.franchise_start_year?.arrow,
+            },
+        ];
+    }
+
+    if (props.mode === "character") {
+        return [
+            {
+                key: "franchises",
+                label: t("attributes.franchises"),
+                result: c.franchises?.result || "wrong",
+                value: formatArrayValue(props.attempt.guessed.franchises),
+            },
+            {
+                key: "collections",
+                label: t("attributes.collections"),
+                result: c.collections?.result || "wrong",
+                value: formatArrayValue(props.attempt.guessed.collections),
+            },
+            {
+                key: "gender",
+                label: t("attributes.gender"),
+                result: c.gender?.result || "wrong",
+                value: props.attempt.guessed.gender,
+            },
+            {
+                key: "species",
+                label: t("attributes.species"),
+                result: c.species?.result || "wrong",
+                value: props.attempt.guessed.species,
+            },
+            {
+                key: "first_appearance_year",
+                label: t("attributes.first_appearance_year"),
+                result: c.first_appearance_year?.result || "wrong",
+                value: c.first_appearance_year?.value,
+                arrow: c.first_appearance_year?.arrow,
+            },
+        ];
+    }
+
+    return [
+        {
+            key: "genres",
+            label: t("attributes.genres"),
+            result: c.genres?.result || "wrong",
+            value: formatArrayValue(props.attempt.guessed.genres),
+        },
+        {
+            key: "developers_publishers",
+            label: t("attributes.developers_publishers"),
+            result: c.developers_publishers?.result || "wrong",
+            value: buildDevelopersPublishersValue(),
+        },
+        {
+            key: "franchises_collections",
+            label: t("attributes.franchises_collections"),
+            result: c.franchises_collections?.result || "wrong",
+            value: buildFranchisesCollectionsValue(),
+        },
+        {
+            key: "player_perspectives",
+            label: t("attributes.player_perspective"),
+            result: c.player_perspectives?.result || "wrong",
+            value: buildPerspectiveValue(),
+        },
+        {
+            key: "game_modes",
+            label: t("attributes.game_mode"),
+            result: c.game_modes?.result || "wrong",
+            value: buildGameModeValue(),
+        },
+        {
+            key: "rating",
+            label: t("attributes.rating"),
+            result: c.rating?.result || "wrong",
+            value: c.rating?.value,
+            arrow: c.rating?.arrow,
+        },
+        {
+            key: "release_year",
+            label: t("attributes.release_year"),
+            result: c.release_year?.result || "wrong",
+            value: c.release_year?.value,
+            arrow: c.release_year?.arrow,
+        },
+        {
+            key: "popularity",
+            label: t("attributes.popularity"),
+            result: c.popularity?.result || "wrong",
+            value: c.popularity?.value,
+            arrow: c.popularity?.arrow,
+        },
+    ];
+});
 </script>
 
 <template>
-    <div class="grid gap-2 animate-fade-in items-stretch" :class="gridClass">
+    <div
+        class="animate-fade-in bg-onyx-light/30 lg:bg-transparent rounded-2xl lg:rounded-none border lg:border-0 border-onyx-light/30 overflow-hidden lg:overflow-visible"
+    >
         <div
-            class="bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] flex items-center justify-center min-h-[80px] p-3"
-        >
-            <span class="text-lg font-black text-teal-500"
-                >#{{ attemptNumber }}</span
-            >
-        </div>
-
-        <div
-            class="bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] flex items-center gap-3 min-h-[80px] p-3 overflow-hidden"
+            class="grid gap-2 items-stretch grid-cols-1"
+            :class="desktopGridClass"
         >
             <div
-                v-if="attempt.guessed.cover_url || attempt.guessed.mug_shot_url"
-                class="w-14 h-14 shrink-0"
+                class="hidden lg:flex bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] items-center justify-center min-h-[80px] p-3"
             >
-                <img
-                    :src="
-                        attempt.guessed.cover_url ||
-                        attempt.guessed.mug_shot_url
-                    "
-                    :alt="attempt.guessed.display_name || attempt.guessed.name"
-                    class="w-full h-full object-cover"
+                <span class="text-lg font-black text-teal-500"
+                    >#{{ attemptNumber }}</span
+                >
+            </div>
+
+            <div
+                class="flex items-center gap-3 p-3 lg:bg-onyx-light lg:border-[3px] lg:border-onyx-dark lg:shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] lg:min-h-[80px] border-b border-onyx-light/30 lg:border-b-0 overflow-hidden"
+            >
+                <div v-if="coverUrl" class="w-12 h-12 lg:w-14 lg:h-14 shrink-0">
+                    <img
+                        :src="coverUrl"
+                        :alt="guessedName"
+                        class="w-full h-full object-cover rounded-md lg:rounded-none"
+                    />
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-bold text-white truncate">
+                        {{ guessedName }}
+                    </p>
+                </div>
+                <span
+                    class="lg:hidden text-base font-black text-teal-500 shrink-0"
+                    >#{{ attemptNumber }}</span
+                >
+            </div>
+
+            <div
+                class="grid grid-cols-2 gap-2 p-3 lg:p-0 lg:contents"
+            >
+                <AttributeCell
+                    v-for="cell in cells"
+                    :key="cell.key"
+                    :label="cell.label"
+                    :result="cell.result"
+                    :value="cell.value"
+                    :arrow="cell.arrow"
                 />
             </div>
-            <div class="min-w-0 flex-1">
-                <p class="text-sm font-bold text-white truncate">
-                    {{ attempt.guessed.display_name || attempt.guessed.name }}
-                </p>
-            </div>
         </div>
-
-        <template v-if="mode === 'classic'">
-            <AttributeCell
-                :result="attempt.comparison.genres?.result || 'wrong'"
-                :value="formatArrayValue(attempt.guessed.genres)"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.developers_publishers?.result || 'wrong'
-                "
-                :value="buildDevelopersPublishersValue()"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.franchises_collections?.result || 'wrong'
-                "
-                :value="buildFranchisesCollectionsValue()"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.player_perspectives?.result || 'wrong'
-                "
-                :value="buildPerspectiveValue()"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.game_modes?.result || 'wrong'"
-                :value="buildGameModeValue()"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.rating?.result || 'wrong'"
-                :value="attempt.comparison.rating?.value"
-                :arrow="attempt.comparison.rating?.arrow"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.release_year?.result || 'wrong'"
-                :value="attempt.comparison.release_year?.value"
-                :arrow="attempt.comparison.release_year?.arrow"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.popularity?.result || 'wrong'"
-                :value="attempt.comparison.popularity?.value"
-                :arrow="attempt.comparison.popularity?.arrow"
-            />
-        </template>
-
-        <template v-else-if="mode === 'screenshots'">
-            <AttributeCell
-                :result="attempt.comparison.release_year?.result || 'wrong'"
-                :value="attempt.comparison.release_year?.value"
-                :arrow="attempt.comparison.release_year?.arrow"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.franchises_collections?.result || 'wrong'
-                "
-                :value="buildFranchisesCollectionsValue()"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.developers_publishers?.result || 'wrong'
-                "
-                :value="buildDevelopersPublishersValue()"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.popularity?.result || 'wrong'"
-                :value="attempt.comparison.popularity?.value"
-                :arrow="attempt.comparison.popularity?.arrow"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.franchise_start_year?.result || 'wrong'
-                "
-                :value="attempt.comparison.franchise_start_year?.value"
-                :arrow="attempt.comparison.franchise_start_year?.arrow"
-            />
-        </template>
-
-        <template v-else-if="mode === 'character'">
-            <AttributeCell
-                :result="attempt.comparison.franchises?.result || 'wrong'"
-                :value="formatArrayValue(attempt.guessed.franchises)"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.collections?.result || 'wrong'"
-                :value="formatArrayValue(attempt.guessed.collections)"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.gender?.result || 'wrong'"
-                :value="attempt.guessed.gender"
-            />
-
-            <AttributeCell
-                :result="attempt.comparison.species?.result || 'wrong'"
-                :value="attempt.guessed.species"
-            />
-
-            <AttributeCell
-                :result="
-                    attempt.comparison.first_appearance_year?.result || 'wrong'
-                "
-                :value="attempt.comparison.first_appearance_year?.value"
-                :arrow="attempt.comparison.first_appearance_year?.arrow"
-            />
-        </template>
     </div>
 </template>
 
