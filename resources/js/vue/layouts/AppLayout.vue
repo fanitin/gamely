@@ -31,10 +31,10 @@ const showDevTools = import.meta.env.DEV;
             "
         ></div>
         <div
-            class="absolute inset-0 z-0 bg-gradient-to-b from-onyx-dark/30 via-onyx-dark/70 to-onyx-dark pointer-events-none"
+            class="absolute inset-0 z-0 bg-onyx-dark/75 pointer-events-none"
         ></div>
 
-        <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark/60 backdrop-blur-xl">
+        <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark">
             <div
                 class="max-w-7xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6"
             >

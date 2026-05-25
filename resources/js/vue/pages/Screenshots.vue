@@ -153,7 +153,7 @@ const progressPercentage = computed(() => {
                     </div>
                     <div class="h-2 bg-onyx-light rounded-full overflow-hidden">
                         <div
-                            class="h-full bg-linear-to-r from-teal-600 to-teal-400 rounded-full transition-all duration-500"
+                            class="h-full bg-teal-500 rounded-full transition-all duration-500"
                             :style="{ width: `${progressPercentage}%` }"
                         ></div>
                     </div>

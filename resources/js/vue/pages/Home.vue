@@ -92,7 +92,7 @@ const nextIn = computed(() => {
         <Head :title="t('nav.home')" />
 
         <div class="max-w-2xl mx-auto px-4 py-6 sm:py-14 flex flex-col items-center">
-            <div class="self-stretch sm:self-start text-center sm:text-left mb-6 sm:mb-12">
+            <div class="text-center sm:text-left mb-6 sm:mb-12">
                 <h1
                     class="text-4xl sm:text-6xl font-black mb-2 sm:mb-3 text-white tracking-tighter leading-none"
                 >

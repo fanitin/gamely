@@ -28,7 +28,6 @@ const colorClasses = computed(() => {
             title: string;
             ctaBg: string;
             edge: string;
-            glow: string;
             border: string;
         }
     > = {
@@ -39,7 +38,6 @@ const colorClasses = computed(() => {
             title: "group-hover:text-mode-classic",
             ctaBg: "group-hover:bg-mode-classic group-hover:border-mode-classic group-hover:text-onyx-dark",
             edge: "before:bg-mode-classic",
-            glow: "after:bg-mode-classic/10",
             border: "group-hover:border-mode-classic/30",
         },
         screens: {
@@ -49,7 +47,6 @@ const colorClasses = computed(() => {
             title: "group-hover:text-mode-screens",
             ctaBg: "group-hover:bg-mode-screens group-hover:border-mode-screens group-hover:text-onyx-dark",
             edge: "before:bg-mode-screens",
-            glow: "after:bg-mode-screens/10",
             border: "group-hover:border-mode-screens/30",
         },
         character: {
@@ -59,7 +56,6 @@ const colorClasses = computed(() => {
             title: "group-hover:text-mode-character",
             ctaBg: "group-hover:bg-mode-character group-hover:border-mode-character group-hover:text-onyx-dark",
             edge: "before:bg-mode-character",
-            glow: "after:bg-mode-character/10",
             border: "group-hover:border-mode-character/30",
         },
     };
@@ -78,8 +74,6 @@ const colorClasses = computed(() => {
                 colorClasses.border,
                 `before:content-[''] before:absolute before:left-0 before:top-[18%] before:bottom-[18%] before:w-[2px] before:rounded-full before:opacity-0 before:transition-all before:duration-300 group-hover:before:opacity-100 group-hover:before:top-[8%] group-hover:before:bottom-[8%]`,
                 colorClasses.edge,
-                `after:content-[''] after:absolute after:inset-0 after:opacity-0 after:[mask-image:radial-gradient(60%_120%_at_0%_50%,black,transparent_60%)] after:transition-opacity after:duration-300 group-hover:after:opacity-100 after:pointer-events-none`,
-                colorClasses.glow,
             ]"
         >
             <div

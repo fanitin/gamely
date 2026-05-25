@@ -81,7 +81,7 @@ const sizeMap = computed(() => {
             </ListboxLabel>
 
             <ListboxButton
-                class="relative w-full cursor-pointer rounded-xl bg-onyx-light/80 border border-white/10 text-left text-white shadow-lg focus:outline-none focus-visible:border-teal-500 focus-visible:ring-2 focus-visible:ring-teal-500/50 transition-colors hover:bg-onyx-light backdrop-blur-sm"
+                class="relative w-full cursor-pointer rounded-xl bg-onyx-light border border-white/10 text-left text-white shadow-lg focus:outline-none focus-visible:border-teal-500 focus-visible:ring-2 focus-visible:ring-teal-500/50 transition-colors hover:bg-onyx-light"
                 :class="sizeMap.button"
             >
                 <span class="block truncate font-medium tracking-wide">

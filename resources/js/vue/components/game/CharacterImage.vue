@@ -30,12 +30,12 @@ const isModalOpen = ref(false);
                 :style="{ filter: `blur(${blurAmount})`, transform: 'scale(1.06)' }"
             />
 
-            <div class="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+            <div class="absolute inset-x-0 bottom-0 h-1/3 bg-black/40 pointer-events-none" />
 
             <div
                 class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
             >
-                <div class="bg-black/60 backdrop-blur-sm rounded-xl px-4 py-2 flex items-center gap-2">
+                <div class="bg-black/75 rounded-xl px-4 py-2 flex items-center gap-2">
                     <ZoomIn class="w-5 h-5 text-white" />
                     <span class="text-sm font-semibold text-white">{{ t("character.expand") }}</span>
                 </div>
@@ -45,14 +45,14 @@ const isModalOpen = ref(false);
                 v-if="!isWon"
                 class="absolute bottom-2 left-0 right-0 flex justify-center pointer-events-none"
             >
-                <span class="text-xs text-white/70 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full">
+                <span class="text-xs text-white/70 bg-black/65 px-3 py-1 rounded-full">
                     {{ t("character.blur_hint") }}
                 </span>
             </div>
 
             <div
                 v-if="isWon"
-                class="absolute top-2 right-2 bg-success-500/90 backdrop-blur-sm rounded-lg px-2 py-1 pointer-events-none"
+                class="absolute top-2 right-2 bg-success-500 rounded-lg px-2 py-1 pointer-events-none"
             >
                 <span class="text-xs font-bold text-white">✓</span>
             </div>
