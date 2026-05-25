@@ -86,7 +86,7 @@ const gridClass = computed(() => {
     if (props.mode === "character") {
         return "grid-cols-[50px_80px_repeat(5,1fr)]";
     }
-    return "grid-cols-[50px_80px_repeat(6,1fr)_80px_80px_90px]";
+    return "grid-cols-[50px_80px_repeat(5,1fr)_80px_80px_90px]";
 });
 
 function formatArrayValue(
