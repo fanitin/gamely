@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Game;
 use App\Enums\GameMode;
 use App\Http\Controllers\Controller;
 use App\Models\DailyChallenge;
+use App\Services\StatsService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PagesController extends Controller
 {
-    public function home(): Response
+    public function home(StatsService $stats): Response
     {
-        return Inertia::render('Home', []);
+        return Inertia::render('Home', [
+            'avgAttempts' => $stats->getAvgAttemptsPerMode(),
+            'nextResetAt' => today()->addDay()->toIso8601String(),
+        ]);
     }
 
     public function classic(): Response

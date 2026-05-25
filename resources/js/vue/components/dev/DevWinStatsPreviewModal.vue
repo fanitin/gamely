@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { Trophy, X } from "lucide-vue-next";
-import AppModal from "@/vue/components/ui/AppModal.vue";
-import GameBarChart from "@/vue/components/game/GameBarChart.vue";
-import GameAttemptsShare from "@/vue/components/game/GameAttemptsShare.vue";
+import { computed, ref, watch } from "vue";
+import axios, { type AxiosRequestConfig } from "axios";
+import ResultModal from "@/vue/components/game/ResultModal.vue";
+import type { ModeValue, ModeDistributionResponse } from "@/vue/composables/useStats";
 
 const props = defineProps<{
     isOpen: boolean;
@@ -14,9 +12,7 @@ const emit = defineEmits<{
     (e: "close"): void;
 }>();
 
-const { t } = useI18n();
-
-const mode = "classic";
+const mode: ModeValue = "classic";
 const attemptsCount = 27;
 const entityName = "Mock Massive Numbers";
 const challengeDate = "2026-05-14";
@@ -26,7 +22,18 @@ const bins = Array.from({ length: 28 }, (_, index) => ({
     players: Math.max(4, Math.round(1400 * Math.exp(-index / 6) + (index % 4) * 83)),
 }));
 
-const totalPlayers = computed(() => bins.reduce((sum, bin) => sum + bin.players, 0));
+const totalPlayers = bins.reduce((sum, bin) => sum + bin.players, 0);
+const averageAttempts = Number(
+    (bins.reduce((sum, bin) => sum + bin.attempts * bin.players, 0) / totalPlayers).toFixed(2),
+);
+
+const mockResponse: ModeDistributionResponse = {
+    mode,
+    date: challengeDate,
+    total_players: totalPlayers,
+    average: averageAttempts,
+    bins,
+};
 
 const states: Array<"exact" | "close" | "wrong"> = ["exact", "close", "wrong", "exact", "close"];
 
@@ -41,39 +48,59 @@ const attempts = Array.from({ length: attemptsCount }, (_, attemptIndex) => ({
         release_year: { result: states[(attemptIndex + 1) % states.length] },
     },
 }));
+
+const interceptorId = ref<number | null>(null);
+
+const isMockedDistributionRequest = (config: AxiosRequestConfig): boolean => {
+    const url = typeof config.url === "string" ? config.url : "";
+    return url.includes("/api/stats/modes/") && url.includes("/distribution");
+};
+
+const installMockInterceptor = () => {
+    if (interceptorId.value !== null) return;
+    interceptorId.value = axios.interceptors.request.use((config) => {
+        if (!isMockedDistributionRequest(config)) return config;
+        config.adapter = async () =>
+            ({
+                data: mockResponse,
+                status: 200,
+                statusText: "OK",
+                headers: {},
+                config,
+            }) as any;
+        return config;
+    });
+};
+
+const removeMockInterceptor = () => {
+    if (interceptorId.value === null) return;
+    axios.interceptors.request.eject(interceptorId.value);
+    interceptorId.value = null;
+};
+
+watch(
+    () => props.isOpen,
+    (isOpen) => {
+        if (isOpen) {
+            installMockInterceptor();
+        } else {
+            removeMockInterceptor();
+        }
+    },
+    { immediate: true },
+);
+
+const show = computed(() => props.isOpen);
 </script>
 
 <template>
-    <AppModal :is-open="props.isOpen" :title="''" size="lg" :hide-header="true" @close="emit('close')">
-        <div class="space-y-4">
-            <div class="flex items-start justify-between gap-4">
-                <div class="flex items-start gap-3">
-                    <Trophy class="w-9 h-9 text-success-500 shrink-0 mt-0.5" />
-                    <div class="space-y-1">
-                        <h3 class="text-xl font-bold text-white uppercase tracking-tight">
-                            {{ t("game.you_won") }}! (DEV)
-                        </h3>
-                        <p class="text-sm text-muted">{{ t("game.attempts_count", { count: attemptsCount }) }}</p>
-                    </div>
-                </div>
-                <button
-                    type="button"
-                    class="rounded-lg p-1 text-muted hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/50"
-                    @click="emit('close')"
-                >
-                    <X class="w-5 h-5" />
-                </button>
-            </div>
-
-            <GameBarChart :bins="bins" :total-players="totalPlayers" />
-
-            <GameAttemptsShare
-                :mode="mode"
-                :attempts-count="attemptsCount"
-                :attempts="attempts"
-                :entity-name="entityName"
-                :challenge-date="challengeDate"
-            />
-        </div>
-    </AppModal>
+    <ResultModal
+        :show="show"
+        :mode="mode"
+        :attempts-count="attemptsCount"
+        :attempts="attempts"
+        :entity-name="entityName"
+        :challenge-date="challengeDate"
+        @close="emit('close')"
+    />
 </template>

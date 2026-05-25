@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { CheckCircle2, CircleAlert, Info, TriangleAlert, X } from "lucide-vue-next";
 import { useToast, type ToastItem } from "@/vue/composables/useToast";
 
+const { t } = useI18n();
 const { toasts, dismissToast } = useToast();
 
 const iconByType = {
@@ -13,10 +15,10 @@ const iconByType = {
 };
 
 const toneByType = {
-    success: "border-success-500/40 bg-success-500/10 text-success-400",
-    info: "border-primary-500/40 bg-primary-500/10 text-primary-400",
-    warning: "border-warning-500/40 bg-warning-500/10 text-warning-400",
-    error: "border-danger-500/40 bg-danger-500/10 text-danger-400",
+    success: "border-success-500/50 text-success-400",
+    info: "border-primary-500/50 text-primary-400",
+    warning: "border-warning-500/50 text-warning-400",
+    error: "border-danger-500/50 text-danger-400",
 };
 
 const getIcon = (toast: ToastItem) => iconByType[toast.type];
@@ -45,7 +47,7 @@ const hasToasts = computed(() => toasts.length > 0);
             <div
                 v-for="toast in toasts"
                 :key="toast.id"
-                class="pointer-events-auto border rounded-xl px-4 py-3 backdrop-blur-md shadow-lg bg-onyx-dark/90 border-white/10"
+                class="pointer-events-auto border rounded-xl px-4 py-3 shadow-lg bg-onyx-dark"
                 :class="getTone(toast)"
                 role="status"
             >
@@ -63,7 +65,7 @@ const hasToasts = computed(() => toasts.length > 0);
                         type="button"
                         class="text-white/60 hover:text-white transition-colors"
                         @click="dismissToast(toast.id)"
-                        aria-label="Close notification"
+                        :aria-label="t('a11y.close_notification')"
                     >
                         <X class="w-4 h-4" />
                     </button>

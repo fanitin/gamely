@@ -22,66 +22,78 @@ const showDevTools = import.meta.env.DEV;
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col bg-onyx-dark text-white relative">
+    <div class="min-h-screen flex flex-col bg-onyx-dark text-white relative overflow-x-hidden">
         <AppToastStack />
         <div
             class="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none"
-            style="background-image: url(&quot;&quot;)"
+            style="
+                background-image: url(&quot;/images/background/main-bg.jpg&quot;);
+            "
         ></div>
         <div
-            class="absolute inset-0 z-0 bg-gradient-to-b from-onyx-dark/80 via-onyx-dark/95 to-onyx-dark pointer-events-none"
+            class="absolute inset-0 z-0 bg-onyx-dark/75 pointer-events-none"
         ></div>
 
-        <header
-            class="border-b border-white/10 relative z-10 bg-onyx-dark/50 backdrop-blur-md"
-        >
+        <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark">
             <div
-                class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between"
+                class="max-w-7xl mx-auto h-16 lg:h-20 flex items-center justify-between px-4 sm:px-6"
             >
                 <Link
                     href="/"
-                    class="text-xl font-bold tracking-tight text-teal-500"
+                    class="text-xl lg:text-2xl font-black tracking-tight text-white flex items-center group"
                 >
-                    Gamely
+                    Game<span
+                        class="text-teal-400 group-hover:text-teal-300 transition-colors"
+                        >ly</span
+                    >
                 </Link>
 
-                <div class="flex items-center gap-1 sm:gap-2">
+                <div class="flex items-center gap-0.5 sm:gap-2">
                     <a
                         href="/games"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-all active:scale-90"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.games')"
                     >
-                        <Library class="w-5 h-5" />
+                        <Library class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
+                            t("nav.games")
+                        }}</span>
                     </a>
 
                     <button
                         @click="isPersonalStatsOpen = true"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-all active:scale-90"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.stats')"
                     >
-                        <BarChart3 class="w-5 h-5" />
+                        <BarChart3 class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
+                            t("nav.stats")
+                        }}</span>
                     </button>
 
                     <button
                         @click="isHelpOpen = true"
-                        class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-all active:scale-90"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.how_to_play')"
                     >
-                        <CircleHelp class="w-5 h-5" />
+                        <CircleHelp class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
+                            t("nav.how_to_play")
+                        }}</span>
                     </button>
 
-                    <!-- TODO: Dev preview controls. Keep visible only in local development. -->
+                    <!-- DEV TOOLING -->
                     <template v-if="showDevTools">
                         <button
                             @click="isDevPersonalStatsPreviewOpen = true"
-                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-teal-300 border border-teal-500/40 rounded-md hover:bg-teal-500/15 transition-colors"
+                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-teal-300 border border-teal-500/40 rounded-lg hover:bg-teal-500/15 transition-colors"
                             title="DEV: Personal Stats Preview"
                         >
                             DEV PS
                         </button>
                         <button
                             @click="isDevWinStatsPreviewOpen = true"
-                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-sky-300 border border-sky-500/40 rounded-md hover:bg-sky-500/15 transition-colors"
+                            class="px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-sky-300 border border-sky-500/40 rounded-lg hover:bg-sky-500/15 transition-colors"
                             title="DEV: Win Stats Preview"
                         >
                             DEV WIN
@@ -89,22 +101,19 @@ const showDevTools = import.meta.env.DEV;
                     </template>
 
                     <div
-                        class="w-px h-4 bg-white/10 mx-1 hidden sm:block"
+                        class="w-px h-8 lg:h-10 bg-white/10 mx-1 hidden sm:block"
                     ></div>
 
                     <LanguageSelector />
-
-                    <span
-                        class="text-xs font-bold text-muted/80 w-6 text-center select-none"
-                    >
-                        {{ currentLanguage }}
-                    </span>
                 </div>
             </div>
         </header>
 
         <HowToPlayModal :isOpen="isHelpOpen" @close="isHelpOpen = false" />
-        <PersonalStatsModal :isOpen="isPersonalStatsOpen" @close="isPersonalStatsOpen = false" />
+        <PersonalStatsModal
+            :isOpen="isPersonalStatsOpen"
+            @close="isPersonalStatsOpen = false"
+        />
         <!-- TODO: Remove or move to dedicated dev panel if preview tooling grows. -->
         <DevPersonalStatsPreviewModal
             v-if="showDevTools"

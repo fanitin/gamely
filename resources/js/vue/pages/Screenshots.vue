@@ -2,20 +2,21 @@
 import { Head, Link } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 import { computed, ref, watch } from "vue";
-import { ArrowLeft, AlertCircle, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import {
+    ArrowLeft,
+    AlertCircle,
+    ChevronLeft,
+    ChevronRight,
+} from "lucide-vue-next";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import AppButton from "@/vue/components/ui/AppButton.vue";
 import GuessInput from "@/vue/components/game/GuessInput.vue";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useScreenshotsGame } from "@/vue/composables/useScreenshotsGame";
-import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
-defineProps<{
-    solvedToday: number;
-}>();
 const {
     attempts,
     attemptsCount,
@@ -65,29 +66,35 @@ const progressPercentage = computed(() => {
     <AppLayout>
         <Head :title="t('modes.game_screenshots.title')" />
 
-        <div class="max-w-5xl mx-auto px-4 py-8">
-            <div class="flex items-center justify-between mb-8">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8"
+            >
                 <AppButton
                     :as="Link"
                     href="/"
                     variant="ghost"
                     size="sm"
-                    class="group"
+                    class="group self-start"
                 >
-                    <ArrowLeft class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft
+                        class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"
+                    />
                     {{ t("nav.back_to_menu") }}
                 </AppButton>
 
                 <div class="text-center flex-1">
-                    <h1 class="text-3xl font-black text-white mb-2 uppercase tracking-tighter">
+                    <h1
+                        class="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter"
+                    >
                         {{ t("modes.game_screenshots.title") }}
                     </h1>
-                    <p class="text-muted">
+                    <p class="text-muted text-sm sm:text-base">
                         {{ t("modes.game_screenshots.description") }}
                     </p>
                 </div>
 
-                <div class="w-[120px]"></div>
+                <div class="hidden sm:block w-[120px]"></div>
             </div>
 
             <div
@@ -106,7 +113,10 @@ const progressPercentage = computed(() => {
             </div>
 
             <template v-else>
-                <div v-if="hints.length > 0 && !isWon" class="mb-6 grid grid-cols-3 gap-3">
+                <div
+                    v-if="hints.length > 0 && !isWon"
+                    class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+                >
                     <HintCard
                         v-for="hint in hints"
                         :key="hint.type"
@@ -123,7 +133,11 @@ const progressPercentage = computed(() => {
                     mode="game_screenshots"
                     :attempts-count="attempts.length"
                     :attempts="attempts"
-                    :entity-name="lastCorrectGuess?.display_name || lastCorrectGuess?.name || ''"
+                    :entity-name="
+                        lastCorrectGuess?.display_name ||
+                        lastCorrectGuess?.name ||
+                        ''
+                    "
                     :challenge-date="new Date().toISOString().split('T')[0]"
                 />
 
@@ -133,24 +147,31 @@ const progressPercentage = computed(() => {
                             {{ t("screenshots.revealed") }}
                         </span>
                         <span class="text-sm font-bold text-white">
-                            {{ visibleScreenshotsCount }} / {{ totalScreenshots }}
+                            {{ visibleScreenshotsCount }} /
+                            {{ totalScreenshots }}
                         </span>
                     </div>
                     <div class="h-2 bg-onyx-light rounded-full overflow-hidden">
                         <div
-                            class="h-full bg-linear-to-r from-teal-600 to-teal-400 rounded-full transition-all duration-500"
+                            class="h-full bg-teal-500 rounded-full transition-all duration-500"
                             :style="{ width: `${progressPercentage}%` }"
                         ></div>
                     </div>
                 </div>
 
                 <div class="mb-8 relative">
-                    <div class="bg-onyx rounded-2xl border border-onyx-light/30 overflow-hidden">
+                    <div
+                        class="bg-onyx rounded-2xl border border-onyx-light/30 overflow-hidden"
+                    >
                         <div class="relative aspect-video bg-onyx-dark">
                             <img
                                 v-if="currentScreenshot"
                                 :src="currentScreenshot.url"
-                                :alt="t('screenshots.screenshot_alt', { number: currentScreenshotIndex + 1 })"
+                                :alt="
+                                    t('screenshots.screenshot_alt', {
+                                        number: currentScreenshotIndex + 1,
+                                    })
+                                "
                                 class="w-full h-full object-contain"
                             />
                             <div
@@ -168,7 +189,10 @@ const progressPercentage = computed(() => {
                                 <ChevronLeft class="w-6 h-6" />
                             </button>
                             <button
-                                v-if="currentScreenshotIndex < visibleScreenshotsCount - 1"
+                                v-if="
+                                    currentScreenshotIndex <
+                                    visibleScreenshotsCount - 1
+                                "
                                 class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-onyx-dark/70 hover:bg-onyx-dark rounded-full flex items-center justify-center text-white transition-all"
                                 @click="nextScreenshot"
                             >
@@ -180,21 +204,29 @@ const progressPercentage = computed(() => {
                             v-if="visibleScreenshots.length > 1"
                             class="p-4 border-t border-onyx-light/30"
                         >
-                            <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                            <div
+                                class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar"
+                            >
                                 <button
-                                    v-for="(screenshot, index) in visibleScreenshots"
+                                    v-for="(
+                                        screenshot, index
+                                    ) in visibleScreenshots"
                                     :key="screenshot.id"
                                     class="shrink-0 w-24 h-14 rounded-lg overflow-hidden border-2 transition-all"
                                     :class="[
                                         currentScreenshotIndex === index
                                             ? 'border-teal-500 ring-2 ring-teal-500/30'
-                                            : 'border-transparent hover:border-onyx-light'
+                                            : 'border-transparent hover:border-onyx-light',
                                     ]"
                                     @click="goToScreenshot(index)"
                                 >
                                     <img
                                         :src="screenshot.url"
-                                        :alt="t('screenshots.thumbnail_alt', { number: index + 1 })"
+                                        :alt="
+                                            t('screenshots.thumbnail_alt', {
+                                                number: index + 1,
+                                            })
+                                        "
                                         class="w-full h-full object-cover"
                                     />
                                 </button>
@@ -209,9 +241,9 @@ const progressPercentage = computed(() => {
                         :placeholder="t('game.search_game')"
                         :exclude-ids="guessedGameIds"
                         :focus-trigger="attemptsCount"
+                        :auto-focus="false"
                         @select="handleSelect"
                     />
-                    <TodaySolvedCard :count="solvedToday" />
                 </div>
 
                 <div v-if="isLoading" class="text-center mb-8">
@@ -226,26 +258,42 @@ const progressPercentage = computed(() => {
                     </h2>
 
                     <div class="space-y-3">
-                        <div class="grid grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px] gap-2">
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                        <div
+                            class="hidden lg:grid grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px] gap-2"
+                        >
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 #
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.game") }}
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.release_year") }}
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.franchises_collections") }}
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.developers_publishers") }}
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.popularity") }}
                             </div>
-                            <div class="text-center text-xs font-black uppercase tracking-wider text-muted py-2">
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted py-2"
+                            >
                                 {{ t("attributes.franchise_year") }}
                             </div>
                         </div>

@@ -112,8 +112,8 @@ onMounted(() => {
 
 watch(
     () => props.focusTrigger,
-    () => {
-        if (props.autoFocus) {
+    (newVal) => {
+        if (props.autoFocus || newVal > 0) {
             nextTick(() => {
                 inputRef.value?.focus();
             });

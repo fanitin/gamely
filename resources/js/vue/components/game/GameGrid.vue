@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<{
                 <div
                     v-for="i in props.columns.length"
                     :key="i"
-                    class="w-full aspect-square bg-onyx-light border-2 border-white/5 rounded-xl"
+                    class="w-full aspect-square bg-onyx-light border-[3px] border-onyx-dark shadow-[inset_0_0_0_2px_rgba(255,255,255,0.06)]"
                 ></div>
             </div>
         </div>

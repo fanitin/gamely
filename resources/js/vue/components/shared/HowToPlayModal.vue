@@ -17,28 +17,28 @@ const { t } = useI18n();
 
 const examples = computed(() => [
     {
-        property: "genre",
+        property: "genres",
         name: "Action, RPG",
         status: "exact",
-        description: t("how_to_play.example_genre_match"),
+        description: t("how_to_play.exact_match"),
     },
     {
-        property: "genre",
+        property: "genres",
         name: "Action, RPG",
         status: "close",
-        description: t("how_to_play.example_genre_partial"),
+        description: t("how_to_play.partial_match"),
     },
     {
-        property: "year",
+        property: "release_year",
         name: "2015 ▲",
         status: "close",
-        description: t("how_to_play.example_year_close"),
+        description: t("how_to_play.close_match"),
     },
     {
-        property: "platform",
+        property: "platforms",
         name: "PS5",
         status: "wrong",
-        description: t("how_to_play.example_wrong"),
+        description: t("how_to_play.no_match"),
     },
 ]);
 </script>
@@ -51,47 +51,52 @@ const examples = computed(() => [
         @close="$emit('close')"
     >
         <div class="space-y-6 text-muted">
-            <div class="space-y-2">
-                <p class="text-sm leading-relaxed font-medium text-white/90">
+            <div class="space-y-1">
+                <p class="text-sm font-semibold text-white/90 leading-relaxed">
                     {{ t("how_to_play.intro") }}
                 </p>
-                <p class="text-xs text-muted/70 italic">
+                <p class="text-xs text-muted/60">
                     {{ t("how_to_play.infinite_hint") }}
                 </p>
             </div>
 
-            <div class="space-y-5 pt-4 border-t border-white/10">
+            <div class="space-y-4 pt-4 border-t border-white/10">
                 <div
                     v-for="(example, index) in examples"
                     :key="index"
-                    class="space-y-2"
+                    class="flex items-center gap-4 py-1"
                 >
-                    <div class="flex items-center gap-4">
-                        <div
-                            class="min-w-[80px] h-10 px-2 flex items-center justify-center rounded-lg font-bold text-[13px] uppercase tracking-wider border border-white/5 shadow-inner transition-colors"
-                            :class="{
-                                'bg-forest-500 text-white shadow-forest-500/10':
-                                    example.status === 'exact',
-                                'bg-gold-500 text-white shadow-gold-500/10':
-                                    example.status === 'close',
-                                'bg-onyx-light/80 text-muted':
-                                    example.status === 'wrong',
-                            }"
+                    <div
+                        class="min-w-[80px] h-10 px-2 flex items-center justify-center rounded-xl font-bold text-xs uppercase tracking-wider transition-colors shrink-0"
+                        :class="{
+                            'bg-forest-500 text-white':
+                                example.status === 'exact',
+                            'bg-gold-500 text-white':
+                                example.status === 'close',
+                            'bg-onyx-light border border-white/5 text-muted':
+                                example.status === 'wrong',
+                        }"
+                    >
+                        {{ example.name }}
+                    </div>
+
+                    <div class="flex-1 min-w-0">
+                        <span
+                            class="block text-[10px] font-bold text-muted/60 uppercase tracking-widest mb-0.5"
                         >
-                            {{ example.name }}
-                        </div>
-                        <div class="flex-1 space-y-0.5">
-                            <p
-                                class="text-[11px] font-bold text-muted/70 uppercase tracking-widest"
-                            >
-                                {{ t(`attributes.${example.property}`) }}
-                            </p>
-                            <p class="text-xs leading-snug text-muted">
-                                {{ example.description }}
-                            </p>
-                        </div>
+                            {{ t(`attributes.${example.property}`) }}
+                        </span>
+                        <p class="text-xs text-muted leading-relaxed">
+                            {{ example.description }}
+                        </p>
                     </div>
                 </div>
+            </div>
+
+            <div class="pt-4 border-t border-white/10">
+                <p class="text-xs text-muted leading-relaxed">
+                    {{ t("how_to_play.hints_info") }}
+                </p>
             </div>
 
             <AppButton

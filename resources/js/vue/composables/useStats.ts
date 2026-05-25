@@ -7,6 +7,7 @@ export interface ModeDistributionResponse {
     mode: ModeValue;
     date: string;
     total_players: number;
+    average: number | null;
     bins: Array<{ attempts: number; players: number }>;
 }
 

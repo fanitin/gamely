@@ -10,13 +10,9 @@ import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import CharacterImage from "@/vue/components/game/CharacterImage.vue";
 import { useCharacterGame } from "@/vue/composables/useCharacterGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
-import TodaySolvedCard from "@/vue/components/game/TodaySolvedCard.vue";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
 
 const { t } = useI18n();
-defineProps<{
-    solvedToday: number;
-}>();
 const {
     attempts,
     isWon,
@@ -44,7 +40,10 @@ watch(isWon, (newVal) => {
 const blurAmount = computed(() => {
     const maxBlur = 30;
     const reductionPerAttempt = 3;
-    const blur = Math.max(0, maxBlur - attemptsCount.value * reductionPerAttempt);
+    const blur = Math.max(
+        0,
+        maxBlur - attemptsCount.value * reductionPerAttempt,
+    );
     return `${blur}px`;
 });
 
@@ -58,29 +57,35 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
     <AppLayout>
         <Head :title="t('modes.character.title')" />
 
-        <div class="max-w-5/6 mx-auto px-4 py-8">
-            <div class="flex items-center justify-between mb-12">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12"
+            >
                 <AppButton
                     :as="Link"
                     href="/"
                     variant="ghost"
                     size="sm"
-                    class="group"
+                    class="group self-start"
                 >
-                    <ArrowLeft class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft
+                        class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform"
+                    />
                     {{ t("nav.back_to_menu") }}
                 </AppButton>
 
                 <div class="text-center flex-1">
-                    <h1 class="text-3xl font-black text-white mb-2 uppercase tracking-tighter">
+                    <h1
+                        class="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter"
+                    >
                         {{ t("modes.character.title") }}
                     </h1>
-                    <p class="text-muted">
+                    <p class="text-muted text-sm sm:text-base">
                         {{ t("modes.character.description") }}
                     </p>
                 </div>
 
-                <div class="w-[120px]"></div>
+                <div class="hidden sm:block w-[120px]"></div>
             </div>
 
             <div
@@ -99,19 +104,25 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
             </div>
 
             <template v-else>
-
                 <ResultModal
                     :show="showModal"
                     @close="showModal = false"
                     mode="character"
                     :attempts-count="attempts.length"
                     :attempts="attempts"
-                    :entity-name="lastCorrectGuess?.display_name || lastCorrectGuess?.name || ''"
+                    :entity-name="
+                        lastCorrectGuess?.display_name ||
+                        lastCorrectGuess?.name ||
+                        ''
+                    "
                     :challenge-date="new Date().toISOString().split('T')[0]"
                 />
 
                 <div class="flex flex-col lg:flex-row gap-8 mb-8">
-                    <div v-if="characterImageUrl" class="shrink-0 flex justify-center lg:justify-start">
+                    <div
+                        v-if="characterImageUrl"
+                        class="shrink-0 flex justify-center lg:justify-start"
+                    >
                         <CharacterImage
                             :image-url="characterImageUrl"
                             :blur-amount="blurAmount"
@@ -120,7 +131,10 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                     </div>
 
                     <div class="flex-1">
-                        <div v-if="hints.length > 0 && !isWon" class="mb-6 grid grid-cols-3 gap-3">
+                        <div
+                            v-if="hints.length > 0 && !isWon"
+                            class="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+                        >
                             <HintCard
                                 v-for="hint in hints"
                                 :key="hint.type"
@@ -139,7 +153,6 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                                 :focus-trigger="attemptsCount"
                                 @select="handleSelect"
                             />
-                            <TodaySolvedCard :count="solvedToday" />
                         </div>
                     </div>
                 </div>
@@ -155,40 +168,54 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                         {{ t("game.your_attempts") }}
                     </h2>
 
-                    <div class="overflow-x-auto pb-4">
-                        <div class="min-w-[900px] space-y-3">
-                            <div class="grid grid-cols-[50px_80px_repeat(5,1fr)] gap-2 mb-2">
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    #
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.character") }}
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.franchises") }}
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.collections") }}
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.gender") }}
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.species") }}
-                                </div>
-                                <div class="text-center text-xs font-black uppercase tracking-wider text-muted">
-                                    {{ t("attributes.first_appearance_year") }}
-                                </div>
+                    <div class="space-y-3">
+                        <div
+                            class="hidden lg:grid grid-cols-[50px_80px_repeat(5,1fr)] gap-2 mb-2"
+                        >
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                #
                             </div>
-
-                            <AttemptRow
-                                v-for="(attempt, index) in reversedAttempts"
-                                :key="index"
-                                mode="character"
-                                :attempt="attempt"
-                                :attempt-number="attempts.length - index"
-                            />
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.character") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.franchises") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.collections") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.gender") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.species") }}
+                            </div>
+                            <div
+                                class="text-center text-xs font-black uppercase tracking-wider text-muted"
+                            >
+                                {{ t("attributes.first_appearance_year") }}
+                            </div>
                         </div>
+
+                        <AttemptRow
+                            v-for="(attempt, index) in reversedAttempts"
+                            :key="index"
+                            mode="character"
+                            :attempt="attempt"
+                            :attempt-number="attempts.length - index"
+                        />
                     </div>
                 </div>
             </template>

@@ -1,50 +1,50 @@
 <script setup>
-import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { Globe } from 'lucide-vue-next'
-import AppModal from '@/vue/components/ui/AppModal.vue'
-import AppSelect from '@/vue/components/ui/AppSelect.vue'
-import { set } from '@vueuse/core'
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { Globe } from "lucide-vue-next";
+import AppModal from "@/vue/components/ui/AppModal.vue";
+import AppSelect from "@/vue/components/ui/AppSelect.vue";
+import { set } from "@vueuse/core";
 
-const { t, locale } = useI18n()
-const isOpen = ref(false)
+const { t, locale } = useI18n();
+const isOpen = ref(false);
 
 const languageOptions = [
-    { value: 'en', label: 'English' },
-    { value: 'ru', label: 'Русский' },
-    { value: 'ua', label: 'Українська' },
+    { value: "en", label: "English" },
+    { value: "ru", label: "Русский" },
+    { value: "ua", label: "Українська" },
     // Temporarily added 15 options to test scrolling as requested
-    { value: 'es', label: 'Español (Test 1)' },
-    { value: 'fr', label: 'Français (Test 2)' },
-    { value: 'de', label: 'Deutsch (Test 3)' },
-    { value: 'it', label: 'Italiano (Test 4)' },
-    { value: 'pt', label: 'Português (Test 5)' },
-    { value: 'pl', label: 'Polski (Test 6)' },
-    { value: 'ja', label: '日本語 (Test 7)' },
-    { value: 'ko', label: '한국어 (Test 8)' },
-    { value: 'zh', label: '中文 (Test 9)' },
-    { value: 'ar', label: 'العربية (Test 10)' },
-    { value: 'tr', label: 'Türkçe (Test 11)' },
-    { value: 'hi', label: 'हिन्दी (Test 12)' },
-    { value: 'nl', label: 'Nederlands (Test 13)' },
-    { value: 'sv', label: 'Svenska (Test 14)' },
-    { value: 'fi', label: 'Suomi (Test 15)' },
-]
+    { value: "es", label: "Español (Test 1)" },
+    { value: "fr", label: "Français (Test 2)" },
+    { value: "de", label: "Deutsch (Test 3)" },
+    { value: "it", label: "Italiano (Test 4)" },
+    { value: "pt", label: "Português (Test 5)" },
+    { value: "pl", label: "Polski (Test 6)" },
+    { value: "ja", label: "日本語 (Test 7)" },
+    { value: "ko", label: "한국어 (Test 8)" },
+    { value: "zh", label: "中文 (Test 9)" },
+    { value: "ar", label: "العربية (Test 10)" },
+    { value: "tr", label: "Türkçe (Test 11)" },
+    { value: "hi", label: "हिन्दी (Test 12)" },
+    { value: "nl", label: "Nederlands (Test 13)" },
+    { value: "sv", label: "Svenska (Test 14)" },
+    { value: "fi", label: "Suomi (Test 15)" },
+];
 
 function openModal() {
-    isOpen.value = true
+    isOpen.value = true;
 }
 
 function closeModal() {
-    isOpen.value = false
+    isOpen.value = false;
 }
 
 function handleLanguageChange(newLang) {
-    locale.value = newLang
-    localStorage.setItem('gw_locale', newLang)
+    locale.value = newLang;
+    localStorage.setItem("gw_locale", newLang);
     setTimeout(() => {
-        closeModal()
-    }, 150)
+        closeModal();
+    }, 150);
 }
 </script>
 
@@ -52,23 +52,31 @@ function handleLanguageChange(newLang) {
     <div>
         <button
             @click="openModal"
-            class="p-2 text-muted hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+            class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
             :title="t('nav.change_locale')"
         >
-            <Globe class="w-6 h-6" />
+            <Globe class="w-5 h-5 lg:w-6 lg:h-6 mb-0.5" />
+            <span class="text-[10px] font-bold leading-none uppercase">{{
+                locale
+            }}</span>
         </button>
 
-        <AppModal :isOpen="isOpen" :title="t('nav.choose_language')" @close="closeModal">
-            <div class="py-4 text-center">
+        <AppModal
+            :isOpen="isOpen"
+            :title="t('nav.choose_language')"
+            :overflow-visible="true"
+            @close="closeModal"
+        >
+            <div class="py-4 max-w-xs mx-auto text-center space-y-6">
                 <AppSelect
                     v-model="locale"
                     :options="languageOptions"
                     size="md"
                     @update:modelValue="handleLanguageChange"
                 />
-                
-                <p class="mt-6 text-sm text-muted font-medium tracking-wide">
-                    {{ t('nav.more_languages_soon') }}
+
+                <p class="text-xs text-muted/65 font-bold uppercase tracking-wider">
+                    {{ t("nav.more_languages_soon") }}
                 </p>
             </div>
         </AppModal>

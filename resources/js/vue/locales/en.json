@@ -7,7 +7,8 @@
         "change_locale": "Language",
         "choose_language": "Choose language",
         "more_languages_soon": "More languages coming soon",
-        "back_to_menu": "Back to Menu"
+        "back_to_menu": "Back to Menu",
+        "site_description": "Guess the game every day!"
     },
     "modes": {
         "classic": {
@@ -91,7 +92,25 @@
         "distribution_title": "Today's win distribution",
         "total_players": "Players solved: {count}",
         "copy": "Copy result",
-        "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!"
+        "share_header": "I solved {date} {name} ({mode}) in {attempts} attempts!",
+        "your_tries": "Your tries",
+        "best": "Best today",
+        "average": "Average",
+        "faster_than": "faster than {percent}% of solvers"
+    },
+    "footer": {
+        "privacy": "Privacy",
+        "contact": "Contact",
+        "disclaimer": "Not affiliated with Sony, Microsoft or Nintendo. Data by",
+        "by": "by"
+    },
+    "a11y": {
+        "close_notification": "Close notification",
+        "character_image": "Character"
+    },
+    "mode_card": {
+        "avg": "avg",
+        "next_in": "next in"
     },
     "errors": {
         "game_not_found": "Game not found",
@@ -110,7 +129,8 @@
         "partial_match": "Partial match (e.g., one of the genres).",
         "close_match": "Close match. ▲ means the answer is higher.",
         "no_match": "No match.",
-        "indicators": "Comparison Indicators"
+        "indicators": "Comparison Indicators",
+        "hints_info": "A new hint is revealed every 4-5 attempts."
     },
     "screenshots": {
         "revealed": "Screenshots revealed",
@@ -146,6 +166,20 @@
         "best_streak": "Best streak",
         "daily_attempts": "Daily attempts",
         "daily_attempts_chart": "Daily attempts by mode chart",
-        "empty": "No personal stats yet"
+        "empty": "No personal stats yet",
+        "pick_mode": "Pick a mode",
+        "pick_range": "Pick a range",
+        "focus_hint": "Pick a mode to see its chart",
+        "weekly_averages": "weekly averages",
+        "avg_suffix": "avg",
+        "week_of": "Week of {from} — {to}",
+        "range_30d": "30D",
+        "range_90d": "90D",
+        "range_1y": "1Y",
+        "months": {
+            "jan": "Jan", "feb": "Feb", "mar": "Mar", "apr": "Apr",
+            "may": "May", "jun": "Jun", "jul": "Jul", "aug": "Aug",
+            "sep": "Sep", "oct": "Oct", "nov": "Nov", "dec": "Dec"
+        }
     }
 }
