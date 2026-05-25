@@ -69,7 +69,7 @@ const colorClasses = computed(() => {
         class="group block w-full outline-none focus-visible:ring-2 focus-visible:ring-white/30 rounded-2xl"
     >
         <div
-            class="relative overflow-hidden bg-onyx-dark/90 border border-white/10 rounded-2xl p-5 sm:p-6 flex items-center gap-4 sm:gap-5 transition-all duration-300 ease-out hover:-translate-y-px hover:bg-onyx-dark/80"
+            class="relative overflow-hidden bg-onyx-dark/90 border border-white/10 rounded-2xl p-5 sm:p-6 lg:p-8 flex items-center gap-4 sm:gap-5 lg:gap-7 transition-all duration-300 ease-out hover:-translate-y-px hover:bg-onyx-dark/80"
             :class="[
                 colorClasses.border,
                 `before:content-[''] before:absolute before:left-0 before:top-[18%] before:bottom-[18%] before:w-[2px] before:rounded-full before:opacity-0 before:transition-all before:duration-300 group-hover:before:opacity-100 group-hover:before:top-[8%] group-hover:before:bottom-[8%]`,
@@ -77,56 +77,56 @@ const colorClasses = computed(() => {
             ]"
         >
             <div
-                class="relative shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white/5 border border-white/10 text-white transition-colors duration-300"
+                class="relative shrink-0 flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-white/5 border border-white/10 text-white transition-colors duration-300"
                 :class="[
                     colorClasses.iconBg,
                     colorClasses.iconBorder,
                     colorClasses.iconText,
                 ]"
             >
-                <component :is="icon" class="w-5 h-5 sm:w-6 sm:h-6" stroke-width="1.75" />
+                <component :is="icon" class="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" stroke-width="1.75" />
             </div>
 
             <div class="relative flex-1 min-w-0">
                 <h2
-                    class="text-lg sm:text-xl font-bold text-white tracking-tight transition-colors duration-300"
+                    class="text-lg sm:text-xl lg:text-2xl font-bold text-white tracking-tight transition-colors duration-300"
                     :class="colorClasses.title"
                 >
                     {{ title }}
                 </h2>
-                <p class="text-muted text-sm sm:text-[15px] leading-snug line-clamp-2">
+                <p class="text-muted text-sm sm:text-[15px] lg:text-base leading-snug lg:mt-1 line-clamp-2">
                     {{ desc }}
                 </p>
             </div>
 
-            <div class="relative hidden sm:flex items-center gap-5 shrink-0">
+            <div class="relative hidden sm:flex items-center gap-5 lg:gap-7 shrink-0">
                 <div v-if="avgAttempts" class="flex flex-col items-end">
-                    <span class="font-mono text-sm text-white font-medium tabular-nums">
+                    <span class="font-mono text-sm lg:text-base text-white font-medium tabular-nums">
                         {{ avgAttempts }}
                     </span>
                     <span
-                        class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
+                        class="font-mono text-[10px] lg:text-[11px] uppercase tracking-wider text-muted/70 mt-0.5"
                     >
                         {{ t("mode_card.avg") }}
                     </span>
                 </div>
 
                 <div v-if="nextIn" class="flex flex-col items-end">
-                    <span class="font-mono text-sm text-white font-medium tabular-nums">
+                    <span class="font-mono text-sm lg:text-base text-white font-medium tabular-nums">
                         {{ nextIn }}
                     </span>
                     <span
-                        class="font-mono text-[10px] uppercase tracking-wider text-muted/70 mt-0.5"
+                        class="font-mono text-[10px] lg:text-[11px] uppercase tracking-wider text-muted/70 mt-0.5"
                     >
                         {{ t("mode_card.next_in") }}
                     </span>
                 </div>
 
                 <div
-                    class="w-9 h-9 rounded-full bg-white/5 border border-white/10 text-muted flex items-center justify-center transition-all duration-300"
+                    class="w-9 h-9 lg:w-11 lg:h-11 rounded-full bg-white/5 border border-white/10 text-muted flex items-center justify-center transition-all duration-300"
                     :class="colorClasses.ctaBg"
                 >
-                    <ArrowRight class="w-4 h-4" stroke-width="2" />
+                    <ArrowRight class="w-4 h-4 lg:w-5 lg:h-5" stroke-width="2" />
                 </div>
             </div>
 

@@ -36,11 +36,11 @@ const showDevTools = import.meta.env.DEV;
 
         <header class="relative z-50 w-full border-b border-white/10 bg-onyx-dark">
             <div
-                class="max-w-7xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6"
+                class="max-w-7xl mx-auto h-16 lg:h-20 flex items-center justify-between px-4 sm:px-6"
             >
                 <Link
                     href="/"
-                    class="text-xl font-black tracking-tight text-white flex items-center group"
+                    class="text-xl lg:text-2xl font-black tracking-tight text-white flex items-center group"
                 >
                     Game<span
                         class="text-teal-400 group-hover:text-teal-300 transition-colors"
@@ -51,33 +51,33 @@ const showDevTools = import.meta.env.DEV;
                 <div class="flex items-center gap-0.5 sm:gap-2">
                     <a
                         href="/games"
-                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.games')"
                     >
-                        <Library class="w-5 h-5 sm:mb-1" />
-                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
+                        <Library class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
                             t("nav.games")
                         }}</span>
                     </a>
 
                     <button
                         @click="isPersonalStatsOpen = true"
-                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.stats')"
                     >
-                        <BarChart3 class="w-5 h-5 sm:mb-1" />
-                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
+                        <BarChart3 class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
                             t("nav.stats")
                         }}</span>
                     </button>
 
                     <button
                         @click="isHelpOpen = true"
-                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
+                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
                         :title="t('nav.how_to_play')"
                     >
-                        <CircleHelp class="w-5 h-5 sm:mb-1" />
-                        <span class="hidden sm:block text-[10px] font-medium leading-none">{{
+                        <CircleHelp class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
+                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
                             t("nav.how_to_play")
                         }}</span>
                     </button>
@@ -101,7 +101,7 @@ const showDevTools = import.meta.env.DEV;
                     </template>
 
                     <div
-                        class="w-px h-8 bg-white/10 mx-1 hidden sm:block"
+                        class="w-px h-8 lg:h-10 bg-white/10 mx-1 hidden sm:block"
                     ></div>
 
                     <LanguageSelector />

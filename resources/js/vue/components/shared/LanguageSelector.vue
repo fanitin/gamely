@@ -52,10 +52,10 @@ function handleLanguageChange(newLang) {
     <div>
         <button
             @click="openModal"
-            class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto h-12 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+            class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
             :title="t('nav.change_locale')"
         >
-            <Globe class="w-5 h-5 mb-0.5" />
+            <Globe class="w-5 h-5 lg:w-6 lg:h-6 mb-0.5" />
             <span class="text-[10px] font-bold leading-none uppercase">{{
                 locale
             }}</span>

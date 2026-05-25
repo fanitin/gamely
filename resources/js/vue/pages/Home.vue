@@ -91,7 +91,7 @@ const nextIn = computed(() => {
     <AppLayout>
         <Head :title="t('nav.home')" />
 
-        <div class="max-w-2xl mx-auto px-4 py-6 sm:py-14 flex flex-col items-center">
+        <div class="max-w-2xl lg:max-w-3xl mx-auto px-4 py-6 sm:py-14 flex flex-col items-center">
             <div class="text-center sm:text-left mb-6 sm:mb-12">
                 <h1
                     class="text-4xl sm:text-6xl font-black mb-2 sm:mb-3 text-white tracking-tighter leading-none"
@@ -103,7 +103,7 @@ const nextIn = computed(() => {
                 </p>
             </div>
 
-            <div class="w-full flex flex-col gap-3 sm:gap-4">
+            <div class="w-full flex flex-col gap-3 sm:gap-4 lg:gap-5">
                 <ModeCard
                     v-for="mode in modes"
                     :key="mode.id"
