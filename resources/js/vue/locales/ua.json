@@ -41,9 +41,9 @@
         "attempts_count": "{count} спроб | {count} спроба | {count} спроби",
         "your_attempts": "Ваші спроби",
         "how_to_play": "Як грати",
-        "exact_match": "Точно — правильний атрибут",
-        "close_match": "Близько — частковий збіг або поруч",
-        "no_match": "Повз — неправильний атрибут",
+        "exact_match": "Точно - правильний атрибут",
+        "close_match": "Близько - частковий збіг або поруч",
+        "no_match": "Повз - неправильний атрибут",
         "solved_today": "Сьогодні вгадали: {count}"
     },
     "result": {
@@ -111,8 +111,40 @@
     "footer": {
         "privacy": "Конфіденційність",
         "contact": "Контакт",
+        "cookie_settings": "Налаштування cookie",
         "disclaimer": "Не пов'язано з Sony, Microsoft чи Nintendo. Дані від",
         "by": ""
+    },
+    "cookies": {
+        "banner": {
+            "title": "Ми використовуємо cookie",
+            "description": "Gamely використовує cookie, щоб гра працювала. За вашою згодою - для аналітики та показу реклами. Вибір за вами.",
+            "accept_all": "Прийняти всі",
+            "reject": "Лише необхідні",
+            "manage": "Налаштувати",
+            "policy": "Політика cookie"
+        },
+        "modal": {
+            "title": "Налаштування cookie",
+            "description": "Оберіть, як Gamely використовує cookie та сховище. Суворо необхідні cookie завжди увімкнені, щоб гра працювала.",
+            "save": "Зберегти",
+            "accept_all": "Прийняти всі",
+            "always_on": "Завжди увім."
+        },
+        "categories": {
+            "necessary": {
+                "title": "Суворо необхідні",
+                "description": "Сесія Laravel, безпека (CSRF), мова та локальний прогрес гри. Потрібні для Gamely - зберігаються лише на вашому пристрої."
+            },
+            "analytics": {
+                "title": "Аналітика",
+                "description": "Google Analytics 4. Допомагає зрозуміти, у які режими грають і як їх покращити."
+            },
+            "ads": {
+                "title": "Реклама",
+                "description": "Google AdSense. Показ реклами та вимірювання її ефективності. При вимкненні можлива неперсоналізована реклама."
+            }
+        }
     },
     "a11y": {
         "close_notification": "Закрити сповіщення",
@@ -184,7 +216,7 @@
         "focus_hint": "Оберіть режим, щоб побачити його графік",
         "weekly_averages": "середнє за тиждень",
         "avg_suffix": "сер.",
-        "week_of": "Тиждень {from} — {to}",
+        "week_of": "Тиждень {from} - {to}",
         "range_30d": "30Д",
         "range_90d": "90Д",
         "range_1y": "1Р",

@@ -31,6 +31,9 @@ const props = defineProps({
 const baseClasses =
     "inline-flex items-center justify-center font-bold tracking-wide rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
 
+const linkClasses =
+    "inline-flex items-center justify-center font-medium text-muted hover:text-white transition-colors disabled:opacity-50 disabled:pointer-events-none";
+
 const variantClasses = {
     primary:
         "bg-teal-500 hover:bg-teal-400 active:bg-teal-600 text-white shadow-lg shadow-teal-500/20",
@@ -40,6 +43,7 @@ const variantClasses = {
     danger: "bg-crimson-500 hover:bg-crimson-400 active:bg-crimson-600 text-white shadow-lg shadow-crimson-500/20",
     outline:
         "bg-transparent border-2 border-onyx-light hover:border-teal-500 text-muted hover:text-white",
+    link: "",
 };
 
 const sizeClasses = {
@@ -49,6 +53,9 @@ const sizeClasses = {
 };
 
 const classes = computed(() => {
+    if (props.variant === "link") {
+        return [linkClasses, sizeClasses[props.size] || "text-xs", props.fullWidth ? "w-full" : ""].join(" ");
+    }
     return [
         baseClasses,
         variantClasses[props.variant] || variantClasses.primary,

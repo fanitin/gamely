@@ -211,7 +211,7 @@ watch(
                 </div>
                 <div class="px-3 py-4 flex flex-col items-center justify-center border-l border-white/10">
                     <p class="font-mono text-[26px] font-semibold tracking-tight tabular-nums leading-none text-white">
-                        <template v-if="best === null">—</template>
+                        <template v-if="best === null">-</template>
                         <template v-else>{{ best }}</template>
                     </p>
                     <p class="mt-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-white/45">
@@ -220,7 +220,7 @@ watch(
                 </div>
                 <div class="px-3 py-4 flex flex-col items-center justify-center border-l border-white/10">
                     <p class="font-mono text-[26px] font-semibold tracking-tight tabular-nums leading-none text-white">
-                        <template v-if="average === null">—</template>
+                        <template v-if="average === null">-</template>
                         <template v-else>{{ average }}</template>
                     </p>
                     <p class="mt-2 text-[10.5px] font-medium uppercase tracking-[0.14em] text-white/45">

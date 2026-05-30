@@ -58,7 +58,7 @@ class RecalculateGameMeta extends Command
                 }
 
                 $this->info(sprintf(
-                    'Progress — Updated: %d | Skipped: %d',
+                    'Progress - Updated: %d | Skipped: %d',
                     $stats['updated'],
                     $stats['skipped']
                 ));
