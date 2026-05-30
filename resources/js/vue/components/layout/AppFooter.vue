@@ -29,13 +29,13 @@ const { openPreferences } = useCookieConsent();
                     <a href="#" class="hover:text-white transition-colors">
                         {{ t("footer.contact") }}
                     </a>
-                    <button
-                        type="button"
-                        class="uppercase tracking-wider hover:text-white transition-colors"
-                        @click="openPreferences"
-                    >
-                        {{ t("footer.cookie_settings") }}
-                    </button>
+<!--                    <button-->
+<!--                        type="button"-->
+<!--                        class="uppercase tracking-wider hover:text-white transition-colors"-->
+<!--                        @click="openPreferences"-->
+<!--                    >-->
+<!--                        {{ t("footer.cookie_settings") }}-->
+<!--                    </button>-->
                 </nav>
             </div>
 
