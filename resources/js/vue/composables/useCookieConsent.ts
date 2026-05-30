@@ -11,7 +11,7 @@ export interface ConsentRecord {
     locale: string;
 }
 
-const STORAGE_KEY = "gamely_cookie_consent_v1";
+const STORAGE_KEY = "gamely_cookie_consent";
 const CONSENT_VERSION = 1;
 
 const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as
@@ -128,7 +128,6 @@ function persist(analytics: boolean, ads: boolean, locale: string): void {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
     } catch {
-        /* storage blocked — consent applies for this session only */
     }
     state.record = record;
     state.bannerOpen = false;
