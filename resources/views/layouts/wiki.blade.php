@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title', config('app.name'))</title>
-    <meta name="description" content="@yield('description', 'GameWordle — guess the video game by its attributes or screenshot.')">
+    <meta name="description" content="@yield('description', 'GameWordle - guess the video game by its attributes or screenshot.')">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="@yield('og_title', config('app.name'))">

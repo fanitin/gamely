@@ -1,6 +1,8 @@
 <script setup>
 import { useI18n } from "vue-i18n";
+import { useCookieConsent } from "@/vue/composables/useCookieConsent";
 const { t } = useI18n();
+const { openPreferences } = useCookieConsent();
 </script>
 
 <template>
@@ -27,6 +29,13 @@ const { t } = useI18n();
                     <a href="#" class="hover:text-white transition-colors">
                         {{ t("footer.contact") }}
                     </a>
+                    <button
+                        type="button"
+                        class="uppercase tracking-wider hover:text-white transition-colors"
+                        @click="openPreferences"
+                    >
+                        {{ t("footer.cookie_settings") }}
+                    </button>
                 </nav>
             </div>
 

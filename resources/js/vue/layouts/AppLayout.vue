@@ -3,13 +3,16 @@ import { Link } from "@inertiajs/vue3";
 import LanguageSelector from "@/vue/components/shared/LanguageSelector.vue";
 import HowToPlayModal from "@/vue/components/shared/HowToPlayModal.vue";
 import PersonalStatsModal from "@/vue/components/shared/PersonalStatsModal.vue";
+import CookieBanner from "@/vue/components/shared/CookieBanner.vue";
+import CookiePreferencesModal from "@/vue/components/shared/CookiePreferencesModal.vue";
 import DevPersonalStatsPreviewModal from "@/vue/components/dev/DevPersonalStatsPreviewModal.vue";
 import DevWinStatsPreviewModal from "@/vue/components/dev/DevWinStatsPreviewModal.vue";
 import AppFooter from "@/vue/components/layout/AppFooter.vue";
 import AppToastStack from "@/vue/components/ui/AppToastStack.vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { CircleHelp, BarChart3, Library } from "lucide-vue-next";
+import { useCookieConsent } from "@/vue/composables/useCookieConsent";
 
 const { locale, t } = useI18n();
 const isHelpOpen = ref(false);
@@ -19,6 +22,9 @@ const isDevWinStatsPreviewOpen = ref(false);
 
 const currentLanguage = computed(() => locale.value.toUpperCase());
 const showDevTools = import.meta.env.DEV;
+
+const { initConsent } = useCookieConsent();
+onMounted(() => initConsent());
 </script>
 
 <template>
@@ -131,5 +137,8 @@ const showDevTools = import.meta.env.DEV;
         </main>
 
         <AppFooter />
+
+        <CookieBanner />
+        <CookiePreferencesModal />
     </div>
 </template>
