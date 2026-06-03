@@ -115,12 +115,12 @@
         },
         "privacy": {
             "title": "Privacy Policy",
-            "intro": "This Privacy Policy explains what data Gamely collects, why, and the choices you have. Gamely is a free daily game and does not require an account.",
+            "intro": "This Privacy Policy explains what data Gamely collects, why we collect it, and the choices you have. Gamely is a free daily game and works without an account.",
             "sections": [
                 {
                     "heading": "Data We Collect",
                     "paragraphs": [
-                        "Gamely has no user accounts and does not ask for your name, email or password. We process only the minimum needed to run the game and, with your consent, to measure traffic and show ads."
+                        "Gamely has no user accounts and never asks for your name, email or password. We process only what the game needs to run and, with your consent, what we use to measure traffic and show ads."
                     ],
                     "list": [
                         "Local game progress and stats stored in your browser (localStorage).",
@@ -152,7 +152,7 @@
                 {
                     "heading": "Your Rights",
                     "paragraphs": [
-                        "Depending on where you live, you may have the right to access, correct, delete or restrict processing of your personal data, and to withdraw consent for analytics and advertising at any time."
+                        "Depending on where you live, you can ask us to access, correct, delete or restrict processing of your personal data, and you can withdraw consent for analytics and advertising at any time."
                     ],
                     "list": [
                         "Withdraw or change cookie consent using Cookie settings in the footer.",
@@ -181,7 +181,7 @@
                 {
                     "heading": "Acceptable Use",
                     "paragraphs": [
-                        "Gamely is provided for personal, non-commercial entertainment. You agree to use it lawfully and not to disrupt or abuse the service."
+                        "Gamely is a free game for personal, non-commercial use. Use it lawfully and do not disrupt or abuse the service."
                     ],
                     "list": [
                         "Do not attempt to disrupt, overload or gain unauthorized access to the service or its infrastructure.",
@@ -222,7 +222,7 @@
                 {
                     "heading": "What Are Cookies",
                     "paragraphs": [
-                        "Cookies and local storage are small pieces of data stored in your browser. Gamely uses them to keep the game working, remember your settings and, with your consent, to measure traffic and show ads."
+                        "Cookies and local storage hold small bits of data in your browser. Gamely uses them to run the game, remember your settings and, with your consent, to measure traffic and show ads."
                     ]
                 },
                 {
