@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
 import { useCookieConsent } from "@/vue/composables/useCookieConsent";
 const { t } = useI18n();
@@ -21,21 +22,33 @@ const { openPreferences } = useCookieConsent();
                 </div>
 
                 <nav
-                    class="flex gap-6 font-semibold uppercase tracking-wider text-[11px]"
+                    class="flex flex-wrap justify-center gap-x-6 gap-y-2 font-semibold uppercase tracking-wider text-[11px]"
                 >
-                    <a href="#" class="hover:text-white transition-colors">
+                    <Link
+                        href="/privacy-policy"
+                        class="hover:text-white transition-colors"
+                    >
                         {{ t("footer.privacy") }}
-                    </a>
-                    <a href="#" class="hover:text-white transition-colors">
-                        {{ t("footer.contact") }}
-                    </a>
-<!--                    <button-->
-<!--                        type="button"-->
-<!--                        class="uppercase tracking-wider hover:text-white transition-colors"-->
-<!--                        @click="openPreferences"-->
-<!--                    >-->
-<!--                        {{ t("footer.cookie_settings") }}-->
-<!--                    </button>-->
+                    </Link>
+                    <Link
+                        href="/terms"
+                        class="hover:text-white transition-colors"
+                    >
+                        {{ t("footer.terms") }}
+                    </Link>
+                    <Link
+                        href="/cookie-policy"
+                        class="hover:text-white transition-colors"
+                    >
+                        {{ t("footer.cookies") }}
+                    </Link>
+                    <button
+                        type="button"
+                        class="uppercase tracking-wider hover:text-white transition-colors"
+                        @click="openPreferences"
+                    >
+                        {{ t("footer.cookie_settings") }}
+                    </button>
                 </nav>
             </div>
 

@@ -40,6 +40,27 @@ class PagesController extends Controller
         ]);
     }
 
+    public function privacy(): Response
+    {
+        return Inertia::render('Privacy', [
+            'meta' => config('legal.privacy'),
+        ]);
+    }
+
+    public function terms(): Response
+    {
+        return Inertia::render('Terms', [
+            'meta' => config('legal.terms'),
+        ]);
+    }
+
+    public function cookie(): Response
+    {
+        return Inertia::render('Cookie', [
+            'meta' => config('legal.cookie'),
+        ]);
+    }
+
     private function solvedTodayForMode(GameMode $mode): int
     {
         $challenge = DailyChallenge::query()

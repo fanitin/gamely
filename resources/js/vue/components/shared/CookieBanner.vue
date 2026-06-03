@@ -49,7 +49,7 @@ const { bannerOpen, acceptAll, rejectNonEssential, openPreferences } =
                 <p class="text-sm leading-relaxed text-muted mb-5">
                     {{ t("cookies.banner.description") }}
                     <a
-                        href="/cookies"
+                        href="/cookie-policy"
                         class="text-teal-400 hover:text-teal-300 transition-colors"
                     >
                         {{ t("cookies.banner.policy") }}
