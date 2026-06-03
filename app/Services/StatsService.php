@@ -12,13 +12,12 @@ class StatsService
 {
     public function getAvgAttemptsPerMode(): array
     {
-        return Cache::remember('avg_attempts_per_mode', 1800, function () {
-            $from = Carbon::now()->subDays(30)->toDateString();
-            $to   = Carbon::now()->toDateString();
+        $date = Carbon::now()->toDateString();
 
+        return Cache::remember("avg_attempts_per_mode_{$date}", 1800, function () use ($date) {
             $rows = GameSession::query()
                 ->join('daily_challenges', 'daily_challenges.id', '=', 'game_sessions.challenge_id')
-                ->whereBetween('daily_challenges.date', [$from, $to])
+                ->whereDate('daily_challenges.date', $date)
                 ->groupBy('game_sessions.mode')
                 ->selectRaw('game_sessions.mode as mode, ROUND(AVG(game_sessions.attempts), 1) as avg')
                 ->pluck('avg', 'mode');

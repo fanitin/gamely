@@ -131,12 +131,12 @@ const colorClasses = computed(() => {
             </div>
 
             <div
-                v-if="avgAttempts && nextIn"
+                v-if="avgAttempts || nextIn"
                 class="sm:hidden absolute right-5 top-5 flex items-center gap-3 font-mono text-[10px] uppercase tracking-wider text-muted/70"
             >
-                <span>{{ avgAttempts }} avg</span>
-                <span>·</span>
-                <span>{{ nextIn }}</span>
+                <span v-if="avgAttempts">{{ avgAttempts }} avg</span>
+                <span v-if="avgAttempts && nextIn">·</span>
+                <span v-if="nextIn">{{ nextIn }}</span>
             </div>
         </div>
     </Link>

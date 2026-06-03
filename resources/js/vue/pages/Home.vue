@@ -17,11 +17,11 @@ const props = defineProps<{
     nextResetAt: string;
 }>();
 
-const FALLBACK_AVG = { classic: 4.2, game_screenshots: 5.8, character: 6.1 };
+type AvgKey = keyof typeof props.avgAttempts;
 
-function avgFor(key: keyof typeof FALLBACK_AVG): string {
+function avgFor(key: AvgKey): string | undefined {
     const val = props.avgAttempts?.[key];
-    return (val != null ? val : FALLBACK_AVG[key]).toFixed(1);
+    return val != null ? val.toFixed(1) : undefined;
 }
 
 type ModeKey = "classic" | "screens" | "character";
@@ -32,7 +32,7 @@ interface GameMode {
     title: string;
     desc: string;
     icon: any;
-    avgKey: keyof typeof FALLBACK_AVG;
+    avgKey: AvgKey;
 }
 
 const modes: GameMode[] = [
