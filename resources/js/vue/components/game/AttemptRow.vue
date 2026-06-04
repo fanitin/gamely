@@ -91,9 +91,9 @@ const desktopGridClass = computed(() => {
         return "lg:grid-cols-[60px_1fr_90px_1fr_1fr_90px_90px]";
     }
     if (props.mode === "character") {
-        return "lg:grid-cols-[50px_80px_repeat(5,1fr)]";
+        return "lg:grid-cols-[50px_100px_repeat(5,1fr)]";
     }
-    return "lg:grid-cols-[50px_80px_repeat(5,1fr)_80px_90px]";
+    return "lg:grid-cols-[50px_100px_repeat(5,1fr)_80px_90px]";
 });
 
 function formatArrayValue(
@@ -335,17 +335,20 @@ const cells = computed<CellDescriptor[]>(() => {
             </div>
 
             <div
-                class="flex items-center gap-3 p-3 lg:bg-onyx-light lg:border-[3px] lg:border-onyx-dark lg:shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] lg:min-h-[80px] border-b border-onyx-light/30 lg:border-b-0 overflow-hidden"
+                class="flex items-center gap-3 p-3 lg:flex-col lg:gap-1.5 lg:justify-center lg:bg-onyx-light lg:border-[3px] lg:border-onyx-dark lg:shadow-[inset_0_0_0_2px_rgba(255,255,255,0.08)] lg:min-h-[80px] border-b border-onyx-light/30 lg:border-b-0 overflow-hidden"
             >
-                <div v-if="coverUrl" class="w-12 h-12 lg:w-14 lg:h-14 shrink-0">
+                <div v-if="coverUrl" class="w-12 h-12 lg:w-12 lg:h-12 shrink-0">
                     <img
                         :src="coverUrl"
                         :alt="guessedName"
                         class="w-full h-full object-cover rounded-md lg:rounded-none"
                     />
                 </div>
-                <div class="min-w-0 flex-1">
-                    <p class="text-sm font-bold text-white truncate">
+                <div class="min-w-0 flex-1 lg:flex-none lg:w-full">
+                    <p
+                        :title="guessedName"
+                        class="text-sm font-bold text-white truncate lg:text-xs lg:text-center lg:leading-tight"
+                    >
                         {{ guessedName }}
                     </p>
                 </div>

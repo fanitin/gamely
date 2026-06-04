@@ -157,7 +157,7 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
 
                     <div class="space-y-3 lg:space-y-3">
                         <div
-                            class="hidden lg:grid grid-cols-[50px_80px_repeat(5,1fr)_80px_90px] gap-2 mb-2"
+                            class="hidden lg:grid grid-cols-[50px_100px_repeat(5,1fr)_80px_90px] gap-2 mb-2"
                         >
                             <div
                                 class="text-center text-xs font-black uppercase tracking-wider text-muted"
