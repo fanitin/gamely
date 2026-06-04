@@ -90,12 +90,12 @@ const displayValue = computed(() => {
 
             <div
                 v-if="isMultiValue"
-                class="relative z-10 w-full space-y-2"
+                class="relative z-10 w-full min-w-0 space-y-2"
             >
                 <div
                     v-for="(item, index) in (value as Array<MultiValue>)"
                     :key="index"
-                    class="text-sm leading-snug"
+                    class="text-sm leading-snug break-words"
                 >
                     <span class="text-white/70 font-medium">{{ item.label }}:</span>
                     <span class="ml-1.5 font-bold">{{ item.value }}</span>

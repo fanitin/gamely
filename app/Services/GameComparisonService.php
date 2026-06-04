@@ -12,7 +12,6 @@ class GameComparisonService
     {
         return [
             'release_year' => $this->compareReleaseYear($guessed->release_date, $target->release_date),
-            'rating' => $this->compareRating($guessed->rating, $target->rating),
             'genres' => $this->compareGenres($guessed, $target),
             'platforms' => $this->comparePlatforms($guessed, $target),
             'developers_publishers' => $this->compareDevelopersAndPublishers($guessed, $target),
@@ -68,41 +67,6 @@ class GameComparisonService
         return [
             'result' => 'wrong',
             'value' => $guessYear,
-            'arrow' => $arrow,
-        ];
-    }
-
-    private function compareRating(?float $guessed, ?float $target): array
-    {
-        if ($guessed === null || $target === null) {
-            return [
-                'result' => 'wrong',
-                'value' => null,
-            ];
-        }
-
-        $diff = abs($guessed - $target);
-
-        if ($diff <= 0.5) {
-            return [
-                'result' => 'exact',
-                'value' => round($guessed, 1),
-            ];
-        }
-
-        $arrow = $guessed < $target ? 'up' : 'down';
-
-        if ($diff <= 1.5) {
-            return [
-                'result' => 'close',
-                'value' => round($guessed, 1),
-                'arrow' => $arrow,
-            ];
-        }
-
-        return [
-            'result' => 'wrong',
-            'value' => round($guessed, 1),
             'arrow' => $arrow,
         ];
     }

@@ -44,7 +44,6 @@ const attempts = Array.from({ length: attemptsCount }, (_, attemptIndex) => ({
         franchises_collections: { result: states[(attemptIndex + 2) % states.length] },
         player_perspectives: { result: states[(attemptIndex + 3) % states.length] },
         game_modes: { result: states[(attemptIndex + 4) % states.length] },
-        rating: { result: states[(attemptIndex + 2) % states.length] },
         release_year: { result: states[(attemptIndex + 1) % states.length] },
     },
 }));

@@ -6,7 +6,6 @@ const defaultComparisonOrder = [
     "franchises_collections",
     "player_perspectives",
     "game_modes",
-    "rating",
     "release_year",
     "popularity",
 ] as const;

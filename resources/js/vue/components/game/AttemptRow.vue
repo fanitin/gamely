@@ -17,7 +17,6 @@ interface Attempt {
         species?: string;
         first_appearance_year?: number | null;
         release_year?: number | null;
-        rating?: number | null;
         popularity_tier?: string | null;
         franchise_start_year?: number | null;
         genres?: Array<{ id: number; name: string }>;
@@ -30,11 +29,6 @@ interface Attempt {
     };
     comparison: {
         release_year?: {
-            result: "exact" | "close" | "wrong";
-            value?: number;
-            arrow?: "up" | "down";
-        };
-        rating?: {
             result: "exact" | "close" | "wrong";
             value?: number;
             arrow?: "up" | "down";
@@ -99,7 +93,7 @@ const desktopGridClass = computed(() => {
     if (props.mode === "character") {
         return "lg:grid-cols-[50px_80px_repeat(5,1fr)]";
     }
-    return "lg:grid-cols-[50px_80px_repeat(5,1fr)_80px_80px_90px]";
+    return "lg:grid-cols-[50px_80px_repeat(5,1fr)_80px_90px]";
 });
 
 function formatArrayValue(
@@ -305,13 +299,6 @@ const cells = computed<CellDescriptor[]>(() => {
             label: t("attributes.game_mode"),
             result: c.game_modes?.result || "wrong",
             value: buildGameModeValue(),
-        },
-        {
-            key: "rating",
-            label: t("attributes.rating"),
-            result: c.rating?.result || "wrong",
-            value: c.rating?.value,
-            arrow: c.rating?.arrow,
         },
         {
             key: "release_year",

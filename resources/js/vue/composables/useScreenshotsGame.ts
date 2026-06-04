@@ -22,7 +22,6 @@ interface GuessedGame {
     display_name: string;
     cover_url: string;
     release_year: number | null;
-    rating: number | null;
     genres: Array<{ id: number; name: string }>;
     developers: Array<{ id: number; name: string }>;
     publishers: Array<{ id: number; name: string }>;
@@ -37,7 +36,6 @@ interface Attempt {
     guessed: GuessedGame;
     comparison: {
         release_year: ComparisonResult;
-        rating: ComparisonResult;
         genres: ComparisonResult;
         developers_publishers: ComparisonResult;
         franchises_collections: ComparisonResult;
