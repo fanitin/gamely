@@ -10,6 +10,7 @@ import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useClassicGame } from "@/vue/composables/useClassicGame";
 import HintCard from "@/vue/components/game/HintCard.vue";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
+import WinBanner from "@/vue/components/game/WinBanner.vue";
 
 const { t } = useI18n();
 const {
@@ -129,6 +130,19 @@ const handleSelect = async (item: { id: number | string; name: string }) => {
                         @select="handleSelect"
                     />
                 </div>
+                <WinBanner
+                    v-else-if="isWon"
+                    mode="classic"
+                    :entity-name="
+                        lastCorrectGuess?.display_name ||
+                        lastCorrectGuess?.name ||
+                        ''
+                    "
+                    :attempts-count="attempts.length"
+                    :cover-url="lastCorrectGuess?.cover_url"
+                    :challenge-date="new Date().toISOString().split('T')[0]"
+                    @open-stats="showModal = true"
+                />
 
                 <div v-if="isLoading" class="text-center mb-8">
                     <div

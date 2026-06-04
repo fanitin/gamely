@@ -43,6 +43,7 @@ const variantClasses = {
     danger: "bg-crimson-500 hover:bg-crimson-400 active:bg-crimson-600 text-white shadow-lg shadow-crimson-500/20",
     outline:
         "bg-transparent border-2 border-onyx-light hover:border-teal-500 text-muted hover:text-white",
+    base: "",
     link: "",
 };
 
@@ -56,9 +57,10 @@ const classes = computed(() => {
     if (props.variant === "link") {
         return [linkClasses, sizeClasses[props.size] || "text-xs", props.fullWidth ? "w-full" : ""].join(" ");
     }
+    const variant = props.variant in variantClasses ? props.variant : "primary";
     return [
         baseClasses,
-        variantClasses[props.variant] || variantClasses.primary,
+        variantClasses[variant],
         sizeClasses[props.size] || sizeClasses.md,
         props.fullWidth ? "w-full" : "",
     ].join(" ");

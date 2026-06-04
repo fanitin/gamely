@@ -15,6 +15,7 @@ import HintCard from "@/vue/components/game/HintCard.vue";
 import AttemptRow from "@/vue/components/game/AttemptRow.vue";
 import { useScreenshotsGame } from "@/vue/composables/useScreenshotsGame";
 import ResultModal from "@/vue/components/game/ResultModal.vue";
+import WinBanner from "@/vue/components/game/WinBanner.vue";
 
 const { t } = useI18n();
 const {
@@ -245,6 +246,19 @@ const progressPercentage = computed(() => {
                         @select="handleSelect"
                     />
                 </div>
+                <WinBanner
+                    v-else-if="isWon"
+                    mode="game_screenshots"
+                    :entity-name="
+                        lastCorrectGuess?.display_name ||
+                        lastCorrectGuess?.name ||
+                        ''
+                    "
+                    :attempts-count="attempts.length"
+                    :cover-url="lastCorrectGuess?.cover_url"
+                    :challenge-date="new Date().toISOString().split('T')[0]"
+                    @open-stats="showModal = true"
+                />
 
                 <div v-if="isLoading" class="text-center mb-8">
                     <div

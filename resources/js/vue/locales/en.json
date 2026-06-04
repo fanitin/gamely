@@ -98,6 +98,11 @@
         "average": "Average",
         "faster_than": "faster than {percent}% of solvers"
     },
+    "win": {
+        "you_won": "You won",
+        "solved_in": "Solved in {count} guesses | Solved in {count} guess | Solved in {count} guesses",
+        "today_stats": "Today's stats"
+    },
     "footer": {
         "privacy": "Privacy",
         "terms": "Terms",
