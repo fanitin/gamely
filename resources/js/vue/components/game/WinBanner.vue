@@ -31,25 +31,22 @@ const modeKey = computed(() => MODE_KEY[props.mode]);
 const styles = computed(() => {
     const map: Record<
         ModeKey,
-        { edge: string; eyebrow: string; ring: string; button: string }
+        { edge: string; eyebrow: string; ring: string }
     > = {
         classic: {
             edge: "before:bg-mode-classic",
             eyebrow: "text-mode-classic",
             ring: "ring-mode-classic/40",
-            button: "bg-mode-classic hover:bg-mode-classic/90 shadow-mode-classic/20",
         },
         screens: {
             edge: "before:bg-mode-screens",
             eyebrow: "text-mode-screens",
             ring: "ring-mode-screens/40",
-            button: "bg-mode-screens hover:bg-mode-screens/90 shadow-mode-screens/20",
         },
         character: {
             edge: "before:bg-mode-character",
             eyebrow: "text-mode-character",
             ring: "ring-mode-character/40",
-            button: "bg-mode-character hover:bg-mode-character/90 shadow-mode-character/20",
         },
     };
     return map[modeKey.value];
@@ -114,9 +111,8 @@ onMounted(async () => {
             </div>
 
             <AppButton
-                variant="base"
-                class="shrink-0 w-full sm:w-auto gap-2 py-3 text-onyx-dark shadow-lg"
-                :class="styles.button"
+                variant="outline"
+                class="shrink-0 w-full sm:w-auto gap-2 py-3"
                 @click="emit('open-stats')"
             >
                 {{ t("win.today_stats") }}

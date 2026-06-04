@@ -43,7 +43,6 @@ const variantClasses = {
     danger: "bg-crimson-500 hover:bg-crimson-400 active:bg-crimson-600 text-white shadow-lg shadow-crimson-500/20",
     outline:
         "bg-transparent border-2 border-onyx-light hover:border-teal-500 text-muted hover:text-white",
-    base: "",
     link: "",
 };
 
