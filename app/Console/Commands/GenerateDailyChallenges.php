@@ -25,7 +25,6 @@ class GenerateDailyChallenges extends Command
         }
 
         $this->generateForDate(today()->toDateString());
-        $this->generateForDate(today()->addDay()->toDateString());
 
         $this->info("\nDone!");
     }
@@ -71,13 +70,12 @@ class GenerateDailyChallenges extends Command
 
     private function generateClassicChallenge(string $date): DailyChallenge
     {
-        $seed = crc32(now());
         $game = Game::where('rating_count', '>', 10)
             ->where(function ($query) {
                 $query->where('rating', '>', 70)
                     ->orWhere('rating_count', '>', 100);
             })
-            ->inRandomOrder($seed)
+            ->inRandomOrder()
             ->first();
 
         return DailyChallenge::create([
@@ -89,14 +87,13 @@ class GenerateDailyChallenges extends Command
 
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
-        $seed = crc32(now());
         $game = Game::where('rating_count', '>', 10)
             ->where(function ($query) {
                 $query->where('rating', '>', 70)
                     ->orWhere('rating_count', '>', 100);
             })
             ->has('screenshots', '>=', 5)
-            ->inRandomOrder($seed)
+            ->inRandomOrder()
             ->first();
 
         if (! $game) {
@@ -112,7 +109,6 @@ class GenerateDailyChallenges extends Command
 
     private function generateCharacterChallenge(string $date): ?DailyChallenge
     {
-        $seed = crc32(now());
         $character = Character::whereNotNull('mug_shot_url')
             ->whereNotNull('gender_id')
             ->whereNotNull('species_id')
@@ -121,7 +117,7 @@ class GenerateDailyChallenges extends Command
                     ->where('rating', '>', 70)
                     ->orWhere('rating_count', '>', 100);
             })
-            ->inRandomOrder($seed)
+            ->inRandomOrder()
             ->first();
 
         if (! $character) {
