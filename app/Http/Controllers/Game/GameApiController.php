@@ -37,7 +37,6 @@ class GameApiController extends Controller
         $validated = $request->validate([
             'entity_id' => ['required', 'integer', 'min:1'],
             'mode' => ['required', 'string', Rule::in(array_map(fn (GameMode $mode) => $mode->value, GameMode::cases()))],
-            'attempts_count' => ['sometimes', 'integer', 'min:1'],
         ]);
 
         $entityId = (int) $validated['entity_id'];
@@ -47,9 +46,22 @@ class GameApiController extends Controller
         }
 
         $sessionToken = $request->cookie('session_token');
+        $isNewToken = false;
         if (! $sessionToken) {
             $sessionToken = (string) Str::uuid();
-            cookie()->queue(cookie(
+            $isNewToken = true;
+        }
+
+        $result = $this->guessService->makeGuess(
+            $entityId,
+            $mode,
+            $sessionToken
+        );
+
+        $response = response()->json($result);
+
+        if ($isNewToken) {
+            $response->withCookie(cookie(
                 name: 'session_token',
                 value: $sessionToken,
                 minutes: 60 * 24 * 365,
@@ -62,13 +74,6 @@ class GameApiController extends Controller
             ));
         }
 
-        $result = $this->guessService->makeGuess(
-            $entityId,
-            $mode,
-            $sessionToken,
-            $validated['attempts_count'] ?? null
-        );
-
-        return response()->json($result);
+        return $response;
     }
 }

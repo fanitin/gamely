@@ -191,7 +191,6 @@ export function useScreenshotsGame() {
             const response = await axios.post(route("api.guess"), {
                 entity_id: gameId,
                 mode: "game_screenshots",
-                attempts_count: attempts.value.length + 1,
             });
 
             const data = response.data;

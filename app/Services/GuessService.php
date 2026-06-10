@@ -8,6 +8,7 @@ use App\Models\DailyChallenge;
 use App\Models\Game;
 use App\Models\GameSession;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class GuessService
@@ -20,7 +21,6 @@ class GuessService
         int $entityId,
         GameMode $mode,
         string $sessionToken,
-        ?int $attemptsCount = null,
         ?string $date = null
     ): array {
         $date = $date ?? today()->toDateString();
@@ -59,6 +59,8 @@ class GuessService
 
         $isCorrect = $comparison['is_correct'];
 
+        $attempts = $this->incrementAttempts($challenge->id, $sessionToken);
+
         if ($isCorrect) {
             $alreadyCompleted = GameSession::where('challenge_id', $challenge->id)
                 ->where('session_token', $sessionToken)
@@ -70,8 +72,6 @@ class GuessService
                     'error' => 'Already completed this challenge',
                 ];
             }
-
-            $attempts = $attemptsCount ?? ($this->countAttempts($challenge->id, $sessionToken) + 1);
 
             try {
                 $session = GameSession::create([
@@ -184,11 +184,13 @@ class GuessService
         ];
     }
 
-    private function countAttempts(int $challengeId, string $sessionToken): int
+    private function incrementAttempts(int $challengeId, string $sessionToken): int
     {
-        return GameSession::where('challenge_id', $challengeId)
-            ->where('session_token', $sessionToken)
-            ->count();
+        $key = "challenge_attempts:{$challengeId}:{$sessionToken}";
+
+        Cache::add($key, 0, now()->addHours(48));
+
+        return (int) Cache::increment($key);
     }
 
     private function isDuplicateSessionException(QueryException $exception): bool

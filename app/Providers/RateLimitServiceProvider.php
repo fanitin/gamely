@@ -23,7 +23,7 @@ class RateLimitServiceProvider extends ServiceProvider
     {
         RateLimiter::for($name, function (Request $request) use ($perMinute, $message) {
             return Limit::perMinute($perMinute)
-                ->by($this->visitorKey($request))
+                ->by($request->ip())
                 ->response(function (Request $request, array $headers) use ($message) {
                     return response()->json([
                         'code' => 'rate_limited',
@@ -33,12 +33,5 @@ class RateLimitServiceProvider extends ServiceProvider
                     ], 429, $headers);
                 });
         });
-    }
-
-    private function visitorKey(Request $request): string
-    {
-        $sessionToken = (string) $request->cookie('session_token', '');
-
-        return $request->ip().'|'.($sessionToken !== '' ? $sessionToken : sha1((string) $request->userAgent()));
     }
 }
