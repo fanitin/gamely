@@ -13,8 +13,8 @@ class GameObserver
             return;
         }
 
-        $originalCover = $game->getOriginal('cover_url');
-        $currentCover = $game->cover_url;
+        $originalCover = $game->getRawOriginal('cover_url');
+        $currentCover = $game->getAttributes()['cover_url'] ?? null;
 
         if ($originalCover === $currentCover) {
             return;
@@ -25,6 +25,6 @@ class GameObserver
 
     public function deleted(Game $game): void
     {
-        app(MediaService::class)->deleteCover($game->cover_url);
+        app(MediaService::class)->deleteCover($game->getRawOriginal('cover_url'));
     }
 }

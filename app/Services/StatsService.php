@@ -106,6 +106,15 @@ class StatsService
         $fromDate = Carbon::parse($from)->startOfDay();
         $toDate = Carbon::parse($to)->startOfDay();
 
+        return Cache::remember(
+            "daily_trend_{$fromDate->toDateString()}_{$toDate->toDateString()}",
+            1800,
+            fn () => $this->buildDailyTrend($fromDate, $toDate)
+        );
+    }
+
+    private function buildDailyTrend(Carbon $fromDate, Carbon $toDate): array
+    {
         $raw = GameSession::query()
             ->join('daily_challenges', 'daily_challenges.id', '=', 'game_sessions.challenge_id')
             ->whereBetween('daily_challenges.date', [$fromDate->toDateString(), $toDate->toDateString()])

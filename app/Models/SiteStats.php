@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class SiteStats extends Model
 {
@@ -30,30 +31,44 @@ class SiteStats extends Model
             return null;
         }
 
-        $stats = self::firstOrCreate(
-            ['challenge_id' => $session->challenge_id],
-            [
-                'total_players' => 0,
-                'attempts_distribution' => [],
-            ]
-        );
+        return DB::transaction(function () use ($session) {
+            $stats = self::query()
+                ->where('challenge_id', $session->challenge_id)
+                ->lockForUpdate()
+                ->first();
 
-        $isFirstAttempt = GameSession::where('challenge_id', $session->challenge_id)
-            ->where('session_token', $session->session_token)
-            ->count() === 1;
+            if (! $stats) {
+                self::createOrFirst(
+                    ['challenge_id' => $session->challenge_id],
+                    [
+                        'total_players' => 0,
+                        'attempts_distribution' => [],
+                    ]
+                );
 
-        if ($isFirstAttempt) {
-            $stats->increment('total_players');
-        }
+                $stats = self::query()
+                    ->where('challenge_id', $session->challenge_id)
+                    ->lockForUpdate()
+                    ->first();
+            }
 
-        $distribution = $stats->attempts_distribution ?? [];
-        $attempts = (string)$session->attempts;
-        $distribution[$attempts] = ($distribution[$attempts] ?? 0) + 1;
-        $stats->attempts_distribution = $distribution;
+            $isFirstAttempt = GameSession::where('challenge_id', $session->challenge_id)
+                ->where('session_token', $session->session_token)
+                ->count() === 1;
 
-        $stats->calculated_at = now();
-        $stats->save();
+            if ($isFirstAttempt) {
+                $stats->increment('total_players');
+            }
 
-        return $stats;
+            $distribution = $stats->attempts_distribution ?? [];
+            $attempts = (string)$session->attempts;
+            $distribution[$attempts] = ($distribution[$attempts] ?? 0) + 1;
+            $stats->attempts_distribution = $distribution;
+
+            $stats->calculated_at = now();
+            $stats->save();
+
+            return $stats;
+        });
     }
 }

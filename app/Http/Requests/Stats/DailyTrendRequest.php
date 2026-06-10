@@ -15,7 +15,7 @@ class DailyTrendRequest extends FormRequest
     {
         return [
             'from' => ['sometimes', 'date_format:Y-m-d'],
-            'to' => ['sometimes', 'date_format:Y-m-d', 'after_or_equal:from'],
+            'to' => ['sometimes', 'date_format:Y-m-d', 'after_or_equal:from', 'before_or_equal:today'],
         ];
     }
 }
