@@ -40,7 +40,6 @@ class GuessServiceTest extends TestCase
             $wrongGame->id,
             GameMode::CLASSIC,
             $sessionToken,
-            1,
             $challengeDate
         );
 
@@ -52,7 +51,6 @@ class GuessServiceTest extends TestCase
             $targetGame->id,
             GameMode::CLASSIC,
             $sessionToken,
-            2,
             $challengeDate
         );
 

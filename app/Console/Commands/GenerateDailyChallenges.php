@@ -10,9 +10,9 @@ use Illuminate\Console\Command;
 
 class GenerateDailyChallenges extends Command
 {
-    protected $signature = 'challenges:generate {date?}';
+    protected $signature = 'challenges:generate {date?} {--days=7}';
 
-    protected $description = 'Generate daily challenges for specified date (tomorrow by default; also backfills today)';
+    protected $description = 'Generate daily challenges idempotently for today and the next N days (default 7); also backfills any missing days';
 
     public function handle(): void
     {
@@ -24,7 +24,11 @@ class GenerateDailyChallenges extends Command
             return;
         }
 
-        $this->generateForDate(today()->toDateString());
+        $days = max(0, (int) $this->option('days'));
+
+        for ($offset = 0; $offset <= $days; $offset++) {
+            $this->generateForDate(today()->addDays($offset)->toDateString());
+        }
 
         $this->info("\nDone!");
     }
@@ -34,7 +38,7 @@ class GenerateDailyChallenges extends Command
         $this->info("Generating challenges for {$date}...");
 
         foreach (GameMode::cases() as $mode) {
-            if (DailyChallenge::where('mode', $mode->value)->where('date', $date)->exists()) {
+            if (DailyChallenge::forMode($mode)->forDate($date)->exists()) {
                 $this->warn("Challenge for {$mode->value} mode on {$date} already exists");
 
                 continue;
