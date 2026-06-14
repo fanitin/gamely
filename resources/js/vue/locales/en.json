@@ -1,4 +1,7 @@
 {
+    "ads": {
+        "label": "Advertisement"
+    },
     "nav": {
         "home": "Home",
         "stats": "Stats",

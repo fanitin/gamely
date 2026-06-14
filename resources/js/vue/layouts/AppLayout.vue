@@ -9,6 +9,7 @@ import DevPersonalStatsPreviewModal from "@/vue/components/dev/DevPersonalStatsP
 import DevWinStatsPreviewModal from "@/vue/components/dev/DevWinStatsPreviewModal.vue";
 import AppFooter from "@/vue/components/layout/AppFooter.vue";
 import AppToastStack from "@/vue/components/ui/AppToastStack.vue";
+import AdUnit from "@/vue/components/shared/AdUnit.vue";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { CircleHelp, BarChart3, Library } from "lucide-vue-next";
@@ -132,9 +133,25 @@ onMounted(() => initConsent());
             @close="isDevWinStatsPreviewOpen = false"
         />
 
-        <main class="flex-1 relative z-10">
-            <slot />
-        </main>
+        <div class="flex-1 relative z-10 flex justify-center">
+            <aside
+                class="hidden 2xl:flex shrink-0 w-44 justify-center pt-8"
+                aria-hidden="true"
+            >
+                <AdUnit slot="tower_left" format="tower" />
+            </aside>
+
+            <main class="flex-1 min-w-0">
+                <slot />
+            </main>
+
+            <aside
+                class="hidden 2xl:flex shrink-0 w-44 justify-center pt-8"
+                aria-hidden="true"
+            >
+                <AdUnit slot="tower_right" format="tower" />
+            </aside>
+        </div>
 
         <AppFooter />
 

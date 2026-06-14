@@ -4,6 +4,7 @@ import { useI18n } from "vue-i18n";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import AppLayout from "@/vue/layouts/AppLayout.vue";
 import ModeCard from "@/vue/components/ui/ModeCard.vue";
+import AdUnit from "@/vue/components/shared/AdUnit.vue";
 import {
     Gamepad2,
     Image as ImageIcon,
@@ -110,6 +111,8 @@ const nextIn = computed(() => {
                     :next-in="nextIn"
                 />
             </div>
+
+            <AdUnit slot="home" class="w-full" />
         </div>
     </AppLayout>
 </template>
