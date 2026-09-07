@@ -144,7 +144,7 @@ const chartData = computed<ChartData<"line">>(() => ({
     ],
 }));
 
-const chartOptions = computed(() => ({
+const chartOptions = computed<ChartOptions<"line">>(() => ({
     responsive: true,
     maintainAspectRatio: false,
     animation: false,
@@ -160,8 +160,8 @@ const chartOptions = computed(() => ({
             padding: 10,
             titleColor: "rgba(255, 255, 255, 0.95)",
             bodyColor: "rgba(255, 255, 255, 0.95)",
-            titleFont: { size: 13, weight: "700" },
-            bodyFont: { size: 13, weight: "600" },
+            titleFont: { size: 13, weight: 700 },
+            bodyFont: { size: 13, weight: 600 },
             usePointStyle: true,
             boxPadding: 6,
             callbacks: {
@@ -200,7 +200,7 @@ const chartOptions = computed(() => ({
                 minRotation: 0,
                 font: (ctx) => ({
                     size: ctx.chart.width < 700 ? 12 : 13,
-                    weight: "600",
+                    weight: 600,
                 }),
             },
         },
@@ -218,7 +218,7 @@ const chartOptions = computed(() => ({
                 },
                 font: (ctx) => ({
                     size: ctx.chart.width < 700 ? 12 : 13,
-                    weight: "600",
+                    weight: 600,
                 }),
             },
         },

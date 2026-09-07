@@ -16,13 +16,14 @@ const props = withDefaults(
 );
 
 const { t } = useI18n();
-const { clientId, enabled, isDev, showAd } = useAds();
+const { clientId, configured, enabled, isDev, showAd } = useAds();
 const page = usePage();
 
 const slotCode = computed(() => adSlots[props.slot]);
+const isVisible = computed(() => configured && (isDev || enabled.value));
 
 const render = async () => {
-    if (!enabled.value || isDev) return;
+    if (!configured || !enabled.value || isDev) return;
     await nextTick();
     showAd();
 };
@@ -35,7 +36,7 @@ watch(
 </script>
 
 <template>
-    <div class="my-6 w-full">
+    <div v-if="isVisible" class="my-6 w-full">
         <p
             class="text-center text-[10px] font-medium uppercase tracking-widest text-muted/60 mb-1"
         >
@@ -51,7 +52,7 @@ watch(
         </div>
 
         <ins
-            v-else-if="enabled && clientId"
+            v-else
             :key="page.url"
             class="adsbygoogle block"
             :class="format === 'tower' ? 'w-40 mx-auto' : 'w-full'"
