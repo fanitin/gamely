@@ -12,3 +12,8 @@ Schedule::command('challenges:generate --days=30')
     ->dailyAt('23:59')
     ->withoutOverlapping()
     ->onOneServer();
+
+Schedule::command('sitemap:generate')
+    ->weeklyOn(1, '03:00')
+    ->withoutOverlapping()
+    ->onOneServer();
