@@ -1,6 +1,6 @@
 import { useCookieConsent } from "@/vue/composables/useCookieConsent";
 
-const CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as string | undefined;
+const CLIENT_ID = (import.meta.env.VITE_ADSENSE_CLIENT_ID as string | undefined)?.trim() || undefined;
 
 export function useAds() {
     const { adsGranted } = useCookieConsent();
@@ -12,6 +12,7 @@ export function useAds() {
 
     return {
         clientId: CLIENT_ID,
+        configured: CLIENT_ID !== undefined,
         enabled: adsGranted,
         isDev: import.meta.env.DEV,
         showAd,

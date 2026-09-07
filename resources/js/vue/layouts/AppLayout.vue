@@ -12,8 +12,9 @@ import AppToastStack from "@/vue/components/ui/AppToastStack.vue";
 import AdUnit from "@/vue/components/shared/AdUnit.vue";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { CircleHelp, BarChart3, Library } from "lucide-vue-next";
+import { CircleHelp, BarChart3 } from "lucide-vue-next";
 import { useCookieConsent } from "@/vue/composables/useCookieConsent";
+import { useAds } from "@/vue/composables/useAds";
 
 const { locale, t } = useI18n();
 const isHelpOpen = ref(false);
@@ -23,6 +24,9 @@ const isDevWinStatsPreviewOpen = ref(false);
 
 const currentLanguage = computed(() => locale.value.toUpperCase());
 const showDevTools = import.meta.env.DEV;
+
+const { configured: adsConfigured, enabled: adsEnabled, isDev: adsIsDev } = useAds();
+const adsVisible = computed(() => adsConfigured && (adsIsDev || adsEnabled.value));
 
 const { initConsent } = useCookieConsent();
 onMounted(() => initConsent());
@@ -56,17 +60,6 @@ onMounted(() => initConsent());
                 </Link>
 
                 <div class="flex items-center gap-0.5 sm:gap-2">
-                    <a
-                        href="/games"
-                        class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
-                        :title="t('nav.games')"
-                    >
-                        <Library class="w-5 h-5 lg:w-6 lg:h-6 sm:mb-1" />
-                        <span class="hidden sm:block text-[10px] lg:text-[11px] font-medium leading-none">{{
-                            t("nav.games")
-                        }}</span>
-                    </a>
-
                     <button
                         @click="isPersonalStatsOpen = true"
                         class="flex flex-col items-center justify-center w-10 sm:min-w-[3.5rem] sm:w-auto lg:min-w-[4rem] h-12 lg:h-14 text-muted hover:text-white hover:bg-white/10 rounded-xl transition-all active:scale-95"
@@ -135,6 +128,7 @@ onMounted(() => initConsent());
 
         <div class="flex-1 relative z-10 flex justify-center">
             <aside
+                v-if="adsVisible"
                 class="hidden 2xl:flex shrink-0 w-44 justify-center pt-8"
                 aria-hidden="true"
             >
@@ -146,6 +140,7 @@ onMounted(() => initConsent());
             </main>
 
             <aside
+                v-if="adsVisible"
                 class="hidden 2xl:flex shrink-0 w-44 justify-center pt-8"
                 aria-hidden="true"
             >
