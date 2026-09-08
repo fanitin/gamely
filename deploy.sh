@@ -34,6 +34,9 @@ docker compose exec -T app php artisan view:cache
 echo "==> Restarting workers"
 docker compose exec -T app php artisan queue:restart
 
+echo "==> Reloading nginx"
+docker compose restart nginx
+
 echo "==> Pruning old images"
 docker image prune -f
 

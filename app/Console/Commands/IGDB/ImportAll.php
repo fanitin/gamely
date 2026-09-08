@@ -6,12 +6,16 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('import:igdb-all')]
+#[Signature('import:igdb-all {--limit= : Limit the number of records processed by each media import}')]
 #[Description('Execute all IGDB import commands in the correct order')]
 class ImportAll extends Command
 {
     public function handle(): int
     {
+        $mediaArguments = $this->option('limit')
+            ? ['--limit' => (int) $this->option('limit')]
+            : [];
+
         $commands = [
             ['signature' => 'import:igdb-platform-families'],
             ['signature' => 'import:igdb-platforms'],
@@ -26,10 +30,10 @@ class ImportAll extends Command
             ['signature' => 'import:igdb-games'],
             ['signature' => 'import:igdb-characters'],
             ['signature' => 'import:igdb-similar-games'],
-            ['signature' => 'import:covers', 'arguments' => ['--limit' => 100]],
-            ['signature' => 'import:artworks', 'arguments' => ['--limit' => 100]],
-            ['signature' => 'import:screenshots', 'arguments' => ['--limit' => 100]],
-            ['signature' => 'import:character-mug-shots', 'arguments' => ['--limit' => 100]],
+            ['signature' => 'import:covers', 'arguments' => $mediaArguments],
+            ['signature' => 'import:artworks', 'arguments' => $mediaArguments],
+            ['signature' => 'import:screenshots', 'arguments' => $mediaArguments],
+            ['signature' => 'import:character-mug-shots', 'arguments' => $mediaArguments],
             ['signature' => 'games:recalculate-meta'],
         ];
 

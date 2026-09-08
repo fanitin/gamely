@@ -13,6 +13,12 @@ Schedule::command('challenges:generate --days=30')
     ->withoutOverlapping()
     ->onOneServer();
 
+Schedule::command('import:igdb-all')
+    ->weeklyOn(0, '01:00')
+    ->withoutOverlapping()
+    ->onOneServer()
+    ->runInBackground();
+
 Schedule::command('sitemap:generate')
     ->weeklyOn(1, '03:00')
     ->withoutOverlapping()
