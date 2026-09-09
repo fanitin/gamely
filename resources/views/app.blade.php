@@ -4,6 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title inertia>{{ config('seo.title') }}</title>
+    <meta name="description" content="{{ config('seo.description') }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Gamely">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ config('seo.title') }}">
+    <meta property="og:description" content="{{ config('seo.description') }}">
+    <meta property="og:image" content="{{ url(config('seo.image')) }}">
+    <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ config('seo.title') }}">
+    <meta name="twitter:description" content="{{ config('seo.description') }}">
+    <meta name="twitter:image" content="{{ url(config('seo.image')) }}">
+
     <link rel="icon" type="image/png" href="/favicons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicons/favicon.svg" />
     <link rel="shortcut icon" href="/favicons/favicon.ico" />

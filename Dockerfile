@@ -29,6 +29,9 @@ COPY --from=vendor /app/vendor/tightenco/ziggy ./vendor/tightenco/ziggy
 ARG VITE_ADSENSE_CLIENT_ID=""
 ENV VITE_ADSENSE_CLIENT_ID=${VITE_ADSENSE_CLIENT_ID}
 
+ARG VITE_GA_MEASUREMENT_ID=""
+ENV VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID}
+
 RUN npm run build
 
 
