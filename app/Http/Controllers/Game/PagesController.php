@@ -8,6 +8,7 @@ use App\Models\DailyChallenge;
 use App\Services\StatsService;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PagesController extends Controller
 {
@@ -58,6 +59,24 @@ class PagesController extends Controller
     {
         return Inertia::render('Cookie', [
             'meta' => config('legal.cookie'),
+        ]);
+    }
+
+    public function sitemap(): BinaryFileResponse
+    {
+        abort_unless(file_exists(public_path('sitemap.xml')), 404);
+
+        return response()->file(public_path('sitemap.xml'), [
+            'Content-Type' => 'application/xml',
+        ]);
+    }
+
+    public function robots(): BinaryFileResponse
+    {
+        abort_unless(file_exists(public_path('robots.txt')), 404);
+
+        return response()->file(public_path('robots.txt'), [
+            'Content-Type' => 'text/plain',
         ]);
     }
 
