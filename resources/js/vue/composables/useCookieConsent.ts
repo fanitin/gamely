@@ -29,10 +29,10 @@ declare global {
     }
 }
 
-function gtag(...args: unknown[]): void {
+const gtag = function (this: unknown): void {
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push(args);
-}
+    window.dataLayer.push(arguments);
+} as (...args: unknown[]) => void;
 
 interface ConsentState {
     record: ConsentRecord | null;
