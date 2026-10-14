@@ -21,7 +21,6 @@ class ImportAll extends Command
                 ['signature' => 'import:covers', 'arguments' => $mediaArguments],
                 ['signature' => 'import:artworks', 'arguments' => $mediaArguments],
                 ['signature' => 'import:screenshots', 'arguments' => $mediaArguments],
-                ['signature' => 'import:character-mug-shots', 'arguments' => $mediaArguments],
             ]
             : [];
 
@@ -37,8 +36,6 @@ class ImportAll extends Command
             ['signature' => 'import:igdb-character-genders'],
             ['signature' => 'import:igdb-character-species'],
             ['signature' => 'import:igdb-games'],
-            ['signature' => 'import:igdb-characters'],
-            ['signature' => 'characters:prune'],
             ['signature' => 'import:igdb-similar-games'],
             ...$mediaCommands,
             ['signature' => 'games:recalculate-meta'],
@@ -47,7 +44,7 @@ class ImportAll extends Command
         $this->info('Starting full IGDB import process...');
 
         if ($mediaCommands === []) {
-            $this->warn('Media import is disabled (IGDB_MEDIA_IMPORT_ENABLED=false). Skipping covers, artworks, screenshots and mug shots.');
+            $this->warn('Media import is disabled (IGDB_MEDIA_IMPORT_ENABLED=false). Skipping covers, artworks and screenshots.');
         }
 
         foreach ($commands as $command) {

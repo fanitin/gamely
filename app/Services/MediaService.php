@@ -91,6 +91,10 @@ class MediaService
 
     private function deleteFromR2(?string $path, string $prefix, string $caller): void
     {
+        if (! config('services.igdb.media_import')) {
+            return;
+        }
+
         if (! is_string($path) || $path === '' || ! str_starts_with($path, $prefix)) {
             return;
         }

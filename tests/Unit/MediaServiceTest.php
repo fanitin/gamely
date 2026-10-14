@@ -54,4 +54,34 @@ class MediaServiceTest extends TestCase
         $this->assertEquals('covers/123.webp', $path);
         Storage::disk('r2')->assertExists('covers/123.webp');
     }
+
+    public function test_it_deletes_media_from_r2_when_media_import_is_enabled()
+    {
+        Storage::fake('r2');
+        Storage::disk('r2')->put('covers/1.webp', 'x');
+        Storage::disk('r2')->put('character_mug_shots/2.webp', 'x');
+
+        $service = new MediaService;
+        $service->deleteCover('covers/1.webp');
+        $service->deleteCharacterMugShot('character_mug_shots/2.webp');
+        $service->deleteCharacterMugShot('covers/1.webp');
+
+        Storage::disk('r2')->assertMissing('covers/1.webp');
+        Storage::disk('r2')->assertMissing('character_mug_shots/2.webp');
+    }
+
+    public function test_it_never_touches_r2_when_media_import_is_disabled()
+    {
+        config(['services.igdb.media_import' => false]);
+        Storage::fake('r2');
+        Storage::disk('r2')->put('covers/1.webp', 'x');
+        Storage::disk('r2')->put('character_mug_shots/2.webp', 'x');
+
+        $service = new MediaService;
+        $service->deleteCover('covers/1.webp');
+        $service->deleteCharacterMugShot('character_mug_shots/2.webp');
+
+        Storage::disk('r2')->assertExists('covers/1.webp');
+        Storage::disk('r2')->assertExists('character_mug_shots/2.webp');
+    }
 }
