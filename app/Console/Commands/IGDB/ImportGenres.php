@@ -15,6 +15,11 @@ class ImportGenres extends AbstractIgdbImport
         return 'genres';
     }
 
+    protected function getModelClass(): string
+    {
+        return Genre::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

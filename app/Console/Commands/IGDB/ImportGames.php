@@ -27,6 +27,11 @@ class ImportGames extends AbstractIgdbImport
         return 'games';
     }
 
+    protected function getModelClass(): string
+    {
+        return Game::class;
+    }
+
     protected function getQueryBody(): string
     {
         $fields = [

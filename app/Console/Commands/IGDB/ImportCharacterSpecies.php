@@ -15,6 +15,11 @@ class ImportCharacterSpecies extends AbstractIgdbImport
         return 'character_species';
     }
 
+    protected function getModelClass(): string
+    {
+        return CharacterSpecies::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name;';

@@ -15,6 +15,11 @@ class ImportPlatformFamilies extends AbstractIgdbImport
         return 'platform_families';
     }
 
+    protected function getModelClass(): string
+    {
+        return PlatformFamily::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

@@ -15,6 +15,11 @@ class ImportPlayerPerspective extends AbstractIgdbImport
         return 'player_perspectives';
     }
 
+    protected function getModelClass(): string
+    {
+        return PlayerPerspective::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

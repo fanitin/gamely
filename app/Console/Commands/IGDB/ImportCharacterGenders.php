@@ -15,6 +15,11 @@ class ImportCharacterGenders extends AbstractIgdbImport
         return 'character_genders';
     }
 
+    protected function getModelClass(): string
+    {
+        return CharacterGender::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name;';

@@ -19,6 +19,7 @@ return [
         'client_secret' => env('IGDB_CLIENT_SECRET'),
         'base_url'      => env('IGDB_BASE_URL', 'https://api.igdb.com/v4'),
         'sleep_ms'      => (int) env('IGDB_RATE_LIMIT_SLEEP_MS', 250),
+        'media_import'  => (bool) env('IGDB_MEDIA_IMPORT_ENABLED', true),
     ],
 
     'postmark' => [

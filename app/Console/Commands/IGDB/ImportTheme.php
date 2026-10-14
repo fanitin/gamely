@@ -15,6 +15,11 @@ class ImportTheme extends AbstractIgdbImport
         return 'themes';
     }
 
+    protected function getModelClass(): string
+    {
+        return Theme::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

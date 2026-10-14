@@ -15,6 +15,11 @@ class ImportGameModes extends AbstractIgdbImport
         return 'game_modes';
     }
 
+    protected function getModelClass(): string
+    {
+        return GameMode::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

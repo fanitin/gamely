@@ -30,6 +30,11 @@ class ImportCharacters extends AbstractIgdbImport
         return 'characters';
     }
 
+    protected function getModelClass(): string
+    {
+        return Character::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields akas,character_gender,character_species,country_name,description,games,mug_shot,name,slug; where games.game_type = (0,8,9) & (games.rating > 70 | games.rating_count > 100) & games.first_release_date != null;';

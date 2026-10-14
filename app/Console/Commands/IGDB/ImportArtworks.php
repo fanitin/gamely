@@ -24,6 +24,12 @@ class ImportArtworks extends Command
 
     public function handle(): int
     {
+        if (! config('services.igdb.media_import')) {
+            $this->warn('Media import is disabled (IGDB_MEDIA_IMPORT_ENABLED=false). Skipping.');
+
+            return self::SUCCESS;
+        }
+
         $forceRedownload = (bool) $this->option('force');
         $limit = $this->option('limit') ? (int) $this->option('limit') : null;
 

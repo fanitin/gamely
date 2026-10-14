@@ -16,9 +16,42 @@ abstract class AbstractIgdbImport extends Command
 
     abstract protected function getEndpoint(): string;
 
+    abstract protected function getModelClass(): string;
+
     abstract protected function getQueryBody(): string;
 
     abstract protected function processItem(array $item): string;
+
+    protected function resolveSlugConflict(array $item): void
+    {
+        if (empty($item['slug']) || empty($item['id'])) {
+            return;
+        }
+
+        $conflict = $this->getModelClass()::query()
+            ->where('slug', $item['slug'])
+            ->where('igdb_id', '!=', $item['id'])
+            ->first();
+
+        if (! $conflict) {
+            return;
+        }
+
+        $stillExists = ! empty($this->igdb->query(
+            $this->getEndpoint(),
+            "fields id; where id = {$conflict->igdb_id}; limit 1;"
+        ));
+
+        if ($stillExists) {
+            $conflict->update(['slug' => "{$item['slug']}-{$conflict->igdb_id}"]);
+            $this->warn("Slug '{$item['slug']}' now belongs to igdb_id {$item['id']}; igdb_id {$conflict->igdb_id} renamed to '{$conflict->slug}'.");
+
+            return;
+        }
+
+        $conflict->delete();
+        $this->warn("Removed stale {$this->getEndpoint()} igdb_id {$conflict->igdb_id}: slug '{$item['slug']}' now belongs to igdb_id {$item['id']}.");
+    }
 
     public function handle(): int
     {
@@ -43,6 +76,7 @@ abstract class AbstractIgdbImport extends Command
                 }
 
                 foreach ($items as $item) {
+                    $this->resolveSlugConflict($item);
                     $status = $this->processItem($item);
                     if (isset($stats[$status])) {
                         $stats[$status]++;

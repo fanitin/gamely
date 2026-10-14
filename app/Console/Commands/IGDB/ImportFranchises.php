@@ -15,6 +15,11 @@ class ImportFranchises extends AbstractIgdbImport
         return 'franchises';
     }
 
+    protected function getModelClass(): string
+    {
+        return Franchise::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';

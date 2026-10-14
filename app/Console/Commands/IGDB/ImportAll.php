@@ -16,6 +16,15 @@ class ImportAll extends Command
             ? ['--limit' => (int) $this->option('limit')]
             : [];
 
+        $mediaCommands = config('services.igdb.media_import')
+            ? [
+                ['signature' => 'import:covers', 'arguments' => $mediaArguments],
+                ['signature' => 'import:artworks', 'arguments' => $mediaArguments],
+                ['signature' => 'import:screenshots', 'arguments' => $mediaArguments],
+                ['signature' => 'import:character-mug-shots', 'arguments' => $mediaArguments],
+            ]
+            : [];
+
         $commands = [
             ['signature' => 'import:igdb-platform-families'],
             ['signature' => 'import:igdb-platforms'],
@@ -30,14 +39,15 @@ class ImportAll extends Command
             ['signature' => 'import:igdb-games'],
             ['signature' => 'import:igdb-characters'],
             ['signature' => 'import:igdb-similar-games'],
-            ['signature' => 'import:covers', 'arguments' => $mediaArguments],
-            ['signature' => 'import:artworks', 'arguments' => $mediaArguments],
-            ['signature' => 'import:screenshots', 'arguments' => $mediaArguments],
-            ['signature' => 'import:character-mug-shots', 'arguments' => $mediaArguments],
+            ...$mediaCommands,
             ['signature' => 'games:recalculate-meta'],
         ];
 
         $this->info('Starting full IGDB import process...');
+
+        if ($mediaCommands === []) {
+            $this->warn('Media import is disabled (IGDB_MEDIA_IMPORT_ENABLED=false). Skipping covers, artworks, screenshots and mug shots.');
+        }
 
         foreach ($commands as $command) {
             $signature = $command['signature'];

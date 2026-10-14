@@ -15,6 +15,11 @@ class ImportCollections extends AbstractIgdbImport
         return 'collections';
     }
 
+    protected function getModelClass(): string
+    {
+        return Collection::class;
+    }
+
     protected function getQueryBody(): string
     {
         return 'fields id, name, slug;';
