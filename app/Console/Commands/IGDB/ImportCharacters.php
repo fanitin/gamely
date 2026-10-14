@@ -6,16 +6,23 @@ use App\Models\Character;
 use App\Models\CharacterGender;
 use App\Models\CharacterSpecies;
 use App\Models\Game;
+use App\Services\CharacterQualityService;
+use App\Services\IgdbService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 
 #[Signature('import:igdb-characters')]
-#[Description('Import characters from IGDB API')]
+#[Description('Import characters from IGDB API (skips junk names and characters without popular games)')]
 class ImportCharacters extends AbstractIgdbImport
 {
     private array $genderMap = [];
 
     private array $speciesMap = [];
+
+    public function __construct(IgdbService $igdb, private CharacterQualityService $quality)
+    {
+        parent::__construct($igdb);
+    }
 
     public function handle(): int
     {
@@ -46,11 +53,19 @@ class ImportCharacters extends AbstractIgdbImport
             return 'skipped';
         }
 
-        $existingGameIds = Game::whereIn('igdb_id', $item['games'])->pluck('id')->toArray();
+        $existingGames = Game::whereIn('igdb_id', $item['games'])->get(['id', 'popularity_tier']);
 
-        if (empty($existingGameIds)) {
+        if ($existingGames->isEmpty()) {
             return 'skipped';
         }
+
+        $hasMugShot = ! empty($item['mug_shot']);
+
+        if (! $hasMugShot && ($this->quality->isJunk($item['name'] ?? '') || ! $this->quality->hasPopularGame($existingGames))) {
+            return 'skipped';
+        }
+
+        $existingGameIds = $existingGames->pluck('id')->toArray();
 
         $character = Character::updateOrCreate(
             ['igdb_id' => $item['id']],

@@ -81,14 +81,24 @@ class MediaService
 
     public function deleteCover(?string $path): void
     {
-        if (! is_string($path) || $path === '' || ! str_starts_with($path, 'covers/')) {
+        $this->deleteFromR2($path, 'covers/', __FUNCTION__);
+    }
+
+    public function deleteCharacterMugShot(?string $path): void
+    {
+        $this->deleteFromR2($path, 'character_mug_shots/', __FUNCTION__);
+    }
+
+    private function deleteFromR2(?string $path, string $prefix, string $caller): void
+    {
+        if (! is_string($path) || $path === '' || ! str_starts_with($path, $prefix)) {
             return;
         }
 
         try {
             Storage::disk('r2')->delete($path);
         } catch (Exception $e) {
-            throw new Exception('MediaService::deleteCover failed: '.$e->getMessage(), 0, $e);
+            throw new Exception("MediaService::{$caller} failed: ".$e->getMessage(), 0, $e);
         }
     }
 

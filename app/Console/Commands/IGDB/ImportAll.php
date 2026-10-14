@@ -38,6 +38,7 @@ class ImportAll extends Command
             ['signature' => 'import:igdb-character-species'],
             ['signature' => 'import:igdb-games'],
             ['signature' => 'import:igdb-characters'],
+            ['signature' => 'characters:prune'],
             ['signature' => 'import:igdb-similar-games'],
             ...$mediaCommands,
             ['signature' => 'games:recalculate-meta'],
