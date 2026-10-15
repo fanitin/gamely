@@ -29,6 +29,16 @@ enum PopularityTier: string
         };
     }
 
+    public static function top(): array
+    {
+        return [self::LEGENDARY, self::POPULAR];
+    }
+
+    public static function topValues(): array
+    {
+        return array_map(fn (self $tier) => $tier->value, self::top());
+    }
+
     public static function fromRatingCount(int $ratingCount, int $hypes = 0): self
     {
         $score = $ratingCount + ($hypes * 2);

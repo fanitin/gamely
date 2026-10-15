@@ -68,7 +68,7 @@ class CharacterQualityServiceTest extends TestCase
 
     public function test_resolve_tiers(): void
     {
-        $this->assertSame(CharacterQualityService::DEFAULT_TIERS, $this->service->resolveTiers([]));
+        $this->assertSame(PopularityTier::top(), $this->service->resolveTiers([]));
         $this->assertSame([PopularityTier::NOTABLE, PopularityTier::NICHE], $this->service->resolveTiers(['Notable', ' niche ']));
         $this->assertNull($this->service->resolveTiers(['epic']));
     }

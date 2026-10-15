@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\GameMode;
+use App\Enums\PopularityTier;
 use App\Models\Character;
 use App\Models\DailyChallenge;
 use App\Models\Game;
@@ -72,15 +73,15 @@ class GenerateDailyChallenges extends Command
         };
     }
 
-    private function generateClassicChallenge(string $date): DailyChallenge
+    private function generateClassicChallenge(string $date): ?DailyChallenge
     {
-        $game = Game::where('rating_count', '>', 10)
-            ->where(function ($query) {
-                $query->where('rating', '>', 70)
-                    ->orWhere('rating_count', '>', 100);
-            })
+        $game = Game::whereIn('popularity_tier', PopularityTier::topValues())
             ->inRandomOrder()
             ->first();
+
+        if (! $game) {
+            return null;
+        }
 
         return DailyChallenge::create([
             'mode' => GameMode::CLASSIC->value,
@@ -91,11 +92,7 @@ class GenerateDailyChallenges extends Command
 
     private function generateScreenshotsChallenge(string $date): ?DailyChallenge
     {
-        $game = Game::where('rating_count', '>', 10)
-            ->where(function ($query) {
-                $query->where('rating', '>', 70)
-                    ->orWhere('rating_count', '>', 100);
-            })
+        $game = Game::whereIn('popularity_tier', PopularityTier::topValues())
             ->has('screenshots', '>=', 5)
             ->inRandomOrder()
             ->first();
@@ -116,11 +113,7 @@ class GenerateDailyChallenges extends Command
         $character = Character::whereNotNull('mug_shot_url')
             ->whereNotNull('gender_id')
             ->whereNotNull('species_id')
-            ->whereHas('games', function ($query) {
-                $query->where('rating_count', '>', 10)
-                    ->where('rating', '>', 70)
-                    ->orWhere('rating_count', '>', 100);
-            })
+            ->whereHas('games', fn ($query) => $query->whereIn('popularity_tier', PopularityTier::topValues()))
             ->inRandomOrder()
             ->first();
 

@@ -55,6 +55,27 @@ class MediaServiceTest extends TestCase
         Storage::disk('r2')->assertExists('covers/123.webp');
     }
 
+    public function test_it_downloads_character_image_to_local_disk_as_webp()
+    {
+        Storage::fake('local');
+
+        $img = \imagecreatetruecolor(800, 400);
+        $white = \imagecolorallocate($img, 255, 255, 255);
+        \imagefill($img, 0, 0, $white);
+        \ob_start();
+        \imagepng($img);
+        $content = \ob_get_clean();
+        \imagedestroy($img);
+
+        Http::fake(['https://static.wikia.nocookie.net/*' => Http::response($content, 200)]);
+
+        $path = (new MediaService)->downloadCharacterImage('https://static.wikia.nocookie.net/witcher/geralt.png', 'geralt-of-rivia');
+
+        $this->assertSame('character-images/geralt-of-rivia.webp', $path);
+        Storage::disk('local')->assertExists($path);
+        $this->assertSame(600, \imagesx(\imagecreatefromstring(Storage::disk('local')->get($path))));
+    }
+
     public function test_it_deletes_media_from_r2_when_media_import_is_enabled()
     {
         Storage::fake('r2');

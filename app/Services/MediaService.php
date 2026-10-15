@@ -13,6 +13,8 @@ use Intervention\Image\Interfaces\ImageInterface;
 
 class MediaService
 {
+    public const LOCAL_CHARACTER_IMAGES_DIR = 'character-images';
+
     private ImageManager $manager;
 
     public function __construct()
@@ -40,6 +42,21 @@ class MediaService
         return $this->processAndUploadImage($url, "character_mug_shots/{$igdbId}.webp", 't_cover_big', 600);
     }
 
+    public function downloadCharacterImage(string $url, string $slug): string
+    {
+        $path = self::LOCAL_CHARACTER_IMAGES_DIR."/{$slug}.webp";
+
+        try {
+            Storage::disk('local')->put($path, $this->fetchAsWebp($url, 600));
+
+            return $path;
+        } catch (GarbageImageException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new Exception("MediaService::downloadCharacterImage failed for {$path}: ".$e->getMessage(), 0, $e);
+        }
+    }
+
     private function processAndUploadImage(string $url, string $path, string $igdbSize, int $maxWidth): string
     {
         $sourceUrl = str_replace('t_thumb', $igdbSize, $url);
@@ -48,25 +65,7 @@ class MediaService
         }
 
         try {
-            $response = Http::timeout(30)->get($sourceUrl);
-
-            if (! $response->successful()) {
-                throw new Exception("Failed to download image from {$sourceUrl}. Status: {$response->status()}");
-            }
-
-            $image = $this->manager->decode($response->body());
-
-            if ($this->isGarbageImage($image)) {
-                throw new GarbageImageException("Image from {$sourceUrl} is detected as garbage (too dark/black).");
-            }
-
-            if ($image->width() > $maxWidth) {
-                $image->scale(width: $maxWidth);
-            }
-
-            $encoded = $image->encode(new WebpEncoder(quality: 82));
-
-            Storage::disk('r2')->put($path, $encoded->toString(), [
+            Storage::disk('r2')->put($path, $this->fetchAsWebp($sourceUrl, $maxWidth), [
                 'ContentType' => 'image/webp',
                 'CacheControl' => 'public, max-age=31536000, immutable',
             ]);
@@ -77,6 +76,27 @@ class MediaService
         } catch (Exception $e) {
             throw new Exception("MediaService::processAndUploadImage failed for {$path}: ".$e->getMessage(), 0, $e);
         }
+    }
+
+    private function fetchAsWebp(string $sourceUrl, int $maxWidth): string
+    {
+        $response = Http::withHeaders(['User-Agent' => WikiImageService::USER_AGENT])->timeout(30)->get($sourceUrl);
+
+        if (! $response->successful()) {
+            throw new Exception("Failed to download image from {$sourceUrl}. Status: {$response->status()}");
+        }
+
+        $image = $this->manager->decode($response->body());
+
+        if ($this->isGarbageImage($image)) {
+            throw new GarbageImageException("Image from {$sourceUrl} is detected as garbage (too dark/black).");
+        }
+
+        if ($image->width() > $maxWidth) {
+            $image->scale(width: $maxWidth);
+        }
+
+        return $image->encode(new WebpEncoder(quality: 82))->toString();
     }
 
     public function deleteCover(?string $path): void

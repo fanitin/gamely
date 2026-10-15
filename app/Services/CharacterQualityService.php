@@ -6,8 +6,6 @@ use App\Enums\PopularityTier;
 
 class CharacterQualityService
 {
-    public const DEFAULT_TIERS = [PopularityTier::LEGENDARY, PopularityTier::POPULAR];
-
     private const CREDITS_PATTERN = '/\b(voice|voices|voice[- ]?overs?|narrator|narration|announcer|talent|actor|actress|actors|cast|vocals?|chorus|choir|singers?|performer|stunts?|mocap|motion capture|extras?|ensemble|uncredited|dialogue|dialog|dubbing)\b/u';
 
     private const INDEXED_PATTERN = '/\s(#\d{1,3}|0\d{1,2})$/u';
@@ -99,7 +97,7 @@ class CharacterQualityService
 
     public function hasPopularGame(iterable $games, ?array $tiers = null): bool
     {
-        $values = array_map(fn (PopularityTier $tier) => $tier->value, $tiers ?? self::DEFAULT_TIERS);
+        $values = array_map(fn (PopularityTier $tier) => $tier->value, $tiers ?? PopularityTier::top());
 
         foreach ($games as $game) {
             $tier = $game->popularity_tier instanceof PopularityTier ? $game->popularity_tier->value : $game->popularity_tier;
@@ -115,7 +113,7 @@ class CharacterQualityService
     public function resolveTiers(array $inputs): ?array
     {
         if ($inputs === []) {
-            return self::DEFAULT_TIERS;
+            return PopularityTier::top();
         }
 
         $tiers = [];
