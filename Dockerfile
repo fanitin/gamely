@@ -35,7 +35,7 @@ ENV VITE_GA_MEASUREMENT_ID=${VITE_GA_MEASUREMENT_ID}
 RUN npm run build
 
 
-FROM php:8.4-fpm-alpine AS app
+FROM php:8.4.27-fpm-alpine AS app
 
 RUN apk add --no-cache \
         freetype \
